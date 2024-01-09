@@ -84,7 +84,7 @@ namespace TextRPG
                         break;
                     }
 
-            }|
+            }
             return "";
         }
     }
