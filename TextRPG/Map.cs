@@ -30,9 +30,11 @@ namespace TextRPG
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 switch ((GameState)Utilities.GetInputKey(1, 2, ConsoleColor.Yellow, ">>"))
                 {
-                    case GameState.PlayerInfo:
+                    case GameState.PlayerInfo: // 상태 보기
+
                         break;
-                    case GameState.StartBatlle:
+                    case GameState.StartBatlle: // 전투 시작
+
                         break;
                 }
             }
