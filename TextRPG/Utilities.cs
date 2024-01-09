@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Text;
 
 namespace TextRPG
 {
@@ -47,8 +43,8 @@ namespace TextRPG
         {
             sb.Append(str);
         }
-
-        static public void TextColor(string str, ConsoleColor color)
+        
+        static void TextColor(string str, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(str);
