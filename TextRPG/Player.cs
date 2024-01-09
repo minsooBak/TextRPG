@@ -11,7 +11,7 @@ namespace TextRPG
     {  
         public void OnEvent(EventType type, object data)
         {
-            //이벤트 받아서 switch문으로 구현
+            //이벤트 받아서 switch문으로
             
         }
     }
