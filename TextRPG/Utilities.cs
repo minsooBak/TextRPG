@@ -42,6 +42,7 @@ namespace TextRPG
         public static void AddLine(string str)
         {
             sb.AppendLine(str);
+        }
         public static void Add(string str)
         {
             sb.Append(str);
