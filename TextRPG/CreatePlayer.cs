@@ -15,23 +15,27 @@ namespace TextRPG
                 Utilities.AddLine("원하시는 행동을 입력해주세요");
                 Utilities.Add(">>");
                 int key = Utilities.GetInputKey(0, 1);
-                if (key == 0)
+                switch(key)
                 {
-                    Console.Clear();
-                    return "";
-                }
-                else if (key == 1)
-                {
-                    Console.Clear();
-                    string name = CreateName();
-                    Console.Clear();
-                    string job = CreateJob();
-                    Console.Clear();
-                    return name + " " + job;
-                }
-                else
-                {
-                    Console.Error.WriteLine("CreatePlayer InputKey Error");
+                    case 0:
+                        {
+                            Console.Clear();
+                            return "";
+                        }
+                    case 1:
+                        {
+                            Console.Clear();
+                            string name = CreateName();
+                            Console.Clear();
+                            string job = CreateJob();
+                            Console.Clear();
+                            return name + " " + job;
+                        }
+                    default:
+                        {
+                            Console.Error.WriteLine("CreatePlayer InputKey Error");
+                            break;
+                        }
                 }
             }
         }
