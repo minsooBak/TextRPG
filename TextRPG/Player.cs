@@ -13,7 +13,6 @@ namespace TextRPG
         {
             //이벤트 받아서 switch문으로 구현
             
-            throw new NotImplementedException();
         }
     }
 }
