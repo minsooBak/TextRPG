@@ -6,38 +6,36 @@ namespace TextRPG
     {
         public string Create()
         {
-            while (true)
+            Utilities.AddLine("RPG_GAME에 오신것을 환영합니다!");
+            Utilities.AddLine("이곳은 캐릭터 생성을 하는 곳 입니다.\n");
+            Utilities.AddLine("1. 캐릭터 생성");
+            Utilities.AddLine("\n0. 종료\n");
+            Utilities.AddLine("원하시는 행동을 입력해주세요");
+            Utilities.Add(">>");
+            int key = Utilities.GetInputKey(0, 1);
+            switch (key)
             {
-                Utilities.AddLine("RPG_GAME에 오신것을 환영합니다!");
-                Utilities.AddLine("이곳은 캐릭터 생성을 하는 곳 입니다.\n");
-                Utilities.AddLine("1. 캐릭터 생성");
-                Utilities.AddLine("\n0. 종료\n");
-                Utilities.AddLine("원하시는 행동을 입력해주세요");
-                Utilities.Add(">>");
-                int key = Utilities.GetInputKey(0, 1);
-                switch(key)
-                {
-                    case 0:
-                        {
-                            Console.Clear();
-                            return "";
-                        }
-                    case 1:
-                        {
-                            Console.Clear();
-                            string name = CreateName();
-                            Console.Clear();
-                            string job = CreateJob();
-                            Console.Clear();
-                            return name + " " + job;
-                        }
-                    default:
-                        {
-                            Console.Error.WriteLine("CreatePlayer InputKey Error");
-                            break;
-                        }
-                }
+                case 0:
+                    {
+                        Console.Clear();
+                        return "";
+                    }
+                case 1:
+                    {
+                        Console.Clear();
+                        string name = CreateName();
+                        Console.Clear();
+                        string job = CreateJob();
+                        Console.Clear();
+                        return name + " " + job;
+                    }
+                default:
+                    {
+                        Console.Error.WriteLine("CreatePlayer InputKey Error");
+                        return "";
+                    }
             }
+            
         }
         string CreateName()
         {
@@ -66,30 +64,27 @@ namespace TextRPG
 
         string CreateJob()
         {
-            while (true)
+            Utilities.AddLine("직업을 정해주세요!\n");
+            Utilities.AddLine("1. 전사");
+            Utilities.AddLine("2. 마법사");
+            Utilities.AddLine("3. 궁수");
+            Utilities.AddLine("4. 도적");
+            Utilities.AddLine("당신의 직업은?");
+            Utilities.Add(">>");
+            int key = Utilities.GetInputKey(1, 4, ConsoleColor.DarkYellow, "캐릭터 생성 - 직업");
+            switch (key)
             {
-                Utilities.AddLine("직업을 정해주세요!\n");
-                Utilities.AddLine("1. 전사");
-                Utilities.AddLine("2. 마법사");
-                Utilities.AddLine("3. 궁수");
-                Utilities.AddLine("4. 도적");
-                Utilities.AddLine("당신의 직업은?");
-                Utilities.Add(">>");
-                int key = Utilities.GetInputKey(1, 4, ConsoleColor.DarkYellow, "캐릭터 생성 - 직업");
-                switch (key)
-                {
-                    case 1: return "전사";
-                    case 2: return "마법사";
-                    case 3: return "궁수";
-                    case 4: return "도적";
-                    default:
-                        {
-                            Console.Error.WriteLine("Player Job Input Error");
-                            break;
-                        }
-                }
-                break;
-            }
+                case 1: return "전사";
+                case 2: return "마법사";
+                case 3: return "궁수";
+                case 4: return "도적";
+                default:
+                    {
+                        Console.Error.WriteLine("Player Job Input Error");
+                        break;
+                    }
+
+            }|
             return "";
         }
     }
