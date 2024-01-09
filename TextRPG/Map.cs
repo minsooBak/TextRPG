@@ -9,6 +9,11 @@ namespace TextRPG
     //추민규님 마을 <-> 던전or상태보기 구현
     internal class Map
     {
+        enum GameState
+        {
+            PlayerInfo,
+            StartBatlle
+        }
 
         public void StartGame()
         {
@@ -23,9 +28,13 @@ namespace TextRPG
                 Console.WriteLine();
 
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
-                //Console.Write(">>");
-                Utilities.GetInputKey(1,2, ConsoleColor.White,">>");
-
+                switch ((GameState)Utilities.GetInputKey(1, 2, ConsoleColor.Yellow, ">>"))
+                {
+                    case GameState.PlayerInfo:
+                        break;
+                    case GameState.StartBatlle:
+                        break;
+                }
             }
         }
     }
