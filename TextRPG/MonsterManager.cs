@@ -8,14 +8,17 @@ namespace TextRPG
 {
     public enum MonsterType
     {
-        Monster1, // 미니언
+        Monster1 = 1, // 미니언
         Monster2, // 공허충
         Monster3  // 대포 미니언
     }
     //정원우님 구현
     internal class MonsterManager
     {
-
+        private static readonly MonsterManager instance = new MonsterManager();
+        private MonsterManager() { }
+        static public MonsterManager Instance { get { return instance; }}
+        public List<Monster> monsters = new List<Monster>();
     }
 
     public class Monster : IListener
@@ -49,10 +52,22 @@ namespace TextRPG
                 Atk = 8;
             }
         }
-
-        public void OnEvent(EventType type, object data)
+        public void MakeMonster(int num) // num 만큼 몬스터를 생성한다.
         {
-            throw new NotImplementedException();
+            Random random = new Random(); //랜덤
+            int rnd;
+            for (int i = 0; i < num; i++)
+            {
+                rnd = random.Next(1,4); // 1 2 3
+                MonsterManager.Instance.monsters.Add(new Monster((MonsterType)rnd)); // 몬스터 생성
+            }
+        }
+        public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
+        {
+            if (type == EventType.eMakeMonster)
+            {
+                MakeMonster((int)data);
+            }
         }
     }
 }

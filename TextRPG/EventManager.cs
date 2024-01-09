@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public enum EventType
 {
-    NONE,
+    NONE, eMakeMonster
 }
 
 public interface IListener
