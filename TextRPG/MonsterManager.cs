@@ -36,14 +36,14 @@ namespace TextRPG
             }
             else if (monsterType == MonsterType.Monster2)
             {
-                Name = "미니언";
+                Name = "공허충";
                 Lv = 3;
                 Hp = 10;
                 Atk = 9;
             }
             else if (monsterType == MonsterType.Monster3)
             {
-                Name = "미니언";
+                Name = "대포미니언";
                 Lv = 5;
                 Hp = 25;
                 Atk = 8;
