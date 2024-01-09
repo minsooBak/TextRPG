@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace TextRPG
 {
@@ -20,23 +15,27 @@ namespace TextRPG
                 Utilities.AddLine("원하시는 행동을 입력해주세요");
                 Utilities.Add(">>");
                 int key = Utilities.GetInputKey(0, 1);
-                if (key == 0)
+                switch(key)
                 {
-                    Console.Clear();
-                    return "";
-                }
-                else if (key == 1)
-                {
-                    Console.Clear();
-                    string name = CreateName();
-                    Console.Clear();
-                    string job = CreateJob();
-                    Console.Clear();
-                    return name + " " + job;
-                }
-                else
-                {
-                    Console.Error.WriteLine("CreatePlayer InputKey Error");
+                    case 0:
+                        {
+                            Console.Clear();
+                            return "";
+                        }
+                    case 1:
+                        {
+                            Console.Clear();
+                            string name = CreateName();
+                            Console.Clear();
+                            string job = CreateJob();
+                            Console.Clear();
+                            return name + " " + job;
+                        }
+                    default:
+                        {
+                            Console.Error.WriteLine("CreatePlayer InputKey Error");
+                            break;
+                        }
                 }
             }
         }
@@ -44,7 +43,9 @@ namespace TextRPG
         {
             while (true)
             {
-                Utilities.TextColor("캐릭터 생성 - 이름", ConsoleColor.DarkYellow);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("캐릭터 생성 - 이름");
+                Console.ResetColor();
                 Console.WriteLine("이름을 정해주세요!\n");
                 Console.WriteLine("당신의 이름은? [이름 생성 규칙 : 띄워쓰기 금지 / 10글자 이내]");
                 Console.Write(">>");
