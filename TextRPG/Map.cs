@@ -11,7 +11,7 @@ namespace TextRPG
     {
         enum GameState
         {
-            PlayerInfo,
+            PlayerInfo = 1,
             StartBatlle
         }
 
