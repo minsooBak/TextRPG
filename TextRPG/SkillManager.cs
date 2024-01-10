@@ -7,16 +7,10 @@ using System.Threading.Tasks;
 
 namespace TextRPG
 {
-    //enum SkillType
-    //{
-    //    Active,
-    //    Passive
-    //}
-
     internal class SkillManager
     {
         private readonly Skill[] skillList = []; //전체 스킬데이터
-        private Dictionary<string, List<Skill>> skillDictionary = [];//클래스별 스킬데이터
+        private Dictionary<string, List<Skill>> skillDictionary = [];//직업별 스킬데이터
         public SkillManager()
         {
             skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
@@ -69,12 +63,12 @@ namespace TextRPG
                 Utilities.AddLine($"{i + 1}. {list[i].Name} - mp {list[i].Cost}");
                 Utilities.AddLine($"   {list[i].Description}.");
             }
+
             return list.Count;
         }
 
         /// <summary>
-        /// 몬스터가 스킬을 사용할수 있는지 여부 체크 및 제일 피해량이 높은 스킬 의 피해량과 코스트, number를 배열로 리턴
-        /// / 없다면 null로 리턴
+        /// 몬스터가 스킬을 사용할수 있는지 여부 체크 및 제일 피해량이 높은 스킬 의 피해량과 코스트, number를 배열로 리턴 / 없다면 null로 리턴
         /// </summary>
         public int[] MonsteSkillUse(string className, int ATK, int mp)
         {
@@ -91,28 +85,16 @@ namespace TextRPG
                 return null;
             }
 
-            Skill? s = null;
-            int max = 0;
-            int count = -1;
-            foreach(Skill skill in list)
+            for (int i = list.Count - 1; i >= 0; i--)
             {
-                if(skill.Cost <= mp)
+                if (list[i].Cost <= mp)
                 {
-                    if(skill.GetATK(ATK) > max)
-                    {
-                        max = skill.GetATK(ATK);
-                        s = skill;
-                        count++;
-                    }
+                    return [list[i].GetATK(ATK), list[i].Cost, i];
                 }
             }
 
-            if(s == null)
-            {
-                return null;
-            }
-
-            return [max, s.Cost, count];
+            //사용가능한 스킬이 없다면 null리턴
+            return null;
         }
 
         /// <summary>
@@ -147,6 +129,11 @@ namespace TextRPG
                 Console.Error.WriteLine($"GetSkillATK Faill! SkillDictionary[{className}] is not Add");
                 return null;
             }
+            else if (number == list.Count)
+            {
+                Console.Error.WriteLine("GetSkillName list[number] = null! number : " + number);
+                return null;
+            }
 
             return list[number].Name;
         }
@@ -163,6 +150,11 @@ namespace TextRPG
                 Console.Error.WriteLine($"GetSkillATK Faill! SkillDictionary[{className}] is not Add");
                 return 0;
             }
+            else if (number == list.Count)
+            {
+                Console.Error.WriteLine("GetSkillName list[number] = null! number : " + number);
+                return 0;
+            }
 
             return list[number].Cost;
         }
@@ -170,10 +162,9 @@ namespace TextRPG
 
     class Skill
     {
-       //public SkillType Type { get; private set; } 나중에 패시브 추가할 경우
         public string Name { get; private set; }
-        public string Class { get; private set; }//나중에 enum으로도 변경가능
-        private float ATK { get; set; } // 퍼뎀
+        public string Class { get; private set; }
+        private float ATK { get; set; } //공격력의 퍼센트 데미지
         public int Cost { get; private set; }
         public string Description { get; private set; }
 
