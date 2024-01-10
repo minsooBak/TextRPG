@@ -34,7 +34,7 @@ namespace TextRPG
                 }
             }
 
-            if(list == null)
+            if(list.Count == 0)
             {
                 Console.Error.WriteLine("SkillsAdd Fail! ClassName : " + className);
                 return;
