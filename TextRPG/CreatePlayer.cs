@@ -35,7 +35,7 @@ namespace TextRPG
                         return "";
                     }
             }
-
+            
         }
         string CreateName()
         {
