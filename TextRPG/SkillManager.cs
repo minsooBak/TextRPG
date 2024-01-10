@@ -92,7 +92,7 @@ namespace TextRPG
             return null;
         }
 
-        public Skill GetPlayerSkill(string className, int number, int ATK)
+        public Skill GetPlayerSkill(string className, int number)
         {
             List<Skill> list;
             if (skillDictionary.Count == 0)
