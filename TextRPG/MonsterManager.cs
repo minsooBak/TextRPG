@@ -43,11 +43,11 @@ namespace TextRPG
         }
     }
 
-    public class Monster : IAttack
+    public class Monster : IAttack, ITakeDamage
     {
         public string Name { get; private set; } //몬스터 이름
         public int Lv { get; private set; } // 레벨
-        public int Hp { get; set; } // 체력
+        public int Hp { get; private set; } // 체력
         public int Atk { get; private set; } //몬스터 공격력
         public bool isDead; //죽었으면 true
 
@@ -62,6 +62,12 @@ namespace TextRPG
             Console.WriteLine($"Lv.{this.Lv} {this.Name} 의 공격!");
 
             return damage;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            this.Hp -= damage;
+            if(this.Hp <= 0) this.isDead = true;
         }
 
         public Monster(MonsterType monsterType = MonsterType.Monster1) //몬스터 초기화

@@ -48,8 +48,7 @@ namespace TextRPG
                 Console.WriteLine($"Lv.{monster.Lv} {monster.Name}");
                 Console.Write($"{monster.Hp} -> ");
 
-                monster.Hp -= damage;
-                if (monster.Hp <= 0) { monster.isDead = true; }
+                monster.TakeDamage(damage);
 
                 Console.WriteLine($"{(monster.isDead ? "Dead" : monster.Hp)}");
             }

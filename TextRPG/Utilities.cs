@@ -39,6 +39,11 @@ namespace TextRPG
         int Attack();
     }
 
+    public interface ITakeDamage
+    {
+        void TakeDamage(int damage);
+    }
+
 
     internal static class Utilities
     {
