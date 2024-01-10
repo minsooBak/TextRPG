@@ -10,8 +10,8 @@ namespace TextRPG
     // 전투 결과 구현하기
     internal class DungeonManager : IListener
     {
-        // 임시 플레이어 정보
-        public int PlayerHp = 100;
+        private static readonly DungeonManager instance = new DungeonManager();
+        static public DungeonManager Instance { get { return instance; } }
         public DungeonManager() 
         {
             // 몬스터 정보 받아오기
@@ -24,7 +24,14 @@ namespace TextRPG
         // 누구를 공격했는지, 준 데미지 표기
 
         // 공격 받은 객체의 HP 상태 출력, 반환
-
+        public int ShowBattle(Monster monster, Player player, bool isPlayerTurn)
+        {
+            if(isPlayerTurn)
+            {
+                
+            }
+            return 0;
+        }
 
         public void OnEvent(EventType type, object data)
         {
