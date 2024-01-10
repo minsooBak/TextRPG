@@ -77,7 +77,7 @@ namespace TextRPG
             List<Skill> list;
             if (skillDictionary.TryGetValue(className, out list) == false)
             {
-                Console.Error.WriteLine("MonsterSkillUse ClassName Null! ClassName : " + className);
+                Console.Error.WriteLine("GetMonsterSkill Fail! ClassName : " + className);
                 return null;
             }
 
@@ -101,7 +101,7 @@ namespace TextRPG
                 return null;
             }else if (skillDictionary.TryGetValue(className, out list) == false)
             {
-                Console.Error.WriteLine($"GetSkillATK Faill! SkillDictionary[{className}] is not Add");
+                Console.Error.WriteLine("GetPlayerSkill Fail! ClassName : " + className);
                 return null;
             }
 
