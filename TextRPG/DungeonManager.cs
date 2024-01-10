@@ -39,11 +39,20 @@ namespace TextRPG
 
         }
 
-        // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
+
+        // 플레이어 혹은 몬스터가 상대를 공격했을 때 결과
+        // 결과 : 
+        // 누가 공격했는지
+        // 누구를 공격했는지, 준 데미지 표기
+
+        // 주는 데미지 결정
+        // Hp 변화가 있을 시 Event.Type(eHpChange)로 postevent 해주기
 
         // 공격할 몬스터 고르기(SelectMonster)
 
         // 공격 진행하기(ShowBattle)
+        // 공격 받은 객체의 HP 상태 출력, 반환
+        
         public void ShowBattle(Monster monster, Player player, bool isPlayerTurn)
         {
             Console.Clear();
