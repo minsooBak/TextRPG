@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace TextRPG
@@ -15,35 +14,60 @@ namespace TextRPG
     }
     //정원우님 구현
     internal class MonsterManager : IListener
-    {      
+    {
+        //private static readonly MonsterManager instance = new MonsterManager();
+        //static public MonsterManager Instance { get { return instance; } }
+        public List<Monster> listOfMonsters;//몬스터 데이터 목록 리스트
+        public List<Monster> dungeonMonsters;
+        public int listOfMonsterCount;
+
         public MonsterManager()
         {
-            EventManager.Instance.AddListener(EventType.eMakeMonster, this);
-            EventManager.Instance.AddListener(EventType.eHpChange, this);
-        }
-        public List<Monster> monsters = new List<Monster>();//가지고 있는 몬스터 배열 
+            EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
+            listOfMonsters = new List<Monster>();
+            dungeonMonsters = new List<Monster>();
 
-        public void MakeMonster(int num) // num 만큼 몬스터를 생성한다.
-        {
-            Random random = new Random();
-            int rnd;
-            for (int i = 0; i < num; i++)
+            listOfMonsterCount = 3;
+            for (int i = 0; i < listOfMonsterCount; i++)
             {
-                rnd = random.Next(1, 4); // 랜덤 1 2 3
-                monsters.Add(new Monster((MonsterType)rnd)); // 몬스터 배열에 저장
+                listOfMonsters.Add(new Monster((MonsterType)(i + 1))); // 몬스터 목록 데이터 저장
+
+                //확인용
+                //Console.WriteLine("몬스터 목록 등록");
+                //Console.WriteLine($"{listOfMonsters[i].Name}");
+                //Console.WriteLine($"현재 등록개수 :{listOfMonsters.Count}");
             }
         }
-
-        public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
+        public void MakeMonsters() //몬스터 생성
         {
-            if (type == EventType.eMakeMonster)
+            Random rnd = new Random();
+            int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
+            for (int i = 0; i < monsterCount; i++)
             {
-                MakeMonster((int)data); //몬스터 생성
+                int randomCount = rnd.Next(0, listOfMonsters.Count); //등록되어 있는 몬스터 중 어떤 몬스터를 고를지
+                dungeonMonsters.Add(CreateMonster(++randomCount));// 던전 몬스터 리스트에 몬스터 추가
+            }
+        }
+        public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
+        {
+            Monster newMonster = new Monster((MonsterType)random);
+            return newMonster;
+        }
+        public int DungeonMonstersCount() //던전에 나온 몬스터 마리수
+        {
+            return dungeonMonsters.Count;
+        }
+
+        public void OnEvent(EventType type, object data)
+        {
+            if (type == EventType.eMakeMonsters)
+            {
+                MakeMonsters();
             }
         }
     }
 
-    public class Monster : IAttack, ITakeDamage
+    public class Monster : IListener, IAttack, ITakeDamage
     {
         public string Name { get; private set; } //몬스터 이름
         public int Lv { get; private set; } // 레벨
@@ -67,12 +91,11 @@ namespace TextRPG
         public void TakeDamage(int damage)
         {
             this.Hp -= damage;
-            if(this.Hp <= 0) this.isDead = true;
+            if (this.Hp <= 0) this.isDead = true;
         }
 
         public Monster(MonsterType monsterType = MonsterType.Monster1) //몬스터 초기화
         {
-            
             if (monsterType == MonsterType.Monster1)
             {
                 Name = "미니언";
@@ -95,6 +118,11 @@ namespace TextRPG
                 Atk = 8;
             }
             isDead = false;
+        }
+
+        public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
+        {
+            //Console.WriteLine();
         }
     }
 }

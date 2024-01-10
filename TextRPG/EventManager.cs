@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public enum EventType
 {
     NONE, 
-    eMakeMonster,
+    eMakeMonsters,
     eHpChange
 }
 

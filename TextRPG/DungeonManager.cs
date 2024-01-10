@@ -16,24 +16,33 @@ namespace TextRPG
             // 플레이어 정보 받아오기
         }
         public int deadCounter = 0;
-        public Monster[] monster;
+        public Monster[] monsters;
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
-        public void GetMonsterList(List<Monster> monsters)
+        public void Encounter(List<Monster> dungeonMonster)
         {
-            monster = monsters.ToArray();
+            monsters = dungeonMonster.ToArray();
 
-            foreach(Monster m in monster)
-            {
-                Console.WriteLine(m.Name);
-            }
-            Console.ReadKey();
+            StartBattle();
+        }
+
+        // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
+        public void StartBattle()
+        {
+            throw new NotImplementedException();
+        }
+
+        // 공격할 몬스터 고르기(SelectMonster)
+        // 플레이어가 선택하는 몬스터를 반환한다.
+        public void SelectMonster()
+        {
+
         }
 
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
 
         // 공격할 몬스터 고르기(SelectMonster)
-        
+
         // 공격 진행하기(ShowBattle)
         public void ShowBattle(Monster monster, Player player, bool isPlayerTurn)
         {
