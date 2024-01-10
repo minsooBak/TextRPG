@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TextRPG;
 
-namespace RPG_Game
+namespace TextRPG
 {
     internal class Player : IListener
     {
