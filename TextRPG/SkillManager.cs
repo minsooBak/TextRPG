@@ -113,15 +113,15 @@ namespace TextRPG
     {
         public readonly string Name;
         public readonly string Class;
-        public readonly float ATK;
+        public readonly float ATKRatio;
         public readonly int Cost;
         public readonly string Description;
 
-        public Skill(string name, string Class, float ATK, int cost, string description)
+        public Skill(string name, string Class, float ATKRatio, int cost, string description)
         {
             Name = name;
             this.Class = Class;
-            this.ATK = ATK;
+            this.ATKRatio = ATKRatio;
             Cost = cost;
             Description = description;
         }
@@ -131,7 +131,7 @@ namespace TextRPG
         /// </summary>
         public int GetATK(int ATK)
         {
-            return (int)(ATK * this.ATK);
+            return (int)(ATK * ATKRatio);
         }
     }
 }
