@@ -60,20 +60,11 @@ namespace TextRPG
             {
                 Console.Write(sb.ToString());
                 string? str = Console.ReadLine();
-                if (str != null && int.TryParse(str, out int a))
+                int key;
+                if (int.TryParse(str, out key) && key >= min && key <= max)
                 {
-                    int key = int.Parse(str);
-                    if (key >= min && key <= max)
-                    {
-                        sb.Clear();
-                        return key;
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
-                    }
+                    sb.Clear();
+                    return key;
                 }
                 else
                 {
@@ -91,20 +82,11 @@ namespace TextRPG
                 TextColor(intro, color);
                 Console.Write(sb.ToString());
                 string? str = Console.ReadLine();
-                if (str != null && int.TryParse(str, out int a))
+                int key;
+                if (int.TryParse(str, out key) && key >= min && key <= max)
                 {
-                    int key = int.Parse(str);
-                    if (key >= min && key <= max)
-                    {
-                        sb.Clear();
-                        return key;
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
-                    }
+                    sb.Clear();
+                    return key;
                 }
                 else
                 {
@@ -112,6 +94,7 @@ namespace TextRPG
                     Console.WriteLine("잘못된 입력입니다!");
                     Console.WriteLine("===================================================");
                 }
+
             }
         }
 
