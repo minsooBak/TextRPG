@@ -8,25 +8,37 @@ namespace TextRPG
 {
     public enum MonsterType
     {
-        Monster1 = 1, // 미니언
+
+        Monster1, // 미니언
         Monster2, // 공허충
         Monster3  // 대포 미니언
     }
     //정원우님 구현
     internal class MonsterManager
     {
-        private static readonly MonsterManager instance = new MonsterManager();
-        private MonsterManager() { }
-        static public MonsterManager Instance { get { return instance; }}
-        public List<Monster> monsters = new List<Monster>();//가지고 있는 몬스터 배열 
+        //private static MonsterManager instance = new MonsterManager();
+
+        //public static MonsterManager Instance { get { return instance; } }
+        private Monster[] monsters;
+
+        public MonsterManager(MonsterType monsterType)
+        {
+            
+        }
+
+        private void GetMonster(int monsterNumber)
+        {
+            monsters = new Monster[monsterNumber];
+        }
     }
 
     public class Monster : IListener
     {
-        private string Name { get; set; } //몬스터 이름
-        private int Lv { get; set; } // 레벨
-        private int Hp { get; set; } // 체력
-        private int Atk { get; set; } //몬스터 공격력
+
+        public string Name { get; private set; }//몬스터 이름
+        public int Lv { get; private set; }// 레벨
+        public int Hp { get; private set; }// 체력
+        public int Atk { get; private set; } //몬스터 공격력
         public bool isDead; //죽었으면 true
 
         public Monster(MonsterType monsterType = MonsterType.Monster1) //몬스터 초기화
@@ -71,5 +83,6 @@ namespace TextRPG
                 MakeMonster((int)data); //몬스터 생성
             }
         }
+
     }
 }
