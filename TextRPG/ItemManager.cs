@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace TextRPG
 {
-    // 추민규님 구현
     enum ItemType
     {
         Weapon,
@@ -18,14 +17,23 @@ namespace TextRPG
         public string[] inventory;
         public string[] equippedItem;
         public string[] fieldItem;
+        public string[] saleItem;
     }
 
     internal class ItemManager : IListener
     {
         readonly Item[] items;
+        readonly Item[] fieldItems;
+        readonly Item[] shopItems;
+
         List<Item> inventory;
+        List<Item> shopDisplay;
+        List<Item> fieldDisplay;
 
         public int GetInventorySize { get { return inventory.Count; } }
+        public int GetShopDisplaySize { get { return shopDisplay.Count; } }
+        public int GetFieldDisplaySize { get { return fieldDisplay.Count; } }
+
 
         public ItemManager() 
         // ItemManager 생성자 : 
@@ -35,9 +43,11 @@ namespace TextRPG
 
             ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
             inventory = [];
+            shopDisplay = [];
+            fieldDisplay = [];
 
             if (data != null)
-            // 아이템 정보를 data에서 읽어와서 inventory에 할당하기
+            // 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
             {
                 foreach (string item in data.Value.inventory)
                 {
@@ -50,7 +60,22 @@ namespace TextRPG
                     Item _item = list.Find(x => x.Name == item);
                     _item.IsEquipped = true;
                 }
+                foreach (string item in data.Value.saleItem)
+                {
+                    Item _item = list.Find(x => x.Name == item);
+                    shopDisplay.Add(_item);
+                }
+                foreach (string item in data.Value.fieldItem)
+                {
+                    Item _item = list.Find(x => x.Name == item);
+                    fieldDisplay.Add(_item);
+                }
             }
+
+            shopItems = list.FindAll(x => x.IsSale == true).ToArray();
+            fieldItems = list.FindAll(x => x.IsOnField == true).ToArray();
+
+
         }
 
         public void ShowInventory()
@@ -77,18 +102,20 @@ namespace TextRPG
     class Item
     // 아이템 자료 클래스
     {
-        public string Name = "";
-        public ItemType Type = 0;
-        public int ATK = 0;
-        public int DEF = 0;
-        public string Comment = "";
-        public int Cost = 0;
+        // { get; private set; } : 읽기 전용 프로퍼티, 외부에서 수정 불가
+        public string Name { get; private set; }
+        public ItemType Type { get; private set; }
+        public int ATK { get; private set; }
+        public int DEF { get; private set; }
+        public string Comment { get; private set; }
+        public int Cost { get; private set; }
 
-        public bool IsEquipped = false;
-        public bool IsOnField = false; // 던전에서 얻을 수 있는 지의 여부
+        public bool IsEquipped { get; set; } // 장비 착용 여부
+        public bool IsSale { get; private set; } // 상점에서 판매 가능한 지의 여부
+        public bool IsOnField { get; private set; } // 던전에서 얻을 수 있는 지의 여부
 
-        // 생성자
-        public Item(string name, int type, int atk, int def, string comment, int reqGold, bool isOnField)
+        public Item(string name, int type, int atk, int def, string comment, int reqGold, bool isSale, bool isOnField)
+        // Item 클래스 생성자
         {
             Name = name;
             Type = (ItemType)type;
@@ -96,6 +123,7 @@ namespace TextRPG
             DEF = def;
             Comment = comment;
             Cost = reqGold;
+            IsSale = isSale;
             IsOnField = isOnField;
         }
     }
