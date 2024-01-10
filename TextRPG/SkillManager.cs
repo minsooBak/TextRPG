@@ -21,7 +21,7 @@ namespace TextRPG
         }
 
         /// <summary>
-        /// 클래스네임에 따라 다른 스킬배열을 넣어줌(PlayerClass, MonsterName)
+        /// 클래스네임에 따라 다른 스킬배열을 넣어줌(Player Class, Monster Name)
         /// </summary>
         public void AddSkills(string className)
         {
@@ -63,14 +63,10 @@ namespace TextRPG
                 Utilities.AddLine($"{i + 1}. {list[i].Name} - mp {list[i].Cost}");
                 Utilities.AddLine($"   {list[i].Description}.");
             }
-
             return list.Count;
         }
 
-        /// <summary>
-        /// 몬스터가 스킬을 사용할수 있는지 여부 체크 및 제일 피해량이 높은 스킬 의 피해량과 코스트, number를 배열로 리턴 / 없다면 null로 리턴
-        /// </summary>
-        public int[] MonsteSkillUse(string className, int ATK, int mp)
+        public Skill GetMonsterSkill(string className, int ATK, int mp)
         {
             if (skillDictionary.Count == 0)
             {
@@ -89,84 +85,37 @@ namespace TextRPG
             {
                 if (list[i].Cost <= mp)
                 {
-                    return [list[i].GetATK(ATK), list[i].Cost, i];
+                    return list[i];
                 }
             }
 
-            //사용가능한 스킬이 없다면 null리턴
             return null;
         }
 
-        /// <summary>
-        /// 플레이어의 스킬 피해량
-        /// </summary>
-        public int GetSkillATK(string className, int number, int ATK)
+        public Skill GetPlayerSkill(string className, int number, int ATK)
         {
             List<Skill> list;
             if (skillDictionary.Count == 0)
             {
                 Console.Error.WriteLine("Skills Empty");
-                return 0;
+                return null;
             }else if (skillDictionary.TryGetValue(className, out list) == false)
             {
                 Console.Error.WriteLine($"GetSkillATK Faill! SkillDictionary[{className}] is not Add");
-                return 0;
-            }
-
-            return list[number].GetATK(ATK); 
-        }
-
-        public string GetSkillName(string className, int number)
-        {
-            List<Skill> list;
-            if (skillDictionary.Count == 0)
-            {
-                Console.Error.WriteLine("Skills Empty");
-                return null;
-            }
-            else if (skillDictionary.TryGetValue(className, out list) == false)
-            {
-                Console.Error.WriteLine($"GetSkillATK Faill! SkillDictionary[{className}] is not Add");
-                return null;
-            }
-            else if (number == list.Count)
-            {
-                Console.Error.WriteLine("GetSkillName list[number] = null! number : " + number);
                 return null;
             }
 
-            return list[number].Name;
-        }
-        
-        public int GetCost(string className, int number)
-        {
-            List<Skill> list;
-            if (skillDictionary.Count == 0)
-            {
-                Console.Error.WriteLine("Skills Empty");
-                return 0;
-            }else if(skillDictionary.TryGetValue(className, out list) == false)
-            {
-                Console.Error.WriteLine($"GetSkillATK Faill! SkillDictionary[{className}] is not Add");
-                return 0;
-            }
-            else if (number == list.Count)
-            {
-                Console.Error.WriteLine("GetSkillName list[number] = null! number : " + number);
-                return 0;
-            }
-
-            return list[number].Cost;
+            return list[number]; 
         }
     }
 
     class Skill
     {
-        public string Name { get; private set; }
-        public string Class { get; private set; }
-        private float ATK { get; set; } //공격력의 퍼센트 데미지
-        public int Cost { get; private set; }
-        public string Description { get; private set; }
+        public readonly string Name;
+        public readonly string Class;
+        public readonly float ATK;
+        public readonly int Cost;
+        public readonly string Description;
 
         public Skill(string name, string Class, float ATK, int cost, string description)
         {
