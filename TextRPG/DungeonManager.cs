@@ -10,8 +10,6 @@ namespace TextRPG
     // 전투 결과 구현하기
     internal class DungeonManager : IListener
     {
-        private static readonly DungeonManager instance = new DungeonManager();
-        static public DungeonManager Instance { get { return instance; } }
         public DungeonManager() 
         {
             // 몬스터 정보 받아오기
@@ -23,14 +21,54 @@ namespace TextRPG
         // 누가 공격했는지
         // 누구를 공격했는지, 준 데미지 표기
 
+        // 주는 데미지 결정
+        // Hp 변화가 있을 시 Event.Type(eHpChange)로 postevent 해주기
+
         // 공격 받은 객체의 HP 상태 출력, 반환
-        public int ShowBattle(Monster monster, Player player, bool isPlayerTurn)
+        public void ShowBattle(Monster monster, Player player, bool isPlayerTurn)
         {
-            if(isPlayerTurn)
+            Console.Clear();
+            int playerHp = 100;     // 임시 플레이어 체력
+            int playerAtk = 10;     // 임시 플레이어 공격력
+
+            double getDamage;
+            int damage;
+
+            Console.WriteLine("Battle!!");
+
+            if (isPlayerTurn)
             {
-                
+                getDamage = playerAtk / 100.0 * 10;
+                damage = new Random().Next(playerAtk - (int)Math.Ceiling(getDamage), playerAtk + (int)Math.Ceiling(getDamage) + 1);
+
+                Console.WriteLine("Chad 의 공격!");
+                Console.WriteLine($"Lv.{monster.Lv} {monster.Name} 을(를) 맞췄습니다. [데미지 : {damage}]\n");
+
+                Console.WriteLine($"Lv.{monster.Lv} {monster.Name}");
+                Console.Write($"{monster.Hp} -> ");
+
+                monster.Hp -= damage;
+                if(monster.Hp <= 0 ) { monster.isDead = true; }
+
+                Console.WriteLine($"{(monster.isDead ? "Dead" : monster.Hp)}");
             }
-            return 0;
+            else
+            {
+                getDamage = monster.Atk / 100.0 * 10;
+                damage = new Random().Next(monster.Atk - (int)Math.Ceiling(getDamage), monster.Atk + (int)Math.Ceiling(getDamage) + 1);
+                Console.WriteLine($"Lv.{monster.Lv} {monster.Name} 의 공격!");
+                Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]");
+
+                Console.WriteLine($"Lv.1 Chad");
+                Console.Write($"{playerHp} -> {playerHp -= damage}");
+            }
+
+            Console.WriteLine("\n0. 다음\n");
+            if(Utilities.GetInputKey(0, 0, ConsoleColor.Yellow, ">> ") == 0)
+            {
+                Console.Clear();
+                return;
+            }
         }
 
         public void OnEvent(EventType type, object data)

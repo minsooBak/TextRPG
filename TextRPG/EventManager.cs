@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 public enum EventType
 {
-    NONE, eMakeMonster
+    NONE, 
+    eMakeMonster,
+    eHpChange
 }
 
 public interface IListener
@@ -51,6 +53,7 @@ namespace TextRPG
                 listenList?[i].OnEvent(eventType, param);
             }
         }
+
 
         public void RemoveListener(EventType eventType)
         {
