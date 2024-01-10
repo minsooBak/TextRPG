@@ -65,6 +65,13 @@ namespace TextRPG
             Console.ResetColor();
         }
 
+        static public void TextColorWithNoNewLine(string str, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(str);
+            Console.ResetColor();
+        }
+
         static public int GetInputKey(int min, int max)
         {
             while (true)
