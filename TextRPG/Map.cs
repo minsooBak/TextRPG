@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static TextRPG.Player;
 
 namespace TextRPG
 {
@@ -43,25 +44,30 @@ namespace TextRPG
         }
 
         private void ShowBattle()
-        {
-            // 전투
-
+        { 
             // 몬스터 출력
             Random random = new Random();
             int monsterCount = random.Next(1, 5);   // 생성할 몬스터의 수
             int deadCounter = 0;
-           
+
 
             EventManager.Instance.PostEvent(EventType.eMakeMonster, monsterCount);      // 몬스터 생성하기
 
-            while (deadCounter < monsterCount)
+            while (deadCounter < monsterCount)  // 모든 몬스터가 죽거나 플레이어 체력이 0이 될 시 종료
             {
                 Console.Clear();
                 Console.WriteLine("Battle!!\n");
 
                 foreach (Monster monster in monsterManager.monsters)
                 {
-                    Console.WriteLine($"Lv.{(monster.Lv)} {monster.Name}  HP {monster.Hp}");
+                    if (monster.Hp <= 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine($"Lv.{(monster.Lv)} {monster.Name} Dead");
+                        Console.ResetColor();
+                    }
+                    else
+                        Console.WriteLine($"Lv.{(monster.Lv)} {monster.Name} HP {monster.Hp}");
                 }
 
                 Console.WriteLine("\n[내 정보]");
@@ -79,6 +85,9 @@ namespace TextRPG
                         break;
                 }
             }
+
+            dungeonManager.ShowResult(deadCounter, monsterManager.monsters.Count);
+
         }
 
         public void SelectMonster(int monsterCount, ref int deadCounter)
@@ -93,7 +102,14 @@ namespace TextRPG
             int i = 0;
             foreach (Monster monster in monsterManager.monsters)
             {
-                Console.WriteLine($"{i + 1} Lv.{(monster.Lv)} {monster.Name}  HP {monster.Hp}");
+                if (monster.Hp <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"{i + 1} Lv.{(monster.Lv)} {monster.Name} Dead");
+                    Console.ResetColor();
+                }
+                else
+                    Console.WriteLine($"{i + 1} Lv.{(monster.Lv)} {monster.Name}  HP {monster.Hp}");
                 i++;
             }
             Console.WriteLine("\n[내 정보]");
@@ -104,12 +120,24 @@ namespace TextRPG
             Console.WriteLine("\n0. 취소\n");
 
             Console.WriteLine("대상을 선택해주세요.");
-            switch (Utilities.GetInputKey(0, monsterCount, ConsoleColor.Yellow, ">> "))
+            int input = (Utilities.GetInputKey(0, monsterCount, ConsoleColor.Yellow, ">> "));
+
+            for(int j = 0; j <= monsterCount; j++)
             {
-                case 0:
+                deadCounter = 0;
+                if (input == 0)
+                {
                     break;
-                case 1:
-                    dungeonManager.ShowBattle(monsterManager.monsters[0], player, isPlayerTurn);
+                }
+                else if (j == input)
+                {
+                    if (monsterManager.monsters[j - 1].isDead)
+                    {
+                        Console.WriteLine("다시 선택해주세요!");
+                        Console.ReadKey();
+                        break;
+                    }
+                    dungeonManager.ShowBattle(monsterManager.monsters[j - 1], player, isPlayerTurn);
                     isPlayerTurn = false;
 
                     foreach (Monster monster in monsterManager.monsters)
@@ -122,8 +150,7 @@ namespace TextRPG
                         dungeonManager.ShowBattle(monster, player, isPlayerTurn);
                     }
                     isPlayerTurn = true;
-
-                    break;
+                }
             }
         }
     }

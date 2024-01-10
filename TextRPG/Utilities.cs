@@ -16,7 +16,8 @@ namespace TextRPG
         Map,
         Item,
         ItemData,
-        Monster
+        Monster,
+        SkillData
     }
 
     struct ObjectState
@@ -32,6 +33,12 @@ namespace TextRPG
         public int ATK { get; set; }
         public int DEF { get; set; }
     }
+
+    public interface IAttack
+    {
+        int Attack();
+    }
+
 
     internal static class Utilities
     {
