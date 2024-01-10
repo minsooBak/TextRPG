@@ -74,13 +74,31 @@ namespace TextRPG
 
             shopItems = list.FindAll(x => x.IsSale == true).ToArray();
             fieldItems = list.FindAll(x => x.IsOnField == true).ToArray();
+            
+            List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
+            EventManager.Instance.PostEvent(EventType.eUpdateItem, null);
 
+            // ItemManager에 Event Listener 등록
+            EventManager.Instance.AddListener(EventType.eGetItem, this);
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);
 
         }
 
-        public void ShowInventory()
+        public void ShowInventory(bool isBought = false, bool isEquipped = false)
+        // 인벤토리 보기 관련 메서드
         {
-            // 인벤토리 보기 관련 메서드
+            Console.WriteLine("[아이템 목록]");
+
+            foreach (Item item in inventory)
+            // 양식에 맞춰 콘솔에 아이템 정보 출력
+            // 1. [E] {아이템 이름} | (양식 수정 예정)
+            {
+                if (isBought)
+                {
+                    Console.WriteLine($"");
+                }
+            }
+            
         }
 
         public void GetFieldItem()
@@ -93,9 +111,37 @@ namespace TextRPG
             // 장비 착용 관련 메서드
         }
 
+        public void SellItem()
+        {
+            // 아이템 판매 관련 메서드
+        }
+
+        public void BuyItem()
+        {
+            // 아이템 구매 관련 메서드
+        }
+
+        public void ShowShop()
+        {
+            // 상점 관련 메서드
+        }
+
         public void OnEvent(EventType type, object data)
         {
             // 게임 이벤트에 따른 인벤토리 기능 구현
+            switch (type)
+            {
+                // case가 eGameEnd인 경우 ItemData를 저장
+                case EventType.eGameEnd:
+                    ItemData itemData = new ItemData();
+                    itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                    itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                    itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+                    itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+
+                    Utilities.SaveFile(SaveType.ItemData, itemData);
+                    break;
+            }
         }
     }
 

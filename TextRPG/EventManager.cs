@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 public enum EventType
 {
-    NONE,
+    eUpdateItem,
+    eGetItem,
+    eGameEnd
 }
 
 public interface IListener
