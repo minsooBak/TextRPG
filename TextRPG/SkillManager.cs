@@ -66,7 +66,7 @@ namespace TextRPG
             return list.Count;
         }
 
-        public Skill GetMonsterSkill(string className, int ATK, int mp)
+        public Skill GetMonsterSkill(string className, int mp)
         {
             if (skillDictionary.Count == 0)
             {
