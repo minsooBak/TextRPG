@@ -58,7 +58,7 @@ namespace TextRPG
             sb.Append(str);
         }
 
-        static void TextColor(string str, ConsoleColor color)
+        static public void TextColor(string str, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(str);
