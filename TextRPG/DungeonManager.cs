@@ -15,17 +15,26 @@ namespace TextRPG
             // 몬스터 정보 받아오기
             // 플레이어 정보 받아오기
         }
+        public int deadCounter = 0;
+        public Monster[] monster;
 
+        // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
+        public void GetMonsterList(List<Monster> monsters)
+        {
+            monster = monsters.ToArray();
 
-        // 플레이어 혹은 몬스터가 상대를 공격했을 때 결과
-        // 결과 : 
-        // 누가 공격했는지
-        // 누구를 공격했는지, 준 데미지 표기
+            foreach(Monster m in monster)
+            {
+                Console.WriteLine(m.Name);
+            }
+            Console.ReadKey();
+        }
 
-        // 주는 데미지 결정
-        // Hp 변화가 있을 시 Event.Type(eHpChange)로 postevent 해주기
+        // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
 
-        // 공격 받은 객체의 HP 상태 출력, 반환
+        // 공격할 몬스터 고르기(SelectMonster)
+        
+        // 공격 진행하기(ShowBattle)
         public void ShowBattle(Monster monster, Player player, bool isPlayerTurn)
         {
             Console.Clear();

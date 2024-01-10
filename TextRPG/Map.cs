@@ -53,6 +53,8 @@ namespace TextRPG
 
             EventManager.Instance.PostEvent(EventType.eMakeMonster, monsterCount);      // 몬스터 생성하기
 
+            dungeonManager.GetMonsterList(monsterManager.monsters);
+
             while (deadCounter < monsterCount)  // 모든 몬스터가 죽거나 플레이어 체력이 0이 될 시 종료
             {
                 Console.Clear();
