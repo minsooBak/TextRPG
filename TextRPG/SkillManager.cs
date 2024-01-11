@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace TextRPG
 {
-    internal class SkillManager
+    internal class SkillManager : IListener
     {
         private readonly Skill[] skillList = []; //전체 스킬데이터
         private Dictionary<string, List<Skill>> skillDictionary = [];//직업별 스킬 데이터{ [직업] , 스킬 리스트}
         // public List<string> classNames; //직업 이름 배열
         public SkillManager()
         {
+            EventManager.Instance.AddListener(EventType.eShowSkill,this);
             List<string> classNames = new List<string>(); //클래스 이름 배열
             skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
             if (skillList == null)
@@ -70,8 +71,9 @@ namespace TextRPG
 
             for(int i = 0; i < list.Count; i++)
             {
-                Utilities.AddLine($"{i + 1}. {list[i].Name} - mp {list[i].Cost}"); //스킬 이름 , 비용 출력
-                Utilities.AddLine($"   {list[i].Description}."); //스킬 설명 출력
+                Utilities.TextColorWithNoNewLine($"{i + 1}. ", ConsoleColor.DarkRed);
+                Console.WriteLine($"{list[i].Name} - mp {list[i].Cost}"); //스킬 이름 , 비용 출력
+                Console.WriteLine($"   {list[i].Description}."); //스킬 설명 출력
             }
             return list.Count; //스킬 개수 반환
         }
@@ -116,6 +118,18 @@ namespace TextRPG
             }
 
             return list[number]; 
+        }
+
+        public void OnEvent(EventType type, object data)
+        {
+            if (type == EventType.eShowSkill)
+            {
+                ShowSkillList((string)data);
+            }
+            else if (type == EventType.eSkillActive)
+            {
+
+            }
         }
     }
 

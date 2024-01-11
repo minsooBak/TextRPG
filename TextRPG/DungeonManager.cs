@@ -33,6 +33,7 @@ namespace TextRPG
 
         public int playerHp = 100;  // 임시 플레이어 체력
         public int playerAtk = 10;  // 임시 플레이어 공격력
+        public string playerJob = "전사"; // 임시 플레이어 직업
 
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
@@ -80,13 +81,34 @@ namespace TextRPG
                         SelectMonster();
                         break;
                         case AttackType.Skill:
+                        SelectSkill();
                         Console.WriteLine("스킬");
                         break;
                 }
             }
             ShowResult(deadCounter, monsters.Length);
         }
+        public void SelectSkill()
+        {
+            Console.Clear();
 
+            bool isPlayerTurn = true;
+
+            Console.WriteLine("Battle!! - 대상 선택\n");
+
+            ShowMonsterList(showMonsterMode = false); //몬스터 번호 없이 출력
+
+            ShowPlayerStats(); // 플레이어 상태 표시
+
+            EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력
+
+            Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
+            Console.WriteLine(" 취소\n");
+
+            Utilities.AddLine("원하시는 행동을 입력해주세요.");
+            Utilities.Add(">>");
+            int input = Utilities.GetInputKey(0, monsters.Length);
+        }
         private void ShowPlayerStats()
         {
             Console.WriteLine("\n[내 정보]");
