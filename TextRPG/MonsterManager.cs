@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TextRPG
@@ -24,6 +25,7 @@ namespace TextRPG
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
+            EventManager.Instance.AddListener(EventType.eClearMonsters, this);
             listOfMonsters = new List<Monster>();
             dungeonMonsters = new List<Monster>();
 
@@ -58,16 +60,25 @@ namespace TextRPG
             return dungeonMonsters.Count;
         }
 
+        public void ClearMonsterList()
+        {
+            dungeonMonsters.Clear();
+        }
+
         public void OnEvent(EventType type, object data)
         {
             if (type == EventType.eMakeMonsters)
             {
                 MakeMonsters();
             }
+            else if(type == EventType.eClearMonsters)
+            {
+                ClearMonsterList();
+            }
         }
     }
 
-    public class Monster : IListener, IAttack, ITakeDamage
+    public class Monster : IListener, IObject
     {
         public string Name { get; private set; } //몬스터 이름
         public int Lv { get; private set; } // 레벨
@@ -90,8 +101,26 @@ namespace TextRPG
 
         public void TakeDamage(int damage)
         {
+            Console.WriteLine($"Lv.{this.Lv} {this.Name} 을(를) 맞췄습니다. [데미지 : {damage}]\n");
+
+            Console.WriteLine($"Lv.{this.Lv} {this.Name}");
+            Console.Write($"{this.Hp} -> ");
+
             this.Hp -= damage;
             if (this.Hp <= 0) this.isDead = true;
+
+            Console.WriteLine($"{(this.isDead ? "Dead" : this.Hp)}");
+        }
+
+        public bool IsDead()
+        {
+            if (this.isDead)
+            {
+                Console.WriteLine("이미 죽은 몬스터입니다.\n 다시 선택해주세요!");
+                Console.ReadKey();
+            }
+
+            return this.isDead;
         }
 
         public Monster(MonsterType monsterType = MonsterType.Monster1) //몬스터 초기화
