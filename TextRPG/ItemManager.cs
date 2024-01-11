@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,21 +85,74 @@ namespace TextRPG
 
         }
 
-        public void ShowInventory(bool isBought = false, bool isEquipped = false)
+        public void ShowInventory()
         // 인벤토리 보기 관련 메서드
         {
             Console.WriteLine("[아이템 목록]");
 
+            int count = 0;
             foreach (Item item in inventory)
             // 양식에 맞춰 콘솔에 아이템 정보 출력
-            // 1. [E] {아이템 이름} | (양식 수정 예정)
+            // 1. [E] {아이템 이름}    | {공격력 or 방어력} {추가 스탯}  | {설명}          |
             {
-                if (isBought)
-                {
-                    Console.WriteLine($"");
-                }
+                count++;
+                if (item.IsEquipped)
+                    Console.Write($"-{count} [E] ");
+                else
+                    Console.Write($"-{count} [-] ");
+
+                Console.WriteLine($"{item.Name} | " +
+                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK}") : "")} " +
+                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF}") : "")} " +
+                    $"{item.Description} | " );
             }
             
+        }
+
+        public void ShowShop()
+        {
+            Console.WriteLine("[아이템 목록]");
+
+            int count = 0;
+            foreach (Item item in shopDisplay)
+            // 양식에 맞춰 콘솔에 아이템 정보 출력
+            // 1. {아이템 이름}    | {공격력 or 방어력} {추가 스탯}  | {설명} | {가격} G
+            {
+                count++;
+                Console.Write($"{item.Name} | " +
+                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK}") : "")} " +
+                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF}") : "")} " +
+                    $"{item.Description}");
+                if (item.IsSale)
+                    Console.WriteLine($"{item.Cost} G");
+                else
+                    Console.WriteLine("구매 완료");
+            }
+            
+        }
+        public void BuyItem(int itemNum, int myWallet)
+        {
+            // 아이템 구매 관련 메서드
+            Item item = shopDisplay[itemNum - 1];
+            if (item.Cost > myWallet)
+            {
+                Console.WriteLine("소지금이 부족합니다.");
+                return;
+            }
+            else
+            {
+                item.IsSale = false;
+                inventory.Add(item);
+                Console.WriteLine($"{item.Name}을 구매했습니다.");
+
+                // EventManager로 골드 변경 이벤트 전달
+                EventManager.Instance.PostEvent(EventType.eUpdateGold, -item.Cost);
+            }
+        }
+
+        public void SellItem()
+        {
+            // 아이템 판매 관련 메서드
         }
 
         public void GetFieldItem()
@@ -111,20 +165,8 @@ namespace TextRPG
             // 장비 착용 관련 메서드
         }
 
-        public void SellItem()
-        {
-            // 아이템 판매 관련 메서드
-        }
 
-        public void BuyItem()
-        {
-            // 아이템 구매 관련 메서드
-        }
 
-        public void ShowShop()
-        {
-            // 상점 관련 메서드
-        }
 
         public void OnEvent(EventType type, object data)
         {
@@ -153,21 +195,21 @@ namespace TextRPG
         public ItemType Type { get; private set; }
         public int ATK { get; private set; }
         public int DEF { get; private set; }
-        public string Comment { get; private set; }
+        public string Description { get; private set; }
         public int Cost { get; private set; }
 
         public bool IsEquipped { get; set; } // 장비 착용 여부
-        public bool IsSale { get; private set; } // 상점에서 판매 가능한 지의 여부
+        public bool IsSale { get; set; } // 상점에서 판매 가능한 지의 여부
         public bool IsOnField { get; private set; } // 던전에서 얻을 수 있는 지의 여부
 
-        public Item(string name, int type, int atk, int def, string comment, int reqGold, bool isSale, bool isOnField)
+        public Item(string name, int type, int atk, int def, string description, int reqGold, bool isSale, bool isOnField)
         // Item 클래스 생성자
         {
             Name = name;
             Type = (ItemType)type;
             ATK = atk;
             DEF = def;
-            Comment = comment;
+            Description = description;
             Cost = reqGold;
             IsSale = isSale;
             IsOnField = isOnField;
