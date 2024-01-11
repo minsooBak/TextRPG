@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 public enum EventType
 {
-    NONE,
+    eGameInit,
+    eGameEnd,
+    eItemGet,
+    eItemChage,
+    eHealthChage,
+    eGoldChage,
+    eExpChage
 }
 
 public interface IListener
