@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static TextRPG.Player;
 
 namespace TextRPG
@@ -19,6 +20,7 @@ namespace TextRPG
 
         MonsterManager monsterManager = new MonsterManager();
         DungeonManager dungeonManager = new DungeonManager();
+        SkillManager skillManager = new SkillManager();
         Player player = new Player();
 
         public void StartGame()
@@ -30,6 +32,15 @@ namespace TextRPG
             Utilities.AddLine("1. 상태 보기");
             Utilities.AddLine("2. 전투 시작");
             Utilities.AddLine("");
+
+            //전체 스킬 출력해보기용
+            //foreach (string Name in skillManager.classNames)
+            //{
+            //    skillManager.ShowSkillList(Name);
+            //}
+            
+            //스킬 출력 예제
+            //skillManager.ShowSkillList(skillManager.classNames[0]);
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             switch ((GameState)Utilities.GetInputKey(1, 2, ConsoleColor.Yellow, ">>"))

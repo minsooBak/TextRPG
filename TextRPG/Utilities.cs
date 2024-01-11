@@ -229,6 +229,25 @@ namespace TextRPG
                         }
                         break;
                     }
+                case LoadType.SkillData:
+                    {
+                        path = path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Skill_Data.json";
+                        if (File.Exists(path) == false)
+                            return null;
+                        StreamReader? file = File.OpenText(path);
+                        if (file != null)
+                        {
+                            JsonTextReader reader = new JsonTextReader(file);
+
+                            JArray json = (JArray)JToken.ReadFrom(reader);
+                            string? str = JsonConvert.SerializeObject(json);
+
+                            file.Close();
+                            return JsonConvert.DeserializeObject<Skill[]>(str);
+                        }
+                        break;
+                    }
             }
             return null;
         }
