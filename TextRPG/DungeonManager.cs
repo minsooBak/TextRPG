@@ -18,7 +18,7 @@ namespace TextRPG
     internal class DungeonManager : IListener
     {
         private Player player;
-
+        private SkillManager skillManager= new SkillManager();
         public DungeonManager(Player player) 
         {
             // 몬스터 정보 받아오기
@@ -78,17 +78,16 @@ namespace TextRPG
                 switch((AttackType)Utilities.GetInputKey(1, 2))
                 {
                     case AttackType.Attack:
-                        SelectMonster();
+                        SelectMonster(AttackType.Attack);
                         break;
                         case AttackType.Skill:
                         SelectSkill();
-                        Console.WriteLine("스킬");
                         break;
                 }
             }
             ShowResult(deadCounter, monsters.Length);
         }
-        public void SelectSkill()
+        public void SelectMonster(AttackType attackType = AttackType.Attack) //대상 선택
         {
             Console.Clear();
 
@@ -96,18 +95,86 @@ namespace TextRPG
 
             Console.WriteLine("Battle!! - 대상 선택\n");
 
-            ShowMonsterList(showMonsterMode = false); //몬스터 번호 없이 출력
+            ShowMonsterList(showMonsterMode = true);
 
-            ShowPlayerStats(); // 플레이어 상태 표시
-
-            EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력
+            ShowPlayerStats();
 
             Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
             Console.WriteLine(" 취소\n");
 
+            Console.WriteLine("대상을 선택해주세요.");
+            Utilities.TextColorWithNoNewLine(">> ", ConsoleColor.Yellow);
+
+            Random rnd = new Random();
+            int monsterAttackType;
+            int input = Utilities.GetInputKey(0, monsters.Length);
+            if (input == 0) return;
+
+            for (int i = 1; i <= monsters.Length; i++)
+            {
+                if (input == i)
+                {
+                    if (monsters[i - 1].IsDead())
+                    {
+                        break;
+                    }
+
+                    ShowBattle(monsters[i - 1], isPlayerTurn, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
+                    isPlayerTurn = false;
+
+                    foreach (Monster monster in monsters)
+                    {
+                        if (monster.isDead)
+                        {
+                            continue;
+                        }
+
+                        monsterAttackType = rnd.Next(1, 3);// 1 ~2
+
+                        if ((AttackType)monsterAttackType == AttackType.Skill)
+                        {
+                            Console.WriteLine("몬스터 스킬");
+                            monster.SetSkill(skillManager.GetMySkill(monster.Name, 0));
+                        }
+                        ShowBattle(monster, isPlayerTurn, (AttackType)monsterAttackType);
+                    }
+                    isPlayerTurn = true;
+                }
+            }
+        }
+        public void SelectSkill()
+        {
+            Console.Clear();
+
+            bool isPlayerTurn = true;
+
+            Utilities.TextColor("Battle!!\n", ConsoleColor.DarkYellow);
+
+            ShowMonsterList(showMonsterMode = false); //몬스터 번호 없이 출력
+
+            ShowPlayerStats(); // 플레이어 상태 표시
+
+            //EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력 
+            skillManager.ShowSkillList(playerJob);// 플레이어 직업의 스킬 출력 
+
+            Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
+            Console.WriteLine(" 취소");
+
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            int input = Utilities.GetInputKey(0, monsters.Length);
+            
+            int input = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
+            input--;
+            if (0 <= input && input < skillManager.GetMySkillCount(playerJob))
+            {
+                player.SetSkill(skillManager.GetMySkill(playerJob, input)); //선택한 스킬 할당
+                SelectMonster(AttackType.Skill);
+            }
+            else
+            {
+                StartBattle();
+                return;
+            }
         }
         private void ShowPlayerStats()
         {
@@ -142,61 +209,15 @@ namespace TextRPG
                 i++;
             }
         }
-
         // 공격할 몬스터 고르기(SelectMonster)
         // 플레이어가 선택하는 몬스터를 반환한다.
-        public void SelectMonster()
-        {
-            Console.Clear();
-
-            bool isPlayerTurn = true;
-
-            Console.WriteLine("Battle!! - 대상 선택\n");
-
-            ShowMonsterList(showMonsterMode = true);
-
-            ShowPlayerStats();
-
-            Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
-            Console.WriteLine(" 취소\n");
-
-            Console.WriteLine("대상을 선택해주세요.");
-            Utilities.TextColorWithNoNewLine(">> ", ConsoleColor.Yellow);
-
-            int input = Utilities.GetInputKey(0, monsters.Length);
-            if (input == 0) return;
-
-            for (int i = 1; i <= monsters.Length; i++)
-            {
-                if (input == i)
-                {
-                    if (monsters[i - 1].IsDead())
-                    {
-                        break;
-                    }
-
-                    ShowBattle(monsters[i - 1], isPlayerTurn);
-                    isPlayerTurn = false;
-
-                    foreach (Monster monster in monsters)
-                    {
-                        if (monster.isDead)
-                        {
-                            continue;
-                        }
-                        ShowBattle(monster, isPlayerTurn);
-                    }
-                    isPlayerTurn = true;
-                }
-            }
-        }
+        
 
         // 공격 진행하기(ShowBattle)
-        public void ShowBattle(Monster monster, bool isPlayerTurn)
+        public void ShowBattle(Monster monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
         {
             Console.Clear();
 
-            double getDamage;
             int damage;
 
             Utilities.TextColor("Battle!! - 전투 진행\n", ConsoleColor.DarkYellow);
@@ -208,11 +229,7 @@ namespace TextRPG
                 // player.Attack()에서 damage를 return 받아 monster.TakeDamage()에 넣어주기
                 // monster.TakeDamage(player.Attack());
 
-
-                getDamage = playerAtk / 100.0 * 10;
-                damage = new Random().Next(playerAtk - (int)Math.Ceiling(getDamage), playerAtk + (int)Math.Ceiling(getDamage) + 1);
-
-                Console.WriteLine("Chad 의 공격!");
+                damage = player.Attack(attackType); //공격 종류에 따라 달리 작동
 
                 monster.TakeDamage(damage);
             }
@@ -222,7 +239,7 @@ namespace TextRPG
                 // player.Attack()에서 damage를 return 받아 monster.TakeDamage()에 넣어주기
                 // player.TakeDamage(monster.Attack());
 
-                damage = monster.Attack();
+                damage = monster.Attack(attackType);
                 Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
                 Console.WriteLine($"Lv.1 Chad");

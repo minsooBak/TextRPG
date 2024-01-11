@@ -9,7 +9,7 @@ public enum EventType
     NONE, 
     eMakeMonsters,
     eClearMonsters,
-    eSkillActive,
+    eSetSkill,
     eShowSkill
 }
 

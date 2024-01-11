@@ -20,7 +20,6 @@ namespace TextRPG
         Monster,
         SkillData
     }
-
     struct ObjectState
     {
         public string Name { get; set; }
@@ -37,7 +36,8 @@ namespace TextRPG
 
     interface IObject
     {
-        int Attack();
+        void SetSkill(Skill skill);
+        int Attack(AttackType attackType);
         void TakeDamage(int damage);
         bool IsDead();
     }
@@ -86,14 +86,14 @@ namespace TextRPG
                     }
                     else
                     {
-                        Console.Clear();
+                        //Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
                         Console.WriteLine("===================================================");
                     }
                 }
                 else
                 {
-                    Console.Clear();
+                    //Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
                     Console.WriteLine("===================================================");
                 }

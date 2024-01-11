@@ -2,19 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TextRPG
 {
-    internal class SkillManager : IListener
+    internal class SkillManager /*: IListener*/
     {
         private readonly Skill[] skillList = []; //전체 스킬데이터
         private Dictionary<string, List<Skill>> skillDictionary = [];//직업별 스킬 데이터{ [직업] , 스킬 리스트}
         // public List<string> classNames; //직업 이름 배열
         public SkillManager()
         {
-            EventManager.Instance.AddListener(EventType.eShowSkill,this);
+            //EventManager.Instance.AddListener(EventType.eShowSkill,this);
+            //EventManager.Instance.AddListener(EventType.eSetSkill, this);
             List<string> classNames = new List<string>(); //클래스 이름 배열
             skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
             if (skillList == null)
@@ -63,13 +66,13 @@ namespace TextRPG
             }
 
             List<Skill> list;
-            if(skillDictionary.TryGetValue(className, out list) == false) // 스킬이 없다면 에러
+            if (skillDictionary.TryGetValue(className, out list) == false) // 스킬이 없다면 에러
             {
                 Console.Error.WriteLine("Skill Show ClassName Null! ClassName : " + className);
                 return 0;
             }
 
-            for(int i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 Utilities.TextColorWithNoNewLine($"{i + 1}. ", ConsoleColor.DarkRed);
                 Console.WriteLine($"{list[i].Name} - mp {list[i].Cost}"); //스킬 이름 , 비용 출력
@@ -100,40 +103,33 @@ namespace TextRPG
                     return list[i];
                 }
             }
-
             return null;
         }
-
-        public Skill GetPlayerSkill(string className, int number)
+        public Skill GetMySkill(string className,int number) //플레이어 스킬 반환
         {
-            List<Skill> list;
-            if (skillDictionary.Count == 0)
-            {
-                Console.Error.WriteLine("Skills Empty");
-                return null;
-            }else if (skillDictionary.TryGetValue(className, out list) == false)
-            {
-                Console.Error.WriteLine("GetPlayerSkill Fail! ClassName : " + className);
-                return null;
-            }
-
-            return list[number]; 
+            return skillDictionary[className][number];
         }
 
-        public void OnEvent(EventType type, object data)
+        public int GetMySkillCount(string className) //플레이어 스킬 개수 반환
         {
-            if (type == EventType.eShowSkill)
-            {
-                ShowSkillList((string)data);
-            }
-            else if (type == EventType.eSkillActive)
-            {
-
-            }
+            return skillDictionary[className].Count;
         }
+
+
+        //public void OnEvent(EventType type, object data)
+        //{
+        //    if (type == EventType.eShowSkill)
+        //    {
+        //        ShowSkillList((string)data);
+        //    }
+        //    else if (type == EventType.eSetSkill)
+        //    {
+
+        //    }
+        //}
     }
 
-    class Skill
+    public class Skill
     {
         public readonly string Name; //이름
         public readonly string Class; //클래스
