@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace TextRPG
@@ -34,14 +35,11 @@ namespace TextRPG
         public int DEF { get; set; }
     }
 
-    public interface IAttack
+    interface IObject
     {
         int Attack();
-    }
-
-    public interface ITakeDamage
-    {
         void TakeDamage(int damage);
+        bool IsDead();
     }
 
 

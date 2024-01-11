@@ -18,13 +18,14 @@ namespace TextRPG
             StartBattle
         }
 
-        MonsterManager monsterManager = new MonsterManager();
-        DungeonManager dungeonManager = new DungeonManager();
-        SkillManager skillManager = new SkillManager();
         Player player = new Player();
-
+        MonsterManager monsterManager = new MonsterManager();
+        DungeonManager dungeonManager;
+        SkillManager skillManager = new SkillManager();
+        
         public void StartGame()
         {
+            dungeonManager = new DungeonManager(player);
             Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다.");
             Utilities.AddLine("이제 전투를 시작할 수 있습니다.");
             Utilities.AddLine("");
@@ -52,11 +53,11 @@ namespace TextRPG
 
         private void ShowBattle()
         {
-            dungeonManager.GetPlayer(player);
-
             EventManager.Instance.PostEvent(EventType.eMakeMonsters);      // 몬스터 생성하기
 
             dungeonManager.Encounter(monsterManager.dungeonMonsters);
+
+            EventManager.Instance.PostEvent(EventType.eClearMonsters);
         }
     }
 }
