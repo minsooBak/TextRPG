@@ -18,7 +18,8 @@ namespace TextRPG
         Item,
         ItemData,
         Monster,
-        SkillData
+        SkillData,
+        Dungeon
     }
 
     struct ObjectState
@@ -224,6 +225,24 @@ namespace TextRPG
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
                             //return JsonConvert.DeserializeObject<List<Monster>>(str);
+                        }
+                        break;
+                    }
+                case LoadType.Dungeon:
+                    {
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Dungeon_Data.json";
+                        if (File.Exists(path) == false)
+                            return null;
+                        StreamReader? file = File.OpenText(path);
+                        if (file != null)
+                        {
+                            JsonTextReader reader = new JsonTextReader(file);
+
+                            JArray json = (JArray)JToken.ReadFrom(reader);
+                            string? str = JsonConvert.SerializeObject(json);
+                            file.Close();
+                            return JsonConvert.DeserializeObject<List<Dungeon>>(str);
                         }
                         break;
                     }

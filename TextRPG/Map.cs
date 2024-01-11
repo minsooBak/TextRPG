@@ -46,9 +46,10 @@ namespace TextRPG
 
         private void ShowBattle()
         {
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters);      // 몬스터 생성하기
-
-            dungeonManager.Encounter(monsterManager.dungeonMonsters);
+            // 던전 스테이지 선택.
+            // 플레이어의 던전 클리어 여부에 따라 진입 가능한 던전 난이도가 높아집니다.
+            // 현재는 SelectDungeonStage의 매개변수에 따라 난이도를 조절해주세요.
+            dungeonManager.SelectDungeonStage(1);
 
             EventManager.Instance.PostEvent(EventType.eClearMonsters);
         }

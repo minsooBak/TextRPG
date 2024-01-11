@@ -21,14 +21,29 @@ namespace TextRPG
 
         public DungeonManager(Player player) 
         {
-            // 몬스터 정보 받아오기
+            EventManager.Instance.AddListener(EventType.eSetMonsters, this);
+            List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
+            dungeons = d;
+
             // 플레이어 정보 받아오기
             this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
         }
+        public List<Dungeon> dungeons = [];
         public int deadCounter = 0;
+        public int dungeonStage = 1;
         public Monster[] monsters;
-        
 
+        public void SelectDungeonStage(int stage)
+        {
+            dungeonStage = stage - 1;
+            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType);
+        }
+
+        public void MakeMonsters(int dungeonMonsterType)
+        {
+            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
+        }
+        
         public bool showMonsterMode = false;
 
         public int playerHp = 100;  // 임시 플레이어 체력
@@ -36,9 +51,9 @@ namespace TextRPG
 
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
-        public void Encounter(List<Monster> dungeonMonster)
+        public void Encounter(List<Monster>dungeonMonsters)
         {
-            monsters = dungeonMonster.ToArray();
+            monsters = dungeonMonsters.ToArray();
 
             StartBattle();
         }
@@ -252,7 +267,23 @@ namespace TextRPG
 
         public void OnEvent(EventType type, object data)
         {
-            throw new NotImplementedException();
+            if(type == EventType.eSetMonsters)
+            {
+                Encounter((List<Monster>)data);
+            }
+        }
+    }
+
+    public class Dungeon
+    {
+        public int dungeonStage { get; set; }
+        // 난이도별 생성 가능한 몬스터 목록
+        public int dungeonMonsterType {  get; set; }
+        
+        public Dungeon(int dungeonStage, int dungeonMonsterType)
+        {
+            this.dungeonStage = dungeonStage;
+            this.dungeonMonsterType = dungeonMonsterType;
         }
     }
 }

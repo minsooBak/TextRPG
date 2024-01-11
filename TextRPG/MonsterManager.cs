@@ -20,7 +20,7 @@ namespace TextRPG
         //static public MonsterManager Instance { get { return instance; } }
         public List<Monster> listOfMonsters;//몬스터 데이터 목록 리스트
         public List<Monster> dungeonMonsters;
-        public int listOfMonsterCount;
+        //public int listOfMonsterCount;
 
         public MonsterManager()
         {
@@ -29,7 +29,20 @@ namespace TextRPG
             listOfMonsters = new List<Monster>();
             dungeonMonsters = new List<Monster>();
 
-            listOfMonsterCount = 3;
+            ////listOfMonsterCount = 3;
+            //for (int i = 0; i < listOfMonsterCount; i++)
+            //{
+            //    listOfMonsters.Add(new Monster((MonsterType)(i + 1))); // 몬스터 목록 데이터 저장
+
+            //    //확인용
+            //    //Console.WriteLine("몬스터 목록 등록");
+            //    //Console.WriteLine($"{listOfMonsters[i].Name}");
+            //    //Console.WriteLine($"현재 등록개수 :{listOfMonsters.Count}");
+            //}
+        }
+        public void MakeMonsters(int listOfMonsterCount) //몬스터 생성
+        {
+            //listOfMonsterCount = 3;
             for (int i = 0; i < listOfMonsterCount; i++)
             {
                 listOfMonsters.Add(new Monster((MonsterType)(i + 1))); // 몬스터 목록 데이터 저장
@@ -39,9 +52,7 @@ namespace TextRPG
                 //Console.WriteLine($"{listOfMonsters[i].Name}");
                 //Console.WriteLine($"현재 등록개수 :{listOfMonsters.Count}");
             }
-        }
-        public void MakeMonsters() //몬스터 생성
-        {
+
             Random rnd = new Random();
             int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
             for (int i = 0; i < monsterCount; i++)
@@ -49,6 +60,8 @@ namespace TextRPG
                 int randomCount = rnd.Next(0, listOfMonsters.Count); //등록되어 있는 몬스터 중 어떤 몬스터를 고를지
                 dungeonMonsters.Add(CreateMonster(++randomCount));// 던전 몬스터 리스트에 몬스터 추가
             }
+
+            EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
         }
         public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
         {
@@ -69,7 +82,7 @@ namespace TextRPG
         {
             if (type == EventType.eMakeMonsters)
             {
-                MakeMonsters();
+                MakeMonsters((int)data);
             }
             else if(type == EventType.eClearMonsters)
             {

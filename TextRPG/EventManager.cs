@@ -8,7 +8,8 @@ public enum EventType
 {
     NONE, 
     eMakeMonsters,
-    eClearMonsters
+    eClearMonsters,
+    eSetMonsters
 }
 
 public interface IListener
