@@ -17,24 +17,23 @@ namespace TextRPG
 
     internal class DungeonManager : IListener
     {
-        public DungeonManager() 
+        private Player player;
+
+        public DungeonManager(Player player) 
         {
             // 몬스터 정보 받아오기
             // 플레이어 정보 받아오기
+            this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
         }
         public int deadCounter = 0;
         public Monster[] monsters;
-        public Player player;
+        
 
         public bool showMonsterMode = false;
 
         public int playerHp = 100;  // 임시 플레이어 체력
         public int playerAtk = 10;  // 임시 플레이어 공격력
 
-        public void GetPlayer(Player player)
-        {
-            this.player = player;
-        }
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
         public void Encounter(List<Monster> dungeonMonster)
@@ -49,6 +48,7 @@ namespace TextRPG
         {
             while (playerHp > 0)
             {
+                // MonsterManager에서 몬스터가 죽으면 리스트에서 제거되는 로직 추가 후 수정하기(List.Count = 0이 되면 while문 탈출)
                 deadCounter = 0;
                 foreach (Monster monster in monsters)
                 {
@@ -148,14 +148,12 @@ namespace TextRPG
             {
                 if (input == i)
                 {
-                    if (monsters[i - 1].isDead)
+                    if (monsters[i - 1].IsDead())
                     {
-                        Console.WriteLine("이미 죽은 몬스터입니다.\n 다시 선택해주세요!");
-                        Console.ReadKey();
                         break;
                     }
 
-                    ShowBattle(monsters[i - 1], player, isPlayerTurn);
+                    ShowBattle(monsters[i - 1], isPlayerTurn);
                     isPlayerTurn = false;
 
                     foreach (Monster monster in monsters)
@@ -164,19 +162,15 @@ namespace TextRPG
                         {
                             continue;
                         }
-                        ShowBattle(monster, player, isPlayerTurn);
+                        ShowBattle(monster, isPlayerTurn);
                     }
                     isPlayerTurn = true;
                 }
             }
         }
 
-        // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
-
-        // 공격할 몬스터 고르기(SelectMonster)
-
         // 공격 진행하기(ShowBattle)
-        public void ShowBattle(Monster monster, Player player, bool isPlayerTurn)
+        public void ShowBattle(Monster monster, bool isPlayerTurn)
         {
             Console.Clear();
 
@@ -187,21 +181,25 @@ namespace TextRPG
 
             if (isPlayerTurn)
             {
+                // 몬스터 공격하기.
+                // player Class 추가 후 IObject.Attack()에서 공격 처리하기.
+                // player.Attack()에서 damage를 return 받아 monster.TakeDamage()에 넣어주기
+                // monster.TakeDamage(player.Attack());
+
+
                 getDamage = playerAtk / 100.0 * 10;
                 damage = new Random().Next(playerAtk - (int)Math.Ceiling(getDamage), playerAtk + (int)Math.Ceiling(getDamage) + 1);
 
                 Console.WriteLine("Chad 의 공격!");
-                Console.WriteLine($"Lv.{monster.Lv} {monster.Name} 을(를) 맞췄습니다. [데미지 : {damage}]\n");
-
-                Console.WriteLine($"Lv.{monster.Lv} {monster.Name}");
-                Console.Write($"{monster.Hp} -> ");
 
                 monster.TakeDamage(damage);
-
-                Console.WriteLine($"{(monster.isDead ? "Dead" : monster.Hp)}");
             }
             else
             {
+                // 몬스터가 플레이어를 공격하기.
+                // player.Attack()에서 damage를 return 받아 monster.TakeDamage()에 넣어주기
+                // player.TakeDamage(monster.Attack());
+
                 damage = monster.Attack();
                 Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
@@ -234,7 +232,7 @@ namespace TextRPG
 
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
-                Console.WriteLine($"Lv.1 Chad\n HP 100 -> {playerHp}\n");
+                Console.WriteLine($"Lv.1 Chad\nHP 100 -> {playerHp}\n");
 
                 Console.WriteLine("0. 다음\n>> ");
 
