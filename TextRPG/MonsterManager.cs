@@ -102,13 +102,21 @@ namespace TextRPG
         public void TakeDamage(int damage)
         {
             int criticalDamage = damage;
-            Console.Write($"Lv.{this.Lv} {this.Name} 을(를) 맞췄습니다. [데미지 : ");
+            
             int r = new Random().Next(0, 101);
+
+            // 공격 미스. 10%의 확률로 공격이 적중하지 않음
+            if(r > 90)
+            {
+                Console.Write($"Lv.{this.Lv} {this.Name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.\n");
+                return;
+            }
+
+            Console.Write($"Lv.{this.Lv} {this.Name} 을(를) 맞췄습니다. [데미지 : ");
             // 치명타 공격
             if (r <= 15)
             {
                 criticalDamage += (damage * 60 / 100);
-                Console.WriteLine(criticalDamage);
 
                 Utilities.TextColorWithNoNewLine($"{criticalDamage}", ConsoleColor.DarkRed);
                 Console.Write("]");
