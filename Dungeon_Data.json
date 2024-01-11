@@ -1,0 +1,14 @@
+[
+  {
+    "dungeonStage":  1,
+    "dungeonMonsterType": 1
+  },
+  {
+    "dungeonStage": 2,
+    "dungeonMonsterType": 2
+  },
+  {
+    "dungeonStage": 3,
+    "dungeonMonsterType": 3
+  }
+]
