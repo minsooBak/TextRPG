@@ -14,8 +14,11 @@ namespace TextRPG
         enum GameState
         {
             PlayerInfo = 1,
-            StartBattle
+            StartBattle,
+            Inventory,
+            Shop,
         }
+
 
         Player player = new Player();
         MonsterManager monsterManager = new MonsterManager();
@@ -55,3 +58,4 @@ namespace TextRPG
         }
     }
 }
+

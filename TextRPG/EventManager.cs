@@ -10,6 +10,11 @@ public enum EventType
     eMakeMonsters,
     eClearMonsters,
     eSetMonsters
+    eUpdateItem,
+    eGetFieldItem,
+    eUpdateGold,
+    eUpdateStat,
+    eGameEnd
 }
 
 public interface IListener
