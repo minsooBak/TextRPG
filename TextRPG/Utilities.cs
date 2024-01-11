@@ -267,6 +267,7 @@ namespace TextRPG
                         }
                         break;
                     }
+            }
             return null;
         }
 
