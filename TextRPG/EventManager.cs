@@ -9,6 +9,7 @@ public enum EventType
     eUpdateItem,
     eGetItem,
     eUpdateGold,
+    eUpdateStat,
     eGameEnd
 }
 

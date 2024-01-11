@@ -150,23 +150,59 @@ namespace TextRPG
             }
         }
 
-        public void SellItem()
+        public void SellItem(int itemNum, int myWallet)
         {
             // 아이템 판매 관련 메서드
+            Item item = inventory[itemNum - 1];
+            item.IsSale = true;
+            inventory.Remove(item);
+            Console.WriteLine($"{item.Name}을 판매했습니다.");
+
+            // EventManager로 골드 변경 이벤트 전달
+            int resultGold = (int) (item.Cost * 0.85);
+            EventManager.Instance.PostEvent(EventType.eUpdateGold, resultGold);
         }
 
-        public void GetFieldItem()
+        public void OnEquipItem(int itemNum)
+        {
+            // 장비 착용 관련 메서드
+            Item item = inventory[itemNum - 1];
+            item.IsEquipped = true;
+            Console.WriteLine($"{item.Name}을 착용했습니다.");
+
+            // EventManager로 스탯 변경 이벤트 전달
+            EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
+        }
+
+        public void OffEquipItem(int itemNum)
+        {
+            // 장비 해제 관련 메서드
+            Item item = inventory[itemNum - 1];
+            item.IsEquipped = false;
+            Console.WriteLine($"{item.Name}을 해제했습니다.");
+
+            // EventManager로 스탯 변경 이벤트 전달
+            EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
+        }
+
+        public void GetFieldItem(int itemNum)
         {
             // 필드에 드랍된 아이템 줍줍
         }
 
-        public void EquipItem()
+        public void DropItem(int itemNum)
         {
-            // 장비 착용 관련 메서드
+            // 아이템 버리기(인벤토리에서 삭제)
+            Item item = inventory[itemNum - 1];
+            inventory.Remove(item);
+            Console.WriteLine($"{item.Name}을 버렸습니다.");
+
+            if (item.IsEquipped) // 버린 아이템이 장비중인 경우
+            {
+                // EventManager로 스탯 변경 이벤트 전달
+                EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
+            }
         }
-
-
-
 
         public void OnEvent(EventType type, object data)
         {
