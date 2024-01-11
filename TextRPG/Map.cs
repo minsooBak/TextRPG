@@ -33,17 +33,13 @@ namespace TextRPG
             Utilities.AddLine("2. 전투 시작");
             Utilities.AddLine("");
 
-            //전체 스킬 출력해보기용
-            //foreach (string Name in skillManager.classNames)
-            //{
-            //    skillManager.ShowSkillList(Name);
-            //}
-            
             //스킬 출력 예제
-            //skillManager.ShowSkillList(skillManager.classNames[0]);
+            //skillManager.ShowSkillList("전사");
+            //skillManager.ShowSkillList("공허충");
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
-            switch ((GameState)Utilities.GetInputKey(1, 2, ConsoleColor.Yellow, ">>"))
+            Utilities.Add(">>");
+            switch ((GameState)Utilities.GetInputKey(1, 2))
             {
                 case GameState.PlayerInfo: // 상태 보기
 

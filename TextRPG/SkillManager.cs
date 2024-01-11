@@ -11,40 +11,24 @@ namespace TextRPG
     {
         private readonly Skill[] skillList = []; //전체 스킬데이터
         private Dictionary<string, List<Skill>> skillDictionary = [];//직업별 스킬 데이터{ [직업] , 스킬 리스트}
-        public List<string> classNames; //직업 이름 배열
+        // public List<string> classNames; //직업 이름 배열
         public SkillManager()
         {
-            classNames = new List<string>();
+            List<string> classNames = new List<string>(); //클래스 이름 배열
             skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
             if (skillList == null)
             {
                 Console.Error.WriteLine("SkillLoad Faill!");
             }
-            AddName(); //스킬 쓰는 직업들 이름 배열 저장
-            foreach (string className in classNames)
+            foreach (var skill in skillList)
             {
-                AddSkills(className); //직업마다 스킬 저장해두기
+                if (classNames.Find(x => x == skill.Class)== null)
+                    classNames.Add(skill.Class);
             }
-        }
-        public void AddName() //스킬 쓰는 직업들 이름 배열 저장 - 생성자에서 호출
-        {
-            classNames.Add("Null"); //클래스 첫 인자는 아무것도 없다는 의미
-            foreach (Skill skill in skillList) //전체 스킬 목록에서 
+            foreach (string className in classNames) //이름 배열로 스킬들 할당
             {
-                bool isIn = false;//클래스 이름 배열에 존재하는지
-                for (int i = 0; i < classNames.Count; i++)  //클래스 개수+1 만큼 진행(앞에 Null 있어서)
-                {
-                    if (skill.Class == classNames[i]) //클래스 이름이 겹치면
-                    {
-                        isIn = true;
-                    }
-                }
-                if (!isIn)//존재하지 않을 때만 추가
-                {
-                    classNames.Add(skill.Class);//클래스 이름 배열에 추가
-                }
+                AddSkills(className); //직업마다 스킬 저장
             }
-            classNames.RemoveAt(0); //널 삭제
         }
         /// <summary>
         /// 클래스네임에 따라 다른 스킬배열을 넣어줌(Player Class, Monster Name)
