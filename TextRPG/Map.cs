@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static TextRPG.Player;
 
 namespace TextRPG
@@ -35,8 +36,13 @@ namespace TextRPG
             Utilities.AddLine("2. 전투 시작");
             Utilities.AddLine("");
 
+            //스킬 출력 예제
+            //skillManager.ShowSkillList("전사");
+            //skillManager.ShowSkillList("공허충");
+
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
-            switch ((GameState)Utilities.GetInputKey(1, 2, ConsoleColor.Yellow, ">>"))
+            Utilities.Add(">>");
+            switch ((GameState)Utilities.GetInputKey(1, 2))
             {
                 case GameState.PlayerInfo: // 상태 보기
 

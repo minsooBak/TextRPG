@@ -1,0 +1,12 @@
+[{"Name":"찌르기","Class":"전사","ATKRatio":1.5,"Cost":10,"Description":"공격력의 1.5배의 공격을 가한다"},
+{"Name":"TEST1-1","Class":"전사","ATKRatio":2,"Cost":15,"Description":"공격력의 2배의 공격을 가한다"},
+{"Name":"TEST2","Class":"마법사","ATKRatio":2,"Cost":30,"Description":"공격력의 2배의 공격을 가한다"},
+{"Name":"TEST3","Class":"도적","ATKRatio":3,"Cost":50,"Description":"공격력의 3배의 공격을 가한다"},
+{"Name":"TEST4","Class":"궁수","ATKRatio":5,"Cost":100,"Description":"공격력의 5배의 공격을 가한다"},
+{"Name":"발냄새","Class":"공허충","ATKRatio":1.5,"Cost":10,"Description":"공격력의 1.5배의 공격을 가한다"},
+{"Name":"Monstr1_2","Class":"공허충","ATKRatio":2,"Cost":20,"Description":"공격력의 2배의 공격을 가한다"},
+{"Name":"Monstr1_3","Class":"공허충","ATKRatio":3,"Cost":30,"Description":"공격력의 3배의 공격을 가한다"},
+{"Name":"Monstr1_4","Class":"공허충","ATKRatio":4,"Cost":40,"Description":"공격력의 4배의 공격을 가한다"},
+{"Name":"트름","Class":"대포미니언","ATKRatio":2,"Cost":20,"Description":"몬스터2스킬"},
+{"Name":"방구","Class":"미니언","ATKRatio":3,"Cost":50,"Description":"몬스터3스킬"},
+{"Name":"Monstr4","Class":"~~","ATKRatio":4,"Cost":100,"Description":"몬스터4스킬"}]

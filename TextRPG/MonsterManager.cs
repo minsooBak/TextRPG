@@ -93,21 +93,30 @@ namespace TextRPG
 
     public class Monster : IListener, IObject
     {
+        public Skill Skill { get; set; }
         public string Name { get; private set; } //몬스터 이름
         public int Lv { get; private set; } // 레벨
         public int Hp { get; private set; } // 체력
         public int Atk { get; private set; } //몬스터 공격력
         public bool isDead; //죽었으면 true
 
-        public int Attack()
+        public void SetSkill(Skill skill)
+        {
+            this.Skill = skill;
+        }
+        public int Attack(AttackType attackType = AttackType.Attack)
         {
             int damage = 0;
             double getDamage;
 
             getDamage = this.Atk / 100.0 * 10;
             damage = new Random().Next(this.Atk - (int)Math.Ceiling(getDamage), this.Atk + (int)Math.Ceiling(getDamage) + 1);
-
-            Console.WriteLine($"Lv.{this.Lv} {this.Name} 의 공격!");
+            if (attackType == AttackType.Skill)
+                damage *= (int)this.Skill.ATKRatio;
+            if(attackType == AttackType.Attack)
+                Console.WriteLine($"Lv.{this.Lv} {this.Name} 의 공격!");
+            else
+                Console.WriteLine($"Lv.{this.Lv} {this.Name} 의 {this.Skill.Name} 스킬 공격!");
 
             return damage;
         }
@@ -193,10 +202,11 @@ namespace TextRPG
             }
             isDead = false;
         }
-
         public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
         {
             //Console.WriteLine();
         }
+
+        
     }
 }

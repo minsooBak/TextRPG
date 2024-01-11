@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -21,7 +23,6 @@ namespace TextRPG
         SkillData,
         Dungeon
     }
-
     struct ObjectState
     {
         public string Name { get; set; }
@@ -38,7 +39,8 @@ namespace TextRPG
 
     interface IObject
     {
-        int Attack();
+        void SetSkill(Skill skill);
+        int Attack(AttackType attackType);
         void TakeDamage(int damage);
         bool IsDead();
     }
@@ -87,14 +89,14 @@ namespace TextRPG
                     }
                     else
                     {
-                        Console.Clear();
+                        //Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
                         Console.WriteLine("===================================================");
                     }
                 }
                 else
                 {
-                    Console.Clear();
+                    //Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
                     Console.WriteLine("===================================================");
                 }
@@ -228,6 +230,25 @@ namespace TextRPG
                         }
                         break;
                     }
+                case LoadType.SkillData:
+                    {
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Skill_Data.json";
+                        if (File.Exists(path) == false)
+                            return null;
+                        StreamReader? file = File.OpenText(path);
+                        if (file != null)
+                        {
+                            JsonTextReader reader = new JsonTextReader(file);
+
+                            JArray json = (JArray)JToken.ReadFrom(reader);
+                            string? str = JsonConvert.SerializeObject(json);
+
+                            file.Close();
+                            return JsonConvert.DeserializeObject<Skill[]>(str);
+                        }
+                        break;
+                    }
                 case LoadType.Dungeon:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
@@ -246,7 +267,6 @@ namespace TextRPG
                         }
                         break;
                     }
-            }
             return null;
         }
 
