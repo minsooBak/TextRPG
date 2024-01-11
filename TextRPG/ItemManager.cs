@@ -80,7 +80,7 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.eUpdateItem, null);
 
             // ItemManager에 Event Listener 등록
-            EventManager.Instance.AddListener(EventType.eGetItem, this);
+            EventManager.Instance.AddListener(EventType.eGetFieldItem, this);
             EventManager.Instance.AddListener(EventType.eGameEnd, this);
 
         }
@@ -130,6 +130,7 @@ namespace TextRPG
             }
             
         }
+
         public void BuyItem(int itemNum, int myWallet)
         {
             // 아이템 구매 관련 메서드
@@ -185,9 +186,22 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
         }
 
-        public void GetFieldItem(int itemNum)
+        public void GetFieldItem(object? data = null)
         {
             // 필드에 드랍된 아이템 줍줍
+            if (data != null)
+            {
+                fieldDisplay.Add((Item)data);
+                foreach (Item item in fieldDisplay)
+                {
+                    inventory.Add(item);
+                    Console.WriteLine($"{item.Name}을 획득했습니다.");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"아무 아이템도 얻지 못했습니다.");
+            }
         }
 
         public void DropItem(int itemNum)
@@ -218,6 +232,11 @@ namespace TextRPG
                     itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
 
                     Utilities.SaveFile(SaveType.ItemData, itemData);
+                    break;
+
+                // case가 eGetItem인 경우 필드 아이템 획득
+                case EventType.eGetFieldItem:
+                    GetFieldItem(data);
                     break;
             }
         }

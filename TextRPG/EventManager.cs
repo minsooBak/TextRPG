@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public enum EventType
 {
     eUpdateItem,
-    eGetItem,
+    eGetFieldItem,
     eUpdateGold,
     eUpdateStat,
     eGameEnd
