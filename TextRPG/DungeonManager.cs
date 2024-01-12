@@ -179,7 +179,7 @@ namespace TextRPG
             player.ShowStats(); // 플레이어 상태 표시
 
             //EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력 
-            skillManager.ShowSkillList(playerJob);// 플레이어 직업의 스킬 출력 
+            skillManager.ShowSkillList(player.Class);// 플레이어 직업의 스킬 출력 
 
             Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
             Console.WriteLine(" 취소");
@@ -188,9 +188,9 @@ namespace TextRPG
             Utilities.Add(">>");
 
             bool ManaCheck = false;
-            int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
+            int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
             skillIdx--;
-            player.SetSkill(skillManager.GetMySkill(playerJob, skillIdx)); //선택한 스킬 할당
+            player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx)); //선택한 스킬 할당
             if (player.IsUseSkill)  //마나가 모자르다면
             {
                 Console.WriteLine("마나가 부족합니다.");

@@ -24,12 +24,12 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.eClearMonsters, this);
             dungeonMonsters = new List<Monster>();
         }
-        public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
+        public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 0 1 2 3 3 3 3 3
         {
             Random rnd = new Random();
             int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
             if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
-                listOfMonsterCount = (int)MonsterType.Monster3; //1 2 3 
+                listOfMonsterCount = (int)MonsterType.Monster3; // 등록된 몬스터 수 보다 값이 클 때
             for (int i = 0; i < monsterCount; i++)
             {
                 int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
