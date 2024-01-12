@@ -18,18 +18,13 @@
         ItemManager itemManager = new ItemManager();
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
-
-        public void Init()
-        {
-            dungeonManager = new DungeonManager(player);
-        }
         public void DrawMap()
         {
             //Tuple<ePlayerType, 10>
             //EventManager.Instance.PostEvent(EventType.Player, new KeyValuePair<ePlayerType, Tuple<int, int>>(ePlayerType.Stats, new Tuple<int, int>(10, 10)));
 
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
-
+            dungeonManager = new DungeonManager(player);
             while (!isGameEnd)
             {
                 switch (gameState)
