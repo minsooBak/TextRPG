@@ -70,7 +70,6 @@ namespace TextRPG
     {
         private ObjectState myState;
 
-        public bool isDead; //죽었으면 true
         public int MP => myState.MP;
 
         public int Health => myState.Health;
@@ -177,7 +176,6 @@ namespace TextRPG
                 myState.Health = 25;
                 myState.ATK = 8;
             }
-            isDead = false;
         }
         public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
         {
