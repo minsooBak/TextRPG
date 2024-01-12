@@ -72,7 +72,7 @@ namespace TextRPG
                 deadCounter = 0;
                 foreach (Monster monster in monsters)
                 {
-                    if(monster.isDead) deadCounter++;
+                    if(monster.IsDead) deadCounter++;
                 }
                 if (deadCounter >= monsters.Length) break;
 
@@ -134,7 +134,7 @@ namespace TextRPG
             {
                 if (input == i)
                 {
-                    if (monsters[i - 1].IsDead())
+                    if (monsters[i - 1].IsDead)
                     {
                         break;
                     }
@@ -144,7 +144,7 @@ namespace TextRPG
 
                     foreach (Monster monster in monsters)
                     {
-                        if (monster.isDead)
+                        if (monster.IsDead)
                         {
                             continue;
                         }
@@ -152,7 +152,7 @@ namespace TextRPG
                         monsterAttackType = rnd.Next(1, 3);// 1 ~2
 
                         if ((AttackType)monsterAttackType == AttackType.Skill)
-                            monster.SetSkill(skillManager.GetMySkill(monster.Name, 0));
+                            monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
 
                         ShowBattle(monster, isPlayerTurn, (AttackType)monsterAttackType);
                     }
@@ -189,7 +189,7 @@ namespace TextRPG
             if (0 <= skillIdx && skillIdx < skillManager.GetMySkillCount(playerJob))
             {
                 player.SetSkill(skillManager.GetMySkill(playerJob, skillIdx)); //선택한 스킬 할당
-                if (player.Skill.Cost > player.Mp)  //마나가 모자르다면
+                if (player.IsUseSkill)  //마나가 모자르다면
                 {
                     Console.WriteLine("마나가 부족합니다.");
                     SelectSkill();
@@ -228,17 +228,17 @@ namespace TextRPG
             int i = 1;
             foreach (Monster monster in monsters)
             {
-                if (monster.isDead)
+                if (monster.IsDead)
                 {
-                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Lv} {monster.Name} Dead", ConsoleColor.DarkGray);
+                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
                 }
                 else
                 {
                     Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
                     Console.Write("Lv.");
-                    Utilities.TextColorWithNoNewLine($"{monster.Lv} ", ConsoleColor.DarkRed);
-                    Console.Write($"{monster.Name} HP ");
-                    Utilities.TextColor($"{monster.Hp}", ConsoleColor.DarkRed);
+                    Utilities.TextColorWithNoNewLine($"{monster.Level} ", ConsoleColor.DarkRed);
+                    Console.Write($"{monster.Class} HP ");
+                    Utilities.TextColor($"{monster.Health}", ConsoleColor.DarkRed);
                 }
                 i++;
             }

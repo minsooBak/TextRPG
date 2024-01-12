@@ -68,31 +68,34 @@ namespace TextRPG
 
     public class Monster : IListener, IObject
     {
-        
-        public Skill Skill { get; set; }
-        public string Name { get; private set; } //몬스터 이름
-        public int Lv { get; private set; } // 레벨
-        public int Hp { get; private set; } // 체력
-        public int Atk { get; private set; } //몬스터 공격력
-        public bool isDead; //죽었으면 true
+        private ObjectState myState;
 
-        public void SetSkill(Skill skill)
-        {
-            this.Skill = skill;
-        }
+        public bool isDead; //죽었으면 true
+        public int MP => myState.MP;
+
+        public int Health => myState.Health;
+
+        public int Level => myState.Level;
+
+        public string Class => myState.Class;
+
+        public bool IsUseSkill => myState.Skill.Cost < MP;//사용할 수 있는지 체크후 bool
+
+        public bool IsDead => myState.Health <= 0;
+        public void SetSkill(Skill skill) => myState.Skill = skill;
         public int Attack(AttackType attackType = AttackType.Attack)
         {
             int damage = 0;
             double getDamage;
 
-            getDamage = this.Atk / 100.0 * 10;
-            damage = new Random().Next(this.Atk - (int)Math.Ceiling(getDamage), this.Atk + (int)Math.Ceiling(getDamage) + 1);
+            getDamage = myState.ATK / 100.0 * 10;
+            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
-                damage *= (int)this.Skill.ATKRatio;
+                damage *= (int)myState.Skill.ATKRatio;
             if(attackType == AttackType.Attack)
-                Console.WriteLine($"Lv.{this.Lv} {this.Name} 의 공격!");
+                Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 공격!");
             else
-                Console.WriteLine($"Lv.{this.Lv} {this.Name} 의 {this.Skill.Name} 스킬 공격!");
+                Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 {myState.Skill.Name} 스킬 공격!");
 
             return damage;
         }
@@ -106,11 +109,11 @@ namespace TextRPG
             // 공격 미스. 10%의 확률로 공격이 적중하지 않음
             if(r > 90)
             {
-                Console.Write($"Lv.{this.Lv} {this.Name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.\n");
+                Console.Write($"Lv.{myState.Level} {myState.Name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.\n");
                 return;
             }
 
-            Console.Write($"Lv.{this.Lv} {this.Name} 을(를) 맞췄습니다. [데미지 : ");
+            Console.Write($"Lv.{myState.Level} {myState.Name} 을(를) 맞췄습니다. [데미지 : ");
             // 치명타 공격
             if (r <= 15)
             {
@@ -129,52 +132,50 @@ namespace TextRPG
                 Console.Write("]");
             }
 
-            Console.WriteLine($"\n\nLv.{this.Lv} {this.Name}");
-            Console.Write($"{this.Hp} -> ");
+            Console.WriteLine($"\n\nLv.{myState.Level} {myState.Name}");
+            Console.Write($"{myState.Health} -> ");
 
             if (r <= 15)
-                this.Hp -= criticalDamage;
+                myState.Health -= criticalDamage;
             else
-                this.Hp -= damage;
+                myState.Health -= damage;
 
-            if (this.Hp <= 0) this.isDead = true;
-
-            Console.WriteLine($"{(this.isDead ? "Dead" : this.Hp)}");
+            Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
         }
 
         public bool PrintDead()
         {
-            if (this.isDead)
+            if (IsDead)
             {
                 Console.WriteLine("이미 죽은 몬스터입니다.\n 다시 선택해주세요!");
                 Console.ReadKey();
             }
 
-            return this.isDead;
+            return IsDead;
         }
 
         public Monster(MonsterType monsterType = MonsterType.Monster1) //몬스터 초기화
         {
             if (monsterType == MonsterType.Monster1)
             {
-                Name = "미니언";
-                Lv = 2;
-                Hp = 15;
-                Atk = 5;
+                myState.Class = "미니언";
+                myState.Level = 2;
+                myState.Health = 15;
+                myState.ATK = 5;
             }
             else if (monsterType == MonsterType.Monster2)
             {
-                Name = "공허충";
-                Lv = 3;
-                Hp = 10;
-                Atk = 9;
+                myState.Class = "공허충";
+                myState.Level = 3;
+                myState.Health = 10;
+                myState.ATK = 9;     
             }
             else if (monsterType == MonsterType.Monster3)
             {
-                Name = "대포미니언";
-                Lv = 5;
-                Hp = 25;
-                Atk = 8;
+                myState.Class = "대포미니언";
+                myState.Level = 5;
+                myState.Health = 25;
+                myState.ATK = 8;
             }
             isDead = false;
         }
