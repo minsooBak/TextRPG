@@ -39,15 +39,13 @@ namespace TextRPG
 
     interface IObject //던전에서 실행될 메서드
     {
-        int MP { get;}
-        int Health { get;}
-        int Level { get; }
         string Class { get; }
         bool IsUseSkill { get; }
         bool IsDead { get; }
         void SetSkill(Skill skill);
         int Attack(AttackType attackType);
         void TakeDamage(int damage);
+        void ShowStats();
     }
 
 

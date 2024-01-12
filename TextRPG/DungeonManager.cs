@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TextRPG
 {
@@ -20,6 +21,7 @@ namespace TextRPG
     {
         private Player player;
         private SkillManager skillManager= new SkillManager();
+        private MonsterManager monsterManager= new MonsterManager();
         public DungeonManager(Player player) 
         {
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
@@ -45,7 +47,8 @@ namespace TextRPG
         public void MakeMonsters(int dungeonMonsterType)//1
         {
             // 몬스터 생성
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
+            //EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
+            monsterManager.MakeMonsters(dungeonMonsterType);
         }
         
         public bool showMonsterMode = false;
@@ -95,17 +98,18 @@ namespace TextRPG
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Utilities.TextColorWithNoNewLine(">> ", ConsoleColor.Yellow);
 
-                switch((AttackType)Utilities.GetInputKey(1, 2))
+                switch ((AttackType)Utilities.GetInputKey(1, 2))
                 {
                     case AttackType.Attack:
                         SelectMonster(AttackType.Attack);
                         break;
-                        case AttackType.Skill:
+                    case AttackType.Skill:
                         SelectSkill();
                         break;
                 }
             }
             ShowResult(deadCounter, monsters.Length);
+            return;
         }
         public void SelectMonster(AttackType attackType = AttackType.Attack) //대상 선택
         {
@@ -183,8 +187,9 @@ namespace TextRPG
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
 
+            // 마나가 부족할 경우, SelectSkill()을 다시 호출.
             bool ManaCheck = false;
-            while(!ManaCheck)
+            
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
             skillIdx--;
             if (0 <= skillIdx && skillIdx < skillManager.GetMySkillCount(playerJob))
@@ -207,20 +212,7 @@ namespace TextRPG
         // 내 스탯 보여주기
         private void ShowPlayerStats()
         {
-            Console.WriteLine("\n[내 정보]");
-            Console.Write("Lv.");
-            Utilities.TextColorWithNoNewLine("1 ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
-            Console.WriteLine("Chad (전사)");         // 나중에 player.Name, player.Job으로 수정하기
-
-            Console.Write("HP ");
-            Utilities.TextColorWithNoNewLine($"{playerHp}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
-            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine("100\n", ConsoleColor.DarkRed);
-
-            Console.Write("MP ");
-            Utilities.TextColorWithNoNewLine($"{playerMp}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
-            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine("50\n\n", ConsoleColor.DarkRed);
+            player.ShowStats();
         }
 
         // 몬스터 보여주기
@@ -231,16 +223,13 @@ namespace TextRPG
             {
                 if (monster.IsDead)
                 {
-                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
+                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.DarkGray);
                 }
                 else
                 {
                     Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
-                    Console.Write("Lv.");
-                    Utilities.TextColorWithNoNewLine($"{monster.Level} ", ConsoleColor.DarkRed);
-                    Console.Write($"{monster.Class} HP ");
-                    Utilities.TextColor($"{monster.Health}", ConsoleColor.DarkRed);
                 }
+                monster.ShowStats();
                 i++;
             }
         }

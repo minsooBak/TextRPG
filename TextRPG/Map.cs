@@ -23,7 +23,7 @@ namespace TextRPG
 
 
         Player player = new Player();
-        MonsterManager monsterManager = new MonsterManager();
+        //MonsterManager monsterManager = new MonsterManager();
         DungeonManager dungeonManager;
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
