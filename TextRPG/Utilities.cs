@@ -163,7 +163,7 @@ namespace TextRPG
                     }
                 case LoadType.ItemData:
                     {
-                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\I_Data.json";
+                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\I_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -182,7 +182,7 @@ namespace TextRPG
                 case LoadType.Item:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Item_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Item_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -199,7 +199,7 @@ namespace TextRPG
                     }
                 case LoadType.Player:
                     {
-                        path += @"\P_Data.json";
+                        path += @"\Data\P_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -218,7 +218,7 @@ namespace TextRPG
                 case LoadType.Monster:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Monster_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Data\Monster_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -236,7 +236,7 @@ namespace TextRPG
                 case LoadType.SkillData:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Skill_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Skill_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -255,7 +255,7 @@ namespace TextRPG
                 case LoadType.Dungeon:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Dungeon_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Dungeon_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
