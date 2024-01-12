@@ -69,23 +69,30 @@
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, int>)data;
-                
+                var a = (KeyValuePair<ePlayerType, object>)data;
+
                 switch(a.Key)
                 {
                     case ePlayerType.HP:
                         {
-                            myState.Health = Math.Clamp(myState.Health + a.Value, 0, maxHealth);
+                            myState.Health = Math.Clamp(myState.Health + (int)a.Value, 0, maxHealth);
                             break;
                         }
                     case ePlayerType.MP:
                         {
-                            myState.Health = Math.Clamp(a.Value, 0, maxMP);
+                            myState.Health = Math.Clamp((int)a.Value, 0, maxMP);
                             break;
                         }
                     case ePlayerType.Gold:
                         {
-                            myState.Gold = Math.Clamp(a.Value, 0, 100);
+                            myState.Gold = Math.Clamp((int)a.Value, 0, 100);
+                            break;
+                        }
+                    case ePlayerType.Stats:
+                        {
+                            var num = (int[])a.Value;
+                            myState.ATK = num[0];
+                            myState.DEF = num[1];
                             break;
                         }
                 }
