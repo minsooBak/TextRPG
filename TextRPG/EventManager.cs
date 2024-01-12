@@ -16,8 +16,10 @@
 
 //public enum EventType //이 이벤트들을 듣겠다
 //{
+//    eMakeMonsters,//변경하기
+//    eSetMonsters, //변경하기
 //    Item,
-//    Quest, 
+//    Quest,
 //    Player,
 //    eGameEnd
 //}

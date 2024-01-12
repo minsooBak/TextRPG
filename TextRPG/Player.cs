@@ -69,7 +69,7 @@
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, int>)data;
+                var a = (KeyValuePair<ePlayerType, int>)data; // 데이터가 딕셔너리 
                 
                 switch(a.Key)
                 {
