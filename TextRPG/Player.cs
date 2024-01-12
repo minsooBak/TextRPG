@@ -15,8 +15,11 @@ namespace TextRPG
     internal class Player : IListener, IObject
     {
         private ObjectState myState;
-        private int InitATK { get; set; }
-        private int InitDEF { get; set; }
+
+        //private int InitATK { get; set; } //
+        //private int InitDEF { get; set; }
+        private int AddATK; //추가 공격력
+        private int AddDEF; // 추가 방어력
 
         public Player()
         {
@@ -31,32 +34,38 @@ namespace TextRPG
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
-            myState.ATK = 10;
+            AddATK = 0;
+            AddDEF = 0;
+            myState.ATK = 100;
             myState.DEF = 0;
             myState.Gold = 0;
-            InitATK = myState.ATK;
-            InitDEF = myState.DEF;
+            //InitATK = myState.ATK;
+            //InitDEF = myState.DEF;
         }
 
         public Player(ObjectState state)
         {
             myState.Name = state.Name;
             myState.Class = state.Class;
-            myState.Level = state.Level;
-            myState.ATK = state.ATK;
-            myState.DEF = state.DEF;
-            myState.Health = state.Health;
-            myState.Gold = state.Gold;
-            myState.MP = state.MP;
 
-            InitATK = state.ATK;
-            InitDEF = state.DEF;
+            myState.Health = state.Health;
+            myState.MP = state.MP;
+            myState.Level = state.Level;
+            myState.ATK = state.ATK + AddATK; // 기존 공격력 + 추가 공격력
+            myState.DEF = state.DEF + AddDEF;
+            myState.Gold = state.Gold;
+            //InitATK = state.ATK;
+            //InitDEF = state.DEF;
         }
 
         public int Health => myState.Health;
         public int MP => myState.MP;
         public int Level => myState.Level;
+        public string Name => myState.Name;
         public string Class => myState.Class;
+        public int ATK => myState.ATK;
+        public int DEF => myState.DEF;
+        public int Gold => myState.Gold;
         public bool IsDead => myState.Health <= 0;
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
@@ -64,7 +73,7 @@ namespace TextRPG
         public void OnEvent(EventType type, object data)
         {
             //이벤트 받아서 switch문으로 구현
-            
+
         }
 
         public int Attack(AttackType attackType)
@@ -86,6 +95,7 @@ namespace TextRPG
 
         public void TakeDamage(int damage)
         {
-            myState.Health -= Math.Clamp(damage, 0 , 100);
+            myState.Health -= Math.Clamp(damage, 0, 100);
         }
+    }
 }

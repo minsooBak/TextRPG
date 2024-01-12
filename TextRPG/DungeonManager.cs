@@ -25,20 +25,22 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
             List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
             dungeons = d;
-
+            Console.WriteLine("던전 매니저 생성");
+            Console.ReadKey();
             // 플레이어 정보 받아오기
             this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
         }
         public List<Dungeon> dungeons = [];
         public int deadCounter = 0;
-        public int dungeonStage = 1;
+        public int dungeonStage = -1; // 1
         public Monster[] monsters;
+        public bool isEnd = false;
 
         // 선택된 던전 스테이지의 몬스터 만들기
-        public void SelectDungeonStage(int stage)
+        public void SelectDungeonStage(int stage) // 2
         {
             deadCounter = 0;
-            dungeonStage = stage - 1;
+            dungeonStage = ++stage; ; // 0  1 2 3 3 3 3 3 3 3 3 
             MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
         }
 
@@ -67,13 +69,13 @@ namespace TextRPG
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
-            while (playerHp > 0)
+            while (player.Health > 0)
             {
                 // MonsterManager에서 몬스터가 죽으면 리스트에서 제거되는 로직 추가 후 수정하기(List.Count = 0이 되면 while문 탈출)
                 deadCounter = 0;
                 foreach (Monster monster in monsters)
                 {
-                    if (monster.isDead) deadCounter++;
+                    if (monster.IsDead) deadCounter++;
                 }
                 if (deadCounter >= monsters.Length) break;
 
@@ -105,7 +107,9 @@ namespace TextRPG
                         break;
                 }
             }
+
             ShowResult(deadCounter, monsters.Length);
+
         }
         public void SelectMonster(AttackType attackType = AttackType.Attack) //대상 선택
         {
@@ -186,22 +190,15 @@ namespace TextRPG
             bool ManaCheck = false;
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
             skillIdx--;
-            if (0 <= skillIdx && skillIdx < skillManager.GetMySkillCount(playerJob))
+            player.SetSkill(skillManager.GetMySkill(playerJob, skillIdx)); //선택한 스킬 할당
+            if (player.IsUseSkill)  //마나가 모자르다면
             {
-                player.SetSkill(skillManager.GetMySkill(playerJob, skillIdx)); //선택한 스킬 할당
-                if (player.IsUseSkill)  //마나가 모자르다면
-                {
-                    Console.WriteLine("마나가 부족합니다.");
-                    SelectSkill();
-                }
-                else
-                    SelectMonster(AttackType.Skill);
+                Console.WriteLine("마나가 부족합니다.");
+                SelectSkill();
             }
             else
-            {
-                StartBattle();
-                return;
-            }
+                SelectMonster(AttackType.Skill);
+
         }
         // 내 스탯 보여주기
         private void ShowPlayerStats()
@@ -278,7 +275,7 @@ namespace TextRPG
 
                 Console.WriteLine($"Lv.1 Chad");
                 Console.Write($"{playerHp} -> ");
-                playerHp -= damage;
+                player.TakeDamage(damage);
 
                 Console.WriteLine($"{(playerHp <= 0 ? playerHp = 0 : playerHp)}");
             }
@@ -293,7 +290,7 @@ namespace TextRPG
         }
 
         // 결과 화면 보여주기
-        public void ShowResult(int deadCounter, int monster)
+        public void ShowResult(int deadCounter, int monster )
         {
             Console.Clear();
 

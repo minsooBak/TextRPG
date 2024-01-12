@@ -10,5 +10,9 @@
   {
     "dungeonStage": 3,
     "dungeonMonsterType": 3
+  },
+  {
+    "dungeonStage": 4,
+    "dungeonMonsterType": 3
   }
 ]
