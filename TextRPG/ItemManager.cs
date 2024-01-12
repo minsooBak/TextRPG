@@ -42,11 +42,12 @@ namespace TextRPG
             List<Item>? list = (List<Item>)Utilities.LoadFile(LoadType.Item);
             items = list.ToArray();
 
-            ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
             inventory = [];
             shopDisplay = [];
             fieldDisplay = [];
 
+            // 인벤토리 저장 파일 불러오기
+            ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
             if (data != null)
             // 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
             {
@@ -73,8 +74,13 @@ namespace TextRPG
                 }
             }
 
-            shopItems = list.FindAll(x => x.IsSale == true).ToArray();
-            fieldItems = list.FindAll(x => x.IsOnField == true).ToArray();
+            foreach (Item item in items)
+            {
+                if (item.IsOnField)
+                    fieldDisplay.Add(item);
+                if (item.IsSale)
+                    shopDisplay.Add(item);
+            }
             
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
             EventManager.Instance.PostEvent(EventType.eUpdateItem, null);

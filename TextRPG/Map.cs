@@ -49,7 +49,10 @@ namespace TextRPG
                     case GameState.Inventory:
                         ShowInventory();
                         break;
-                    default:
+                    case GameState.Shop:
+                        ShowShop();
+                        break;
+                    case GameState.NONE:
                         StartGame(); 
                         break;
                 }
@@ -59,6 +62,8 @@ namespace TextRPG
         
         public void StartGame()
         {
+            Console.Clear();
+
             Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다.");
             Utilities.AddLine("이제 전투를 시작할 수 있습니다.");
             Utilities.AddLine("");
@@ -66,7 +71,7 @@ namespace TextRPG
             Utilities.AddLine("1. 상태 보기");
             Utilities.AddLine("2. 전투 시작");
             Utilities.AddLine("3. 인벤토리 보기");
-            //Utilities.AddLine("4. 전투 시작");
+            Utilities.AddLine("4. 상점 보기");
             Utilities.AddLine("");
             Utilities.AddLine("0. 종료");
 
@@ -76,7 +81,7 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 3))
+            switch ((GameState)Utilities.GetInputKey(0, 4))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
@@ -84,8 +89,14 @@ namespace TextRPG
                 case GameState.StartBattle: // 전투 시작
                     gameState = GameState.StartBattle;
                     break;
-                case GameState.Inventory:
+                case GameState.Inventory: // 인벤토리 보기
                     gameState = GameState.Inventory;
+                    break;
+                case GameState.Shop: // 상점 보기
+                    gameState = GameState.Shop;
+                    break;
+                case GameState.NONE: // 종료
+                    Utilities.AddLine("게임을 종료합니다.");
                     break;
             }
         }
@@ -108,6 +119,8 @@ namespace TextRPG
 
         private void ShowStatus()
         {
+            Console.Clear();
+
             Utilities.TextColor("상태 보기", ConsoleColor.Yellow);
             Utilities.AddLine("캐릭터의 정보가 표시됩니다.");
             Utilities.AddLine("");
@@ -127,16 +140,19 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 1))
+            switch ((GameState)Utilities.GetInputKey(0, 0))
             {
-                default:
+                case GameState.NONE:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
+                    StartGame();
                     break;
             }
         }
 
         private void ShowInventory()
         {
+            Console.Clear();
+
             Utilities.TextColor("인벤토리", ConsoleColor.Yellow);
             Utilities.AddLine("보유 중인 아이템을 관리할 수 있습니다.");
             Utilities.AddLine("");
@@ -150,16 +166,19 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 2))
+            switch ((GameState)Utilities.GetInputKey(0, 1))
             {
-                default:
+                case GameState.NONE:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
+                    StartGame();
                     break;
             }
         }
 
         private void ShowShop()
         {
+            Console.Clear();
+
             Utilities.TextColor("상점", ConsoleColor.Yellow);
             Utilities.AddLine("필요한 아이템을 얻을 수 있는 상점입니다.");
             Utilities.AddLine("");
@@ -176,10 +195,11 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 2))
+            switch ((GameState)Utilities.GetInputKey(0, 1))
             {
-                default:
+                case GameState.NONE:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
+                    StartGame();
                     break;
             }
         }
