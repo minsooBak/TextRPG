@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 public enum EventType
 {
+    NONE,
+    eMakeMonsters,
+    eClearMonsters,
+    eSetMonsters,
     eUpdateItem,
     eGetFieldItem,
     eUpdateGold,
     eUpdateStat,
-    eGameEnd
+    eGameEnd,
+    eSetSkill,
+    eShowSkill
 }
 
 public interface IListener
