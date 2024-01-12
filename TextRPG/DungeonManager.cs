@@ -36,6 +36,7 @@ namespace TextRPG
         // 선택된 던전 스테이지의 몬스터 만들기
         public void SelectDungeonStage(int stage)
         {
+            deadCounter = 0;
             dungeonStage = stage - 1;
             MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
         }
