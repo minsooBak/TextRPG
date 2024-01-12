@@ -85,7 +85,7 @@ namespace TextRPG
 
                 ShowMonsterList(showMonsterMode = false);
 
-                ShowPlayerStats();
+                player.ShowStats();
 
                 Utilities.TextColorWithNoNewLine("1.", ConsoleColor.DarkRed);
                 Console.WriteLine(" 공격");
@@ -121,7 +121,7 @@ namespace TextRPG
 
             ShowMonsterList(showMonsterMode = true);        // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
 
-            ShowPlayerStats();
+            player.ShowStats();
 
             Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
             Console.WriteLine(" 취소\n");
@@ -165,6 +165,7 @@ namespace TextRPG
                 }
             }
         }
+
         // 스킬 선택
         public void SelectSkill()
         {
@@ -176,7 +177,7 @@ namespace TextRPG
 
             ShowMonsterList(showMonsterMode = false); //몬스터 번호 없이 출력
 
-            ShowPlayerStats(); // 플레이어 상태 표시
+            player.ShowStats(); // 플레이어 상태 표시
 
             //EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력 
             skillManager.ShowSkillList(playerJob);// 플레이어 직업의 스킬 출력 
@@ -201,23 +202,6 @@ namespace TextRPG
 
         }
         // 내 스탯 보여주기
-        private void ShowPlayerStats()
-        {
-            Console.WriteLine("\n[내 정보]");
-            Console.Write("Lv.");
-            Utilities.TextColorWithNoNewLine("1 ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
-            Console.WriteLine("Chad (전사)");         // 나중에 player.Name, player.Job으로 수정하기
-
-            Console.Write("HP ");
-            Utilities.TextColorWithNoNewLine($"{playerHp}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
-            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine("100\n", ConsoleColor.DarkRed);
-
-            Console.Write("MP ");
-            Utilities.TextColorWithNoNewLine($"{playerMp}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
-            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine("50\n\n", ConsoleColor.DarkRed);
-        }
 
         // 몬스터 보여주기
         private void ShowMonsterList(bool mode)
@@ -227,22 +211,19 @@ namespace TextRPG
             {
                 if (monster.IsDead)
                 {
-                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
+                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.DarkGray);
                 }
                 else
                 {
                     Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
-                    Console.Write("Lv.");
-                    Utilities.TextColorWithNoNewLine($"{monster.Level} ", ConsoleColor.DarkRed);
-                    Console.Write($"{monster.Class} HP ");
-                    Utilities.TextColor($"{monster.Health}", ConsoleColor.DarkRed);
                 }
+                monster.ShowStats();
                 i++;
             }
         }
         // 공격할 몬스터 고르기(SelectMonster)
         // 플레이어가 선택하는 몬스터를 반환한다.
-        
+
 
         // 공격 진행하기(ShowBattle)
         public void ShowBattle(Monster monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
@@ -274,10 +255,10 @@ namespace TextRPG
                 Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
                 Console.WriteLine($"Lv.1 Chad");
-                Console.Write($"{playerHp} -> ");
+                Console.Write($"{player.Health} -> ");
                 player.TakeDamage(damage);
 
-                Console.WriteLine($"{(playerHp <= 0 ? playerHp = 0 : playerHp)}");
+                Console.WriteLine($"{(player.Health <= 0 ? 0 : player.Health)}");
             }
 
             Console.WriteLine("\n0. 다음\n");
@@ -305,7 +286,7 @@ namespace TextRPG
 
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
-                Console.WriteLine($"Lv.1 Chad\nHP 100 -> {playerHp}\n");
+                Console.WriteLine($"Lv.1 Chad\nHP 100 -> {player.Health}\n");
             }
             else
             {

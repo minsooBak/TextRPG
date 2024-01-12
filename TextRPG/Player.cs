@@ -20,8 +20,6 @@ namespace TextRPG
         //private int InitDEF { get; set; }
         private int AddATK; //추가 공격력
         private int AddDEF; // 추가 방어력
-        int MaxHealth { get; set; }
-        int MaxMp { get; set; }
 
         public Player()
         {
@@ -32,7 +30,7 @@ namespace TextRPG
             myState.Name = Name.Key;
             myState.Class = Name.Value;
 
-            myState.Health = 100;
+            myState.Health = 1000;
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
@@ -88,12 +86,12 @@ namespace TextRPG
             Console.Write("HP ");
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{MaxHealth = myState.Health}\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"100\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{MaxMp = myState.MP}\n\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"100\n\n", ConsoleColor.DarkRed);
         }
 
         public int Attack(AttackType attackType)
