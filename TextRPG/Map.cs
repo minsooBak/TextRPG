@@ -21,7 +21,6 @@ namespace TextRPG
             NONE
         }
 
-
         Player player = new Player();
         MonsterManager monsterManager = new MonsterManager();
         DungeonManager dungeonManager;
