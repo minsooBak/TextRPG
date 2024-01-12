@@ -63,17 +63,11 @@
     {
         private ObjectState myState;
 
-        public int MP => myState.MP;
-
-        public int Health => myState.Health;
-
         public int Level => myState.Level;
-
         public string Class => myState.Class;
+        public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
+        public bool IsDead => myState.HP <= 0;
 
-        public bool IsUseSkill => myState.Skill.Cost < MP;//사용할 수 있는지 체크후 bool
-
-        public bool IsDead => myState.Health <= 0;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         public void ShowStats()
@@ -89,7 +83,7 @@
                 Console.Write("Lv.");
                 Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
                 Console.Write($"{myState.Class} HP ");
-                Utilities.TextColor($"{myState.Health}", ConsoleColor.DarkRed);
+                Utilities.TextColor($"{myState.HP}", ConsoleColor.DarkRed);
             }
         }
 
@@ -143,14 +137,14 @@
             }
 
             Console.WriteLine($"\n\nLv.{myState.Level} {myState.Name}");
-            Console.Write($"{myState.Health} -> ");
+            Console.Write($"{myState.HP} -> ");
 
             if (r <= 15)
-                myState.Health -= criticalDamage;
+                myState.HP -= criticalDamage;
             else
-                myState.Health -= damage;
+                myState.HP -= damage;
 
-            Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
+            Console.WriteLine($"{(IsDead ? "Dead" : myState.HP)}");
         }
 
         public bool PrintDead()
@@ -170,21 +164,21 @@
             {
                 myState.Class = "미니언";
                 myState.Level = 2;
-                myState.Health = 15;
+                myState.HP = 15;
                 myState.ATK = 5;
             }
             else if (monsterType == MonsterType.Monster2)
             {
                 myState.Class = "공허충";
                 myState.Level = 3;
-                myState.Health = 10;
+                myState.HP = 10;
                 myState.ATK = 9;     
             }
             else if (monsterType == MonsterType.Monster3)
             {
                 myState.Class = "대포미니언";
                 myState.Level = 5;
-                myState.Health = 25;
+                myState.HP = 25;
                 myState.ATK = 8;
             }
         }
