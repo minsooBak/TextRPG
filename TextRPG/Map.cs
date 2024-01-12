@@ -25,7 +25,7 @@ namespace TextRPG
         Player player = new Player();
         DungeonManager dungeonManager;
         MonsterManager monsterManager = new MonsterManager();
-        //ItemManager itemManager = new ItemManager();
+        ItemManager itemManager = new ItemManager();
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
 
@@ -126,53 +126,53 @@ namespace TextRPG
             }
         }
 
-        //private void ShowInventory()
-        //{
-        //    Utilities.TextColor("인벤토리", ConsoleColor.Yellow);
-        //    Utilities.AddLine("보유 중인 아이템을 관리할 수 있습니다.");
-        //    Utilities.AddLine("");
+        private void ShowInventory()
+        {
+            Utilities.TextColor("인벤토리", ConsoleColor.Yellow);
+            Utilities.AddLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Utilities.AddLine("");
 
-        //    itemManager.ShowInventory();
-        //    Utilities.AddLine("");
+            itemManager.ShowInventory();
+            Utilities.AddLine("");
 
-        //    Utilities.AddLine("1. 장착 관리");
-        //    Utilities.AddLine("0. 나가기");
-        //    Utilities.AddLine("");
+            Utilities.AddLine("1. 장착 관리");
+            Utilities.AddLine("0. 나가기");
+            Utilities.AddLine("");
 
-        //    Utilities.AddLine("원하시는 행동을 입력해주세요.");
-        //    Utilities.Add(">>");
-        //    switch ((GameState)Utilities.GetInputKey(1, 2))
-        //    {
-        //        default:
-        //            gameState = GameState.NONE; // StartGame()으로 돌아가기
-        //            break;
-        //    }
-        //}
+            Utilities.AddLine("원하시는 행동을 입력해주세요.");
+            Utilities.Add(">>");
+            switch ((GameState)Utilities.GetInputKey(1, 2))
+            {
+                default:
+                    gameState = GameState.NONE; // StartGame()으로 돌아가기
+                    break;
+            }
+        }
 
-        //private void ShowShop()
-        //{
-        //    Utilities.TextColor("상점", ConsoleColor.Yellow);
-        //    Utilities.AddLine("필요한 아이템을 얻을 수 있는 상점입니다.");
-        //    Utilities.AddLine("");
+        private void ShowShop()
+        {
+            Utilities.TextColor("상점", ConsoleColor.Yellow);
+            Utilities.AddLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Utilities.AddLine("");
 
-        //    Utilities.AddLine("[보유 골드]");
-        //    Utilities.AddLine($"{player.Gold} G");
-        //    Utilities.AddLine("");
+            Utilities.AddLine("[보유 골드]");
+            Utilities.AddLine($"{player.Gold} G");
+            Utilities.AddLine("");
 
-        //    itemManager.ShowShop();
+            itemManager.ShowShop();
 
-        //    Utilities.AddLine("1. 아이템 구매");
-        //    Utilities.AddLine("0. 나가기");
-        //    Utilities.AddLine("");
+            Utilities.AddLine("1. 아이템 구매");
+            Utilities.AddLine("0. 나가기");
+            Utilities.AddLine("");
 
-        //    Utilities.AddLine("원하시는 행동을 입력해주세요.");
-        //    Utilities.Add(">>");
-        //    switch ((GameState)Utilities.GetInputKey(1, 2))
-        //    {
-        //        default:
-        //            gameState = GameState.NONE; // StartGame()으로 돌아가기
-        //            break;
-        //    }
-        //}
+            Utilities.AddLine("원하시는 행동을 입력해주세요.");
+            Utilities.Add(">>");
+            switch ((GameState)Utilities.GetInputKey(1, 2))
+            {
+                default:
+                    gameState = GameState.NONE; // StartGame()으로 돌아가기
+                    break;
+            }
+        }
     }
 }
