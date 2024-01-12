@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -283,7 +284,8 @@ namespace TextRPG
             }
 
             Console.WriteLine("\n0. 다음\n");
-            if (Utilities.GetInputKey(0, 0, ConsoleColor.Yellow, ">> ") == 0)
+            Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
+            if (Utilities.GetInputKey(0, 0) == 0)
             {
                 Console.Clear();
                 return;
@@ -293,6 +295,7 @@ namespace TextRPG
         // 결과 화면 보여주기
         public void ShowResult(int deadCounter, int monster)
         {
+
             Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -300,7 +303,7 @@ namespace TextRPG
             Console.ResetColor();
 
             // 승리 시
-            if(deadCounter >= monster)
+            if (deadCounter >= monster)
             {
                 Console.WriteLine("Victory\n");
 
@@ -314,8 +317,8 @@ namespace TextRPG
 
                 Console.WriteLine("Lv.1 Chad\nHP 100 -> 0\n");
             }
-            Console.WriteLine("0. 다음\n>> ");
-
+            Console.WriteLine("\n0. 다음\n");
+            Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             if (Utilities.GetInputKey(0, 0) == 0)
             {
                 Console.Clear();
