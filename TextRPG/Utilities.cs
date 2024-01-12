@@ -46,11 +46,12 @@ namespace TextRPG
     }
 
     internal static class Utilities
-    { 
-        public static KeyValuePair<T, int> EventPair<T>(T t, int a)
+    {
+        public static KeyValuePair<T, object> EventPair<T>(T t, object a)
         {
-            return new KeyValuePair<T, int>(t, a);
+            return new KeyValuePair<T, object>(t, a);
         }
+
 
         static StringBuilder sb = new StringBuilder(400);
 
