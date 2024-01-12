@@ -294,20 +294,19 @@ namespace TextRPG
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
                 Console.WriteLine($"Lv.1 Chad\nHP 100 -> {playerHp}\n");
-
-                Console.WriteLine("0. 다음\n>> ");
-
-                if (Utilities.GetInputKey(0, 0) == 0) return;
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
                 Console.WriteLine("Lv.1 Chad\nHP 100 -> 0\n");
+            }
+            Console.WriteLine("0. 다음\n>> ");
 
-                Console.WriteLine("0. 다음\n>> ");
-
-                if (Utilities.GetInputKey(0, 0) == 0) return;
+            if (Utilities.GetInputKey(0, 0) == 0)
+            {
+                Console.Clear();
+                return;
             }
         }
 
@@ -323,9 +322,9 @@ namespace TextRPG
 
     public class Dungeon
     {
-        public int dungeonStage { get; set; }
+        public int dungeonStage { get; private set; }
         // 난이도별 생성 가능한 몬스터 목록
-        public int dungeonMonsterType {  get; set; }
+        public int dungeonMonsterType {  get; private set; }
         
         public Dungeon(int dungeonStage, int dungeonMonsterType)
         {
