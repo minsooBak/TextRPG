@@ -39,7 +39,7 @@ namespace TextRPG
         public ItemManager() 
         // ItemManager 생성자 : 
         {
-            List<Item>? list = (List<Item>?)Utilities.LoadFile(LoadType.Item);
+            List<Item>? list = (List<Item>)Utilities.LoadFile(LoadType.Item);
             items = list.ToArray();
 
             ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);

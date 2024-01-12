@@ -41,9 +41,13 @@ namespace TextRPG
                 switch (gameState)
                 {
                     case GameState.PlayerInfo:
+                        ShowStatus();
                         break;
                     case GameState.StartBattle:
                         ShowBattle();
+                        break;
+                    case GameState.Inventory:
+                        ShowInventory();
                         break;
                     default:
                         StartGame(); 
@@ -61,6 +65,8 @@ namespace TextRPG
 
             Utilities.AddLine("1. 상태 보기");
             Utilities.AddLine("2. 전투 시작");
+            Utilities.AddLine("3. 인벤토리 보기");
+            //Utilities.AddLine("4. 전투 시작");
             Utilities.AddLine("");
             Utilities.AddLine("0. 종료");
 
@@ -70,13 +76,16 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 2))
+            switch ((GameState)Utilities.GetInputKey(1, 3))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
                     break;
                 case GameState.StartBattle: // 전투 시작
                     gameState = GameState.StartBattle;
+                    break;
+                case GameState.Inventory:
+                    gameState = GameState.Inventory;
                     break;
             }
         }

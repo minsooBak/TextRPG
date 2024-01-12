@@ -182,7 +182,7 @@ namespace TextRPG
                 case LoadType.Item:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Item_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Item_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -193,7 +193,7 @@ namespace TextRPG
                             JArray json = (JArray)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            //return JsonConvert.DeserializeObject<List<Item>>(str);
+                            return JsonConvert.DeserializeObject<List<Item>>(str);
                         }
                         break;
                     }
