@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace TextRPG
@@ -49,8 +46,14 @@ namespace TextRPG
     }
 
 
+
     internal static class Utilities
     {
+        public static KeyValuePair<T, int> EventPair<T>(T t, int a)
+        {
+            return new KeyValuePair<T, int>(t, a);
+        }
+
         static StringBuilder sb = new StringBuilder(400);
 
         public static void AddLine(string str)

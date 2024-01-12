@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static TextRPG.Player;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     //추민규님 마을 <-> 던전or상태보기 구현
     internal class Map
@@ -30,11 +21,17 @@ namespace TextRPG
 
         public void DrawMap()
         {
+            //Tuple<ePlayerType, 10>
+            //EventManager.Instance.PostEvent(EventType.Player, new KeyValuePair<ePlayerType, Tuple<int, int>>(ePlayerType.Stats, new Tuple<int, int>(10, 10)));
+
+            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
+
             while (!isGameEnd)
             {
                 switch (gameState)
                 {
                     case GameState.PlayerInfo:
+                        return;
                         break;
                     case GameState.StartBattle:
                         ShowBattle();

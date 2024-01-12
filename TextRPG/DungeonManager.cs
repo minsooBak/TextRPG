@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     //송상화님 던전 구현 
     // 전투 결과 구현하기
@@ -40,8 +31,8 @@ namespace TextRPG
         public void SelectDungeonStage(int stage)
         {
             deadCounter = 0;
-            dungeonStage = stage - 1;
-            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
+            dungeonStage = stage;
+            MakeMonsters(dungeons[dungeonStage - 1].dungeonMonsterType); //idx 0
         }
 
         public void MakeMonsters(int dungeonMonsterType)//1
@@ -52,11 +43,6 @@ namespace TextRPG
         }
         
         public bool showMonsterMode = false;
-
-        public int playerHp = 100;  // 임시 플레이어 체력
-        public int playerMp = 0;  // 임시 플레이어 마나
-        public int playerAtk = 10;  // 임시 플레이어 공격력
-        public string playerJob = "전사"; // 임시 플레이어 직업
 
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
@@ -70,7 +56,7 @@ namespace TextRPG
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
-            while (playerHp > 0)
+            while (player.IsDead == false)
             {
                 // MonsterManager에서 몬스터가 죽으면 리스트에서 제거되는 로직 추가 후 수정하기(List.Count = 0이 되면 while문 탈출)
                 deadCounter = 0;
@@ -179,7 +165,7 @@ namespace TextRPG
             ShowPlayerStats(); // 플레이어 상태 표시
 
             //EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력 
-            skillManager.ShowSkillList(playerJob);// 플레이어 직업의 스킬 출력 
+            skillManager.ShowSkillList(player.Class);// 플레이어 직업의 스킬 출력 
 
             Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
             Console.WriteLine(" 취소");
@@ -188,26 +174,16 @@ namespace TextRPG
             Utilities.Add(">>");
 
             // 마나가 부족할 경우, SelectSkill()을 다시 호출.
-            bool ManaCheck = false;
-            
-            int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
+            int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
             skillIdx--;
-            if (0 <= skillIdx && skillIdx < skillManager.GetMySkillCount(playerJob))
+
+            player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx)); //선택한 스킬 할당
+            if (player.IsUseSkill == false)  //마나가 모자르다면
             {
-                player.SetSkill(skillManager.GetMySkill(playerJob, skillIdx)); //선택한 스킬 할당
-                if (player.IsUseSkill)  //마나가 모자르다면
-                {
-                    Console.WriteLine("마나가 부족합니다.");
-                    SelectSkill();
-                }
-                else
-                    SelectMonster(AttackType.Skill);
+                Console.WriteLine("마나가 부족합니다.");
             }
             else
-            {
-                StartBattle();
-                return;
-            }
+                SelectMonster(AttackType.Skill);
         }
         // 내 스탯 보여주기
         private void ShowPlayerStats()
@@ -264,13 +240,7 @@ namespace TextRPG
                 // player.TakeDamage(monster.Attack());
 
                 damage = monster.Attack(attackType);
-                Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
-
-                Console.WriteLine($"Lv.1 Chad");
-                Console.Write($"{playerHp} -> ");
-                playerHp -= damage;
-
-                Console.WriteLine($"{(playerHp <= 0 ? playerHp = 0 : playerHp)}");
+                player.TakeDamage(damage);
             }
 
             Console.WriteLine("\n0. 다음\n");
@@ -298,14 +268,15 @@ namespace TextRPG
                 Console.WriteLine("Victory\n");
 
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
-
-                Console.WriteLine($"Lv.1 Chad\nHP 100 -> {playerHp}\n");
+                if (dungeonStage < 3)
+                    dungeonStage++;
+                player.ShowResult();
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
-                Console.WriteLine("Lv.1 Chad\nHP 100 -> 0\n");
+                player.ShowResult();
             }
             Console.WriteLine("\n0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);

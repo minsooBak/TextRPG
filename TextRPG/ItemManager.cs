@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     enum ItemType
     {
@@ -26,7 +19,6 @@ namespace TextRPG
         readonly Item[] items;
         readonly Item[] fieldItems;
         readonly Item[] shopItems;
-
         List<Item> inventory;
         List<Item> shopDisplay;
         List<Item> fieldDisplay;

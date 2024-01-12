@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
-
-
     //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
     internal class Player : IListener, IObject
     {
         private ObjectState myState;
         private int InitATK { get; set; }
         private int InitDEF { get; set; }
-        int MaxHealth { get; set; }
-        int MaxMp { get; set; }
+        private int maxHealth;
+        private int maxMP;
+        private int PrevHealth { get; set; } // 이전 hp값
+        private int PrevMp { get; set; }
 
         public Player()
         {
+            EventManager.Instance.AddListener(EventType.Player, this);
             //CreatePlayer
             CreatePlayer createPlayer = new CreatePlayer();
             var Name = createPlayer.Create();
@@ -38,6 +30,9 @@ namespace TextRPG
             myState.Gold = 0;
             InitATK = myState.ATK;
             InitDEF = myState.DEF;
+
+            maxHealth = 100;
+            maxMP = 100;
         }
 
         public Player(ObjectState state)
@@ -57,13 +52,42 @@ namespace TextRPG
 
         public string Class => myState.Class;
         public bool IsDead => myState.Health <= 0;
-        public bool IsUseSkill => myState.Skill.Cost < myState.MP;
+        public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         public void OnEvent(EventType type, object data)
         {
             //이벤트 받아서 switch문으로 구현
-            
+            if(type == EventType.Player)
+            {
+                
+                var a = (KeyValuePair<ePlayerType, int>?)data;
+                //var b = a == null ? data as KeyValuePair<ePlayerType, Tuple<int, int>>? : null;
+                //if(b != null)
+                //{
+                //    myState.ATK -= b.Value.Value.Item1;
+                //    myState.DEF -= b.Value.Value.Item2;
+                //    return;
+                //}
+                switch(a.Value.Key)
+                {
+                    case ePlayerType.HP:
+                        {
+                            myState.Health = Math.Clamp(myState.Health + a.Value.Value, 0, maxHealth);
+                            break;
+                        }
+                    case ePlayerType.MP:
+                        {
+                            myState.Health = Math.Clamp(a.Value.Value, 0, maxMP);
+                            break;
+                        }
+                    case ePlayerType.Gold:
+                        {
+                            myState.Gold = Math.Clamp(a.Value.Value, 0, 100);
+                            break;
+                        }
+                }
+            }
         }
 
         public int ShowHealth()
@@ -81,23 +105,31 @@ namespace TextRPG
             Console.Write("HP ");
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{MaxHealth = myState.Health}\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{MaxMp = myState.MP}\n\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
         }
 
         public int Attack(AttackType attackType)
         {
+            if (PrevHealth == 0)
+            {
+                PrevHealth = myState.Health;
+                PrevMp = myState.MP;
+            }
+
             int damage = 0;
             double getDamage;
-
             getDamage = myState.ATK / 100.0 * 10;
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
+            {
                 damage = myState.Skill.GetATK(damage);
+                myState.MP -= myState.Skill.Cost;
+            }
 
             if (attackType == AttackType.Attack)
                 Console.WriteLine("Chad 의 공격!");
@@ -108,7 +140,20 @@ namespace TextRPG
 
         public void TakeDamage(int damage)
         {
+            Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
+
+            Console.WriteLine($"Lv.1 Chad");
+            Console.Write($"{myState.Health} ->");
             myState.Health -= Math.Clamp(damage, 0 , 100);
+            Console.Write($"{myState.Health}");
+        }
+
+        public void ShowResult()
+        {
+            Console.WriteLine($"Lv.1 Chad\nHP {PrevHealth} -> {myState.Health}");
+            Console.WriteLine($"Lv.1 Chad\nMP {PrevMp} -> {myState.MP}\n");
+            PrevHealth = 0;
+            PrevMp = 0;
         }
     }
 }
