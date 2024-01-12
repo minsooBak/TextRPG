@@ -126,6 +126,7 @@ namespace TextRPG
 
             Random rnd = new Random();
             int monsterAttackType;
+
             int input = Utilities.GetInputKey(0, monsters.Length);
             if (input == 0) return;
 
@@ -151,10 +152,8 @@ namespace TextRPG
                         monsterAttackType = rnd.Next(1, 3);// 1 ~2
 
                         if ((AttackType)monsterAttackType == AttackType.Skill)
-                        {
-                            Console.WriteLine("몬스터 스킬");
                             monster.SetSkill(skillManager.GetMySkill(monster.Name, 0));
-                        }
+
                         ShowBattle(monster, isPlayerTurn, (AttackType)monsterAttackType);
                     }
                     isPlayerTurn = true;

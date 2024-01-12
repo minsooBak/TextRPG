@@ -21,6 +21,7 @@ namespace TextRPG
         public int Def { get; }
         public int Hp { get; }
         public int Gold { get; }
+        public int Mp { get; }
 
         public Player(string name = "chad", string job = "전사", int level = 1, int atk=100, int def=5, int hp=100, int gold=1500)
         {
@@ -31,6 +32,7 @@ namespace TextRPG
             Def = def;
             Hp = hp;
             Gold = gold;
+            Mp = 50;
         }
 
         public Skill Skill { get; set; }
