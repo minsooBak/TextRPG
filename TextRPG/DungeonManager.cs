@@ -37,10 +37,10 @@ namespace TextRPG
         public void SelectDungeonStage(int stage)
         {
             dungeonStage = stage - 1;
-            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType);
+            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
         }
 
-        public void MakeMonsters(int dungeonMonsterType)
+        public void MakeMonsters(int dungeonMonsterType)//1
         {
             // 몬스터 생성
             EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);

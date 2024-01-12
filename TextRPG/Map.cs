@@ -79,7 +79,7 @@ namespace TextRPG
             // 던전 스테이지 선택.
             // 플레이어의 던전 클리어 여부에 따라 진입 가능한 던전 난이도가 높아집니다.
             // 현재는 SelectDungeonStage의 매개변수에 따라 난이도를 조절해주세요.
-            dungeonManager.SelectDungeonStage(1);
+            dungeonManager.SelectDungeonStage(dungeonManager.dungeonStage);
 
             // 플레이어의 HP가 0이 되면 게임 종료하기
             // if(player.Hp <= 0) isGameEnd = true;
