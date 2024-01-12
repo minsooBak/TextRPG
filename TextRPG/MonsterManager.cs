@@ -66,7 +66,7 @@ namespace TextRPG
         }
     }
 
-    public class Monster : IListener, IObject
+    public class Monster : IObject
     {
         private ObjectState myState;
 

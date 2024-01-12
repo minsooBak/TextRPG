@@ -183,7 +183,6 @@ namespace TextRPG
             Utilities.Add(">>");
 
             bool ManaCheck = false;
-            while(!ManaCheck)
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
             skillIdx--;
             if (0 <= skillIdx && skillIdx < skillManager.GetMySkillCount(playerJob))
