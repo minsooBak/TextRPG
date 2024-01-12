@@ -33,6 +33,7 @@ namespace TextRPG
         public int dungeonStage = 1;
         public Monster[] monsters;
 
+        // 선택된 던전 스테이지의 몬스터 만들기
         public void SelectDungeonStage(int stage)
         {
             dungeonStage = stage - 1;
@@ -41,6 +42,7 @@ namespace TextRPG
 
         public void MakeMonsters(int dungeonMonsterType)
         {
+            // 몬스터 생성
             EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
         }
         
@@ -110,7 +112,7 @@ namespace TextRPG
 
             Console.WriteLine("Battle!! - 대상 선택\n");
 
-            ShowMonsterList(showMonsterMode = true);
+            ShowMonsterList(showMonsterMode = true);        // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
 
             ShowPlayerStats();
 
@@ -157,6 +159,7 @@ namespace TextRPG
                 }
             }
         }
+        // 스킬 선택
         public void SelectSkill()
         {
             Console.Clear();
@@ -191,6 +194,7 @@ namespace TextRPG
                 return;
             }
         }
+        // 내 스탯 보여주기
         private void ShowPlayerStats()
         {
             Console.WriteLine("\n[내 정보]");
@@ -204,6 +208,7 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine("100\n\n", ConsoleColor.DarkRed);
         }
 
+        // 몬스터 보여주기
         private void ShowMonsterList(bool mode)
         {
             int i = 1;
@@ -272,6 +277,7 @@ namespace TextRPG
             }
         }
 
+        // 결과 화면 보여주기
         public void ShowResult(int deadCounter, int monster)
         {
             Console.Clear();
@@ -280,6 +286,7 @@ namespace TextRPG
             Console.WriteLine("Battle!! - Result\n");
             Console.ResetColor();
 
+            // 승리 시
             if(deadCounter >= monster)
             {
                 Console.WriteLine("Victory\n");
@@ -308,6 +315,7 @@ namespace TextRPG
         {
             if(type == EventType.eSetMonsters)
             {
+                // MonsterManager에서 생성된 몬스터 리스트 받기
                 Encounter((List<Monster>)data);
             }
         }
