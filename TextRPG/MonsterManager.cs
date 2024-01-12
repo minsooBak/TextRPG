@@ -20,7 +20,6 @@ namespace TextRPG
         //static public MonsterManager Instance { get { return instance; } }
         public List<Monster> listOfMonsters;//몬스터 데이터 목록 리스트
         public List<Monster> dungeonMonsters;
-        public int listOfMonsterCount;
 
         public MonsterManager()
         {
@@ -29,8 +28,7 @@ namespace TextRPG
             listOfMonsters = new List<Monster>();
             dungeonMonsters = new List<Monster>();
 
-            listOfMonsterCount = 3;
-            for (int i = 0; i < listOfMonsterCount; i++)
+            for (int i = 0; i < 3; i++)
             {
                 listOfMonsters.Add(new Monster((MonsterType)(i + 1))); // 몬스터 목록 데이터 저장
 
