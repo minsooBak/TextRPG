@@ -27,6 +27,8 @@ namespace TextRPG
             myState.Name = Name.Key;
             myState.Class = Name.Value;
 
+            myState.Health = 100;
+            myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
             myState.ATK = 10;
