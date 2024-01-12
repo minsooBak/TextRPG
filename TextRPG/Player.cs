@@ -1,186 +1,91 @@
-﻿using DocumentFormat.OpenXml.Office.CustomUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using TextRPG;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TextRPG
 {
-    internal class Player : IListener
+
+
+    //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
+    internal class Player : IListener, IObject
     {
-        private ObjectState state;
-        private int level = 1;
-        private int itemATK;
-        private int itemDEF;
-        public int ATK { get { return state.ATK; } }
-        public int DEF { get { return state.DEF; } }
-        public int Gold
-        {
-            get { return state.Gold; }
-            private set
-            {
-                state.Gold = Math.Clamp(value, 0, 999999999);
-            }
-        }
-        public int Health
-        {
-            get { return state.Health; }
-            private set
-            {
-                state.Health = Math.Clamp(value, 0, 100);
-            }
-        }
+        private ObjectState myState;
+        private int InitATK { get; set; }
+        private int InitDEF { get; set; }
 
         public Player()
         {
-            EventManager.Instance.AddListener(EventType.eGameInit, this);
-            EventManager.Instance.AddListener(EventType.eGameEnd, this);
-            EventManager.Instance.AddListener(EventType.eHealthChage, this);
-            EventManager.Instance.AddListener(EventType.eGoldChage, this);
-            EventManager.Instance.AddListener(EventType.eItemChage, this);
-            EventManager.Instance.AddListener(EventType.eExpChage, this);
+            //CreatePlayer
+            CreatePlayer createPlayer = new CreatePlayer();
+            var Name = createPlayer.Create();
+
+            myState.Name = Name.Key;
+            myState.Class = Name.Value;
+
+            myState.Health = 100;
+            myState.MP = 100;
+            myState.Level = 1;
+            myState.EXP = 0;
+            myState.ATK = 10;
+            myState.DEF = 0;
+            myState.Gold = 0;
+            InitATK = myState.ATK;
+            InitDEF = myState.DEF;
         }
 
-        public void Init(string name, string _class, int? _gold = null, int? _health = null, int? _exp = null)
+        public Player(ObjectState state)
         {
-            if (_health > 100)
-                _health = 100;
+            myState.Name = state.Name;
+            myState.Class = state.Class;
+            myState.Level = state.Level;
+            myState.ATK = state.ATK;
+            myState.DEF = state.DEF;
+            myState.Health = state.Health;
+            myState.Gold = state.Gold;
+            myState.MP = state.MP;
 
-            state.Name = name;
-            state.Class = _class;
-            state.Gold = _gold ?? 1500;
-            state.Health = _health ?? 100;
-            state.EXP = _exp ?? 100;
-
-            switch (_class)
-            {
-                case "전사":
-                    {
-                        state.InitATK = 1;
-                        state.InitDEF = 2;
-                        break;
-                    }
-                case "마법사":
-                    {
-                        state.InitATK = 3;
-                        state.InitDEF = 0;
-                        break;
-                    }
-                case "궁수":
-                    {
-                        state.InitATK = 2;
-                        state.InitDEF = 1;
-                        break;
-                    }
-                case "도적":
-                    {
-                        state.InitATK = 3;
-                        state.InitDEF = 0;
-                        break;
-                    }
-            }
-            LevelCheck();
-            state.ATK = ATK > 1 ? ATK + (int)state.InitATK : (int)state.InitATK;
-            state.DEF = DEF > 1 ? DEF + (int)state.InitDEF : (int)state.InitDEF;
+            InitATK = state.ATK;
+            InitDEF = state.DEF;
         }
 
-        public void LevelCheck()
+        public int Health => myState.Health;
+        public int MP => myState.MP;
+        public int Level => myState.Level;
+        public string Class => myState.Class;
+        public bool IsDead => myState.Health <= 0;
+        public bool IsUseSkill => myState.Skill.Cost < myState.MP;
+        public void SetSkill(Skill skill) => myState.Skill = skill;
+
+        public void OnEvent(EventType type, object data)
         {
-            int result = state.Level - level;
-            if (level != state.Level)
-            {
-                state.InitATK += 0.5f * result;
-                state.InitDEF += 1 * result;
-                level = state.Level;
-            }
+            //이벤트 받아서 switch문으로 구현
+            
+        }
+
+        public int Attack(AttackType attackType)
+        {
+            int damage = 0;
+            double getDamage;
+
+            getDamage = myState.ATK / 100.0 * 10;
+            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
+            if (attackType == AttackType.Skill)
+                damage = myState.Skill.GetATK(damage);
+
+            if (attackType == AttackType.Attack)
+                Console.WriteLine("Chad 의 공격!");
             else
-                level = state.Level;
-
+                Console.WriteLine($"Chad 의 {myState.Skill.Name} 스킬 공격!");
+            return damage;
         }
 
-        public void ShowStat()
+        public void TakeDamage(int damage)
         {
-            Console.Write($"Lv : {state.Level}");
-            Console.WriteLine($"\tEXP : {state.EXP % 100}");
-            Console.WriteLine($"{state.Name}  ( {state.Class} )");
-            Console.WriteLine($"공격력 : {ATK}");
-            Console.WriteLine($"방어력 : {DEF}");
-            Console.WriteLine($"체력 : {Health}");
-            Console.WriteLine($"Gold : {Gold}G");
-        }
-
-        void IListener.OnEvent(EventType type, object data)
-        {
-            switch (type)
-            {
-                case EventType.eHealthChage:
-                    {
-                        Health += (int)data;
-                        break;
-                    }
-                case EventType.eGameInit:
-                    {
-                        ObjectState? stateLode = (ObjectState?)Utilities.LoadFile(LoadType.Player);
-                        if (stateLode != null)
-                            Init(stateLode.Value.Name, stateLode.Value.Class, stateLode.Value.Gold, stateLode.Value.Health, stateLode.Value.EXP);
-
-                        break;
-                    }
-                case EventType.eGameEnd:
-                    {
-                        ObjectState playerState = new ObjectState
-                        {
-                            Name = state.Name,
-                            Class = state.Class,
-                            Gold = Gold,
-                            Health = Health,
-                            EXP = state.EXP,
-
-                        };
-                        Utilities.SaveFile(SaveType.Player, playerState);
-                        break;
-                    }
-                case EventType.eGoldChage:
-                    {
-                        Gold += (int)data;
-                        break;
-                    }
-                case EventType.eItemChage:
-                    {
-                        List<Item> items = [];
-                        items = (List<Item>)data;
-                        if (items != null)
-                        {
-                            itemATK = 0;
-                            itemDEF = 0;
-                            foreach (Item item in items)
-                            {
-                                itemATK += item.Power;
-                                itemDEF += item.Armor;
-                            }
-                        }
-                        state.ATK = (int)state.InitATK + itemATK;
-                        state.DEF = state.InitDEF + itemDEF;
-
-                        break;
-                    }
-                case EventType.eExpChage:
-                    {
-                        LevelCheck();
-                        state.EXP += (int)data;
-                        LevelCheck();
-                        EventManager.Instance.PostEvent(EventType.eItemChage);
-
-                        break;
-                    }
-                default:
-                    {
-                        Console.WriteLine("Player OnEvent Type Error!");
-                        break;
-                    }
-            }
+            myState.Health -= Math.Clamp(damage, 0 , 100);
         }
     }
 }
