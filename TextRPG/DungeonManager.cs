@@ -41,6 +41,8 @@ namespace TextRPG
         {
             deadCounter = 0;
             dungeonStage = ++stage; ; // 0  1 2 3 3 3 3 3 3 3 3 
+            if(dungeonStage > 3)
+                dungeonStage
             MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
         }
 
@@ -52,9 +54,6 @@ namespace TextRPG
         
         public bool showMonsterMode = false;
 
-        public int playerHp = 100;  // 임시 플레이어 체력
-        public int playerMp = 0;  // 임시 플레이어 마나
-        public int playerAtk = 10;  // 임시 플레이어 공격력
         public string playerJob = "전사"; // 임시 플레이어 직업
 
 
