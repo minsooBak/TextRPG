@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -18,7 +20,8 @@ namespace TextRPG
         Item,
         ItemData,
         Monster,
-        SkillData
+        SkillData,
+        Dungeon
     }
     struct ObjectState
     {
@@ -229,7 +232,7 @@ namespace TextRPG
                     }
                 case LoadType.SkillData:
                     {
-                        path = path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Skill_Data.json";
                         if (File.Exists(path) == false)
                             return null;
@@ -243,6 +246,24 @@ namespace TextRPG
 
                             file.Close();
                             return JsonConvert.DeserializeObject<Skill[]>(str);
+                        }
+                        break;
+                    }
+                case LoadType.Dungeon:
+                    {
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Dungeon_Data.json";
+                        if (File.Exists(path) == false)
+                            return null;
+                        StreamReader? file = File.OpenText(path);
+                        if (file != null)
+                        {
+                            JsonTextReader reader = new JsonTextReader(file);
+
+                            JArray json = (JArray)JToken.ReadFrom(reader);
+                            string? str = JsonConvert.SerializeObject(json);
+                            file.Close();
+                            return JsonConvert.DeserializeObject<List<Dungeon>>(str);
                         }
                         break;
                     }

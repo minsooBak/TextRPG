@@ -15,12 +15,36 @@ namespace TextRPG
         enum GameState
         {
             PlayerInfo = 1,
-            StartBattle
+            StartBattle,
+            Inventory,
+            Shop,
+            NONE
         }
+
 
         Player player = new Player();
         MonsterManager monsterManager = new MonsterManager();
         DungeonManager dungeonManager;
+        private bool isGameEnd = false;
+        private GameState gameState = GameState.NONE;
+
+        public void DrawMap()
+        {
+            while (!isGameEnd)
+            {
+                switch (gameState)
+                {
+                    case GameState.PlayerInfo:
+                        break;
+                    case GameState.StartBattle:
+                        ShowBattle();
+                        break;
+                    default:
+                        StartGame(); 
+                        break;
+                }
+            }
+        }
         
         public void StartGame()
         {
@@ -42,21 +66,29 @@ namespace TextRPG
             switch ((GameState)Utilities.GetInputKey(1, 2))
             {
                 case GameState.PlayerInfo: // 상태 보기
-
+                    gameState = GameState.PlayerInfo;
                     break;
                 case GameState.StartBattle: // 전투 시작
-                    ShowBattle();
+                    gameState = GameState.StartBattle;
                     break;
             }
         }
 
         private void ShowBattle()
         {
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters);      // 몬스터 생성하기
+            // 던전 스테이지 선택.
+            // 플레이어의 던전 클리어 여부에 따라 진입 가능한 던전 난이도가 높아집니다.
+            // 현재는 SelectDungeonStage의 매개변수에 따라 난이도를 조절해주세요.
+            dungeonManager.SelectDungeonStage(dungeonManager.dungeonStage);
 
-            dungeonManager.Encounter(monsterManager.dungeonMonsters);
+            // 플레이어의 HP가 0이 되면 게임 종료하기
+            // if(player.Hp <= 0) isGameEnd = true;
 
+            // 전투 종료 후 몬스터 리스트 초기화
             EventManager.Instance.PostEvent(EventType.eClearMonsters);
+            // StartGame()으로 돌아가기
+            gameState = GameState.NONE;
         }
     }
 }
+

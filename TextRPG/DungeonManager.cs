@@ -21,14 +21,32 @@ namespace TextRPG
         private SkillManager skillManager= new SkillManager();
         public DungeonManager(Player player) 
         {
-            // 몬스터 정보 받아오기
+            EventManager.Instance.AddListener(EventType.eSetMonsters, this);
+            List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
+            dungeons = d;
+
             // 플레이어 정보 받아오기
             this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
         }
+        public List<Dungeon> dungeons = [];
         public int deadCounter = 0;
+        public int dungeonStage = 1;
         public Monster[] monsters;
-        
 
+        // 선택된 던전 스테이지의 몬스터 만들기
+        public void SelectDungeonStage(int stage)
+        {
+            deadCounter = 0;
+            dungeonStage = stage - 1;
+            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
+        }
+
+        public void MakeMonsters(int dungeonMonsterType)//1
+        {
+            // 몬스터 생성
+            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
+        }
+        
         public bool showMonsterMode = false;
 
         public int playerHp = 100;  // 임시 플레이어 체력
@@ -37,9 +55,9 @@ namespace TextRPG
 
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
-        public void Encounter(List<Monster> dungeonMonster)
+        public void Encounter(List<Monster>dungeonMonsters)
         {
-            monsters = dungeonMonster.ToArray();
+            monsters = dungeonMonsters.ToArray();
 
             StartBattle();
         }
@@ -95,7 +113,7 @@ namespace TextRPG
 
             Console.WriteLine("Battle!! - 대상 선택\n");
 
-            ShowMonsterList(showMonsterMode = true);
+            ShowMonsterList(showMonsterMode = true);        // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
 
             ShowPlayerStats();
 
@@ -141,6 +159,7 @@ namespace TextRPG
                 }
             }
         }
+        // 스킬 선택
         public void SelectSkill()
         {
             Console.Clear();
@@ -175,6 +194,7 @@ namespace TextRPG
                 return;
             }
         }
+        // 내 스탯 보여주기
         private void ShowPlayerStats()
         {
             Console.WriteLine("\n[내 정보]");
@@ -188,6 +208,7 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine("100\n\n", ConsoleColor.DarkRed);
         }
 
+        // 몬스터 보여주기
         private void ShowMonsterList(bool mode)
         {
             int i = 1;
@@ -256,6 +277,7 @@ namespace TextRPG
             }
         }
 
+        // 결과 화면 보여주기
         public void ShowResult(int deadCounter, int monster)
         {
             Console.Clear();
@@ -264,6 +286,7 @@ namespace TextRPG
             Console.WriteLine("Battle!! - Result\n");
             Console.ResetColor();
 
+            // 승리 시
             if(deadCounter >= monster)
             {
                 Console.WriteLine("Victory\n");
@@ -271,26 +294,42 @@ namespace TextRPG
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
                 Console.WriteLine($"Lv.1 Chad\nHP 100 -> {playerHp}\n");
-
-                Console.WriteLine("0. 다음\n>> ");
-
-                if (Utilities.GetInputKey(0, 0) == 0) return;
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
                 Console.WriteLine("Lv.1 Chad\nHP 100 -> 0\n");
+            }
+            Console.WriteLine("0. 다음\n>> ");
 
-                Console.WriteLine("0. 다음\n>> ");
-
-                if (Utilities.GetInputKey(0, 0) == 0) return;
+            if (Utilities.GetInputKey(0, 0) == 0)
+            {
+                Console.Clear();
+                return;
             }
         }
 
         public void OnEvent(EventType type, object data)
         {
-            throw new NotImplementedException();
+            if(type == EventType.eSetMonsters)
+            {
+                // MonsterManager에서 생성된 몬스터 리스트 받기
+                Encounter((List<Monster>)data);
+            }
+        }
+    }
+
+    public class Dungeon
+    {
+        public int dungeonStage { get; private set; }
+        // 난이도별 생성 가능한 몬스터 목록
+        public int dungeonMonsterType {  get; private set; }
+        
+        public Dungeon(int dungeonStage, int dungeonMonsterType)
+        {
+            this.dungeonStage = dungeonStage;
+            this.dungeonMonsterType = dungeonMonsterType;
         }
     }
 }

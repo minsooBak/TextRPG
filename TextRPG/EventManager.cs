@@ -9,6 +9,12 @@ public enum EventType
     NONE, 
     eMakeMonsters,
     eClearMonsters,
+    eSetMonsters,
+    eUpdateItem,
+    eGetFieldItem,
+    eUpdateGold,
+    eUpdateStat,
+    eGameEnd,
     eSetSkill,
     eShowSkill
 }

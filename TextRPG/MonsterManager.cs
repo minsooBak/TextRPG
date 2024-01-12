@@ -18,35 +18,54 @@ namespace TextRPG
     {
         //private static readonly MonsterManager instance = new MonsterManager();
         //static public MonsterManager Instance { get { return instance; } }
-        public List<Monster> listOfMonsters;//몬스터 데이터 목록 리스트
         public List<Monster> dungeonMonsters;
+        //public int listOfMonsterCount;
 
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
             EventManager.Instance.AddListener(EventType.eClearMonsters, this);
-            listOfMonsters = new List<Monster>();
             dungeonMonsters = new List<Monster>();
 
-            for (int i = 0; i < 3; i++)
-            {
-                listOfMonsters.Add(new Monster((MonsterType)(i + 1))); // 몬스터 목록 데이터 저장
+            ////listOfMonsterCount = 3;
+            //for (int i = 0; i < listOfMonsterCount; i++)
+            //{
+            //    listOfMonsters.Add(new Monster((MonsterType)(i + 1))); // 몬스터 목록 데이터 저장
 
-                //확인용
-                //Console.WriteLine("몬스터 목록 등록");
-                //Console.WriteLine($"{listOfMonsters[i].Name}");
-                //Console.WriteLine($"현재 등록개수 :{listOfMonsters.Count}");
-            }
+            //    //확인용
+            //    //Console.WriteLine("몬스터 목록 등록");
+            //    //Console.WriteLine($"{listOfMonsters[i].Name}");
+            //    //Console.WriteLine($"현재 등록개수 :{listOfMonsters.Count}");
+            //}
         }
-        public void MakeMonsters() //몬스터 생성
+        public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
+            ////listOfMonsterCount = 3;
+            //for (int i = 0; i < listOfMonsterCount; i++) //1 2 3 4
+            //{
+            //    //스테이지가 1 이면 미니언만 전체 목록 배열에 저장 // 1 2 3 3 3 3
+            //    //스테이지가 2 이면 미니언,공허충만 전체 목록 배열에 저장 1 2 3 
+            //    if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)// 4 > 3
+            //    {
+            //        break;
+            //    }
+            //    //확인용
+            //    //Console.WriteLine("몬스터 목록 등록");
+            //    //Console.WriteLine($"{listOfMonsters[i].Name}");
+            //    //Console.WriteLine($"현재 등록개수 :{listOfMonsters.Count}");
+            //}
+
             Random rnd = new Random();
             int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
+            if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
+                listOfMonsterCount = (int)MonsterType.Monster3; //1 2 3 
             for (int i = 0; i < monsterCount; i++)
             {
-                int randomCount = rnd.Next(0, listOfMonsters.Count); //등록되어 있는 몬스터 중 어떤 몬스터를 고를지
-                dungeonMonsters.Add(CreateMonster(++randomCount));// 던전 몬스터 리스트에 몬스터 추가
+                int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
+                dungeonMonsters.Add(CreateMonster(++randomCount));// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
+
+            EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
         }
         public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
         {
@@ -67,7 +86,7 @@ namespace TextRPG
         {
             if (type == EventType.eMakeMonsters)
             {
-                MakeMonsters();
+                MakeMonsters((int)data);
             }
             else if(type == EventType.eClearMonsters)
             {

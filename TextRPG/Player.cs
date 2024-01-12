@@ -23,7 +23,7 @@ namespace TextRPG
         public int Gold { get; }
         public int Mp { get; }
 
-        public Player(string name = "chad", string job = "전사", int level = 1, int atk=10, int def=5, int hp=100, int gold=1500)
+        public Player(string name = "chad", string job = "전사", int level = 1, int atk=100, int def=5, int hp=100, int gold=1500)
         {
             Name = name;
             Job = job;

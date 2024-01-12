@@ -5,8 +5,8 @@
         static void Main(string[] args)
         {
             Map map = new();
-            map.StartGame();
             //Map구현 매서드 실행
+            map.DrawMap();            
         }
     }
 }
