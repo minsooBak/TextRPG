@@ -6,7 +6,7 @@
         {
             Map map = new();
             //Map구현 매서드 실행
-            map.StartGame();            
+            map.DrawMap();            
         }
     }
 }
