@@ -4,6 +4,7 @@ namespace TextRPG
 {
     internal class CreatePlayer
     {
+        //캐릭터 생성 및 출력
         public KeyValuePair<string, string> Create()
         {
             Utilities.AddLine("RPG_GAME에 오신것을 환영합니다!");
@@ -37,6 +38,8 @@ namespace TextRPG
             }
             
         }
+
+        //이름 만들기
         string CreateName()
         {
             while (true)
@@ -62,6 +65,7 @@ namespace TextRPG
             }
         }
 
+        //클래스 정하기
         string CreateJob()
         {
             Utilities.AddLine("직업을 정해주세요!\n");

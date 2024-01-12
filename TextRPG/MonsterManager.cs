@@ -59,14 +59,14 @@ namespace TextRPG
             {
                 MakeMonsters((int)data);
             }
-            else if(type == EventType.eClearMonsters)
+            else if (type == EventType.eClearMonsters)
             {
                 ClearMonsterList();
             }
         }
     }
 
-    public class Monster : IListener, IObject
+    public class Monster : IObject
     {
         private ObjectState myState;
 
@@ -82,24 +82,6 @@ namespace TextRPG
 
         public bool IsDead => myState.Health <= 0;
         public void SetSkill(Skill skill) => myState.Skill = skill;
-
-        public void ShowStats()
-        {
-            // 몬스터가 죽었는지 확인하기 -> 죽어있다면 Dead, 색깔 변경하기
-            if (IsDead)
-            {
-                Utilities.TextColor($"Lv.{myState.Level} {myState.Class} Dead", ConsoleColor.DarkGray);
-            }
-            else
-            {
-                // 안죽었다면 Level, Class, Hp 출력하기
-                Console.Write("Lv.");
-                Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
-                Console.Write($"{myState.Class} HP ");
-                Utilities.TextColor($"{myState.Health}", ConsoleColor.DarkRed);
-            }
-        }
-
         public int Attack(AttackType attackType = AttackType.Attack)
         {
             int damage = 0;
@@ -195,9 +177,6 @@ namespace TextRPG
                 myState.ATK = 8;
             }
         }
-        public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
-        {
-            //Console.WriteLine();
-        }
+        
     }
 }
