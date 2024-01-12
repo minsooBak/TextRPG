@@ -45,8 +45,6 @@ namespace TextRPG
         void ShowStats();
     }
 
-
-
     internal static class Utilities
     {
         public static KeyValuePair<T, object> EventPair<T>(T t, object a)
