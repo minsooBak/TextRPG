@@ -34,6 +34,7 @@ namespace TextRPG
         public int ATK { get; set; }
         public int DEF { get; set; }
         public int MP { get; set; }
+        public Skill Skill { get; set; }
     }
 
     interface IObject //던전에서 실행될 메서드
@@ -42,11 +43,11 @@ namespace TextRPG
         int Health { get;}
         int Level { get; }
         string Class { get; }
+        bool IsUseSkill { get; }
         bool IsDead { get; }
         void SetSkill(Skill skill);
         int Attack(AttackType attackType);
         void TakeDamage(int damage);
-        bool PirntDead();
     }
 
 
