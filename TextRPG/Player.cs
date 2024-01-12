@@ -33,7 +33,7 @@ namespace TextRPG
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
-            myState.ATK = 10;
+            myState.ATK = 100;
             myState.DEF = 0;
             myState.Gold = 0;
             InitATK = myState.ATK;
@@ -64,6 +64,11 @@ namespace TextRPG
         {
             //이벤트 받아서 switch문으로 구현
             
+        }
+
+        public int ShowHealth()
+        {
+            return myState.Health;
         }
 
         public void ShowStats()
