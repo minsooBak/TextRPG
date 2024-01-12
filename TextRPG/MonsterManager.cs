@@ -24,7 +24,6 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.eClearMonsters, this);
             dungeonMonsters = new List<Monster>();
         }
-
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
             Random rnd = new Random();
@@ -60,7 +59,7 @@ namespace TextRPG
             {
                 MakeMonsters((int)data);
             }
-            else if(type == EventType.eClearMonsters)
+            else if (type == EventType.eClearMonsters)
             {
                 ClearMonsterList();
             }

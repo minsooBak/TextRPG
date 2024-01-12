@@ -19,8 +19,8 @@ namespace TextRPG
     internal class DungeonManager : IListener
     {
         private Player player;
-        private SkillManager skillManager= new SkillManager();
-        public DungeonManager(Player player) 
+        private SkillManager skillManager = new SkillManager();
+        public DungeonManager(Player player)
         {
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
             List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
@@ -57,7 +57,7 @@ namespace TextRPG
 
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
-        public void Encounter(List<Monster>dungeonMonsters)
+        public void Encounter(List<Monster> dungeonMonsters)
         {
             monsters = dungeonMonsters.ToArray();
 
@@ -73,7 +73,7 @@ namespace TextRPG
                 deadCounter = 0;
                 foreach (Monster monster in monsters)
                 {
-                    if(monster.IsDead) deadCounter++;
+                    if (monster.isDead) deadCounter++;
                 }
                 if (deadCounter >= monsters.Length) break;
 
@@ -95,12 +95,12 @@ namespace TextRPG
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Utilities.TextColorWithNoNewLine(">> ", ConsoleColor.Yellow);
 
-                switch((AttackType)Utilities.GetInputKey(1, 2))
+                switch ((AttackType)Utilities.GetInputKey(1, 2))
                 {
                     case AttackType.Attack:
                         SelectMonster(AttackType.Attack);
                         break;
-                        case AttackType.Skill:
+                    case AttackType.Skill:
                         SelectSkill();
                         break;
                 }
@@ -295,7 +295,6 @@ namespace TextRPG
         // 결과 화면 보여주기
         public void ShowResult(int deadCounter, int monster)
         {
-
             Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -328,7 +327,7 @@ namespace TextRPG
 
         public void OnEvent(EventType type, object data)
         {
-            if(type == EventType.eSetMonsters)
+            if (type == EventType.eSetMonsters)
             {
                 // MonsterManager에서 생성된 몬스터 리스트 받기
                 Encounter((List<Monster>)data);

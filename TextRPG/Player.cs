@@ -88,5 +88,4 @@ namespace TextRPG
         {
             myState.Health -= Math.Clamp(damage, 0 , 100);
         }
-    }
 }
