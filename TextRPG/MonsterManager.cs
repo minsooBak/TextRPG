@@ -24,6 +24,7 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.eClearMonsters, this);
             dungeonMonsters = new List<Monster>();
         }
+
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
             Random rnd = new Random();
@@ -177,11 +178,6 @@ namespace TextRPG
                 myState.ATK = 8;
             }
         }
-        public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
-        {
-            //Console.WriteLine();
-        }
-
         
     }
 }

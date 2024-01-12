@@ -9,20 +9,19 @@ using static TextRPG.Player;
 
 namespace TextRPG
 {
-    //추민규님 마을 <-> 던전or상태보기 구현
+    //맵의 이동 처리
     internal class Map
     {
         enum GameState
         {
-            PlayerInfo = 1,
+            NONE,
+            PlayerInfo,
             StartBattle,
             Inventory,
             Shop,
-            NONE
         }
 
         Player player = new Player();
-        MonsterManager monsterManager = new MonsterManager();
         DungeonManager dungeonManager;
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
@@ -43,6 +42,7 @@ namespace TextRPG
                         break;
                 }
             }
+            //저장처리
         }
         
         public void StartGame()
@@ -55,6 +55,7 @@ namespace TextRPG
             Utilities.AddLine("1. 상태 보기");
             Utilities.AddLine("2. 전투 시작");
             Utilities.AddLine("");
+            Utilities.AddLine("0. 종료");
 
             //스킬 출력 예제
             //skillManager.ShowSkillList("전사");
