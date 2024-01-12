@@ -4,7 +4,7 @@ namespace TextRPG
 {
     internal class CreatePlayer
     {
-        public string Create()
+        public KeyValuePair<string, string> Create()
         {
             Utilities.AddLine("RPG_GAME에 오신것을 환영합니다!");
             Utilities.AddLine("이곳은 캐릭터 생성을 하는 곳 입니다.\n");
@@ -18,7 +18,7 @@ namespace TextRPG
                 case 0:
                     {
                         Console.Clear();
-                        return "";
+                        return new KeyValuePair<string, string>();
                     }
                 case 1:
                     {
@@ -27,12 +27,12 @@ namespace TextRPG
                         Console.Clear();
                         string job = CreateJob();
                         Console.Clear();
-                        return name + " " + job;
+                        return new KeyValuePair<string, string>(name, job);
                     }
                 default:
                     {
                         Console.Error.WriteLine("CreatePlayer InputKey Error");
-                        return "";
+                        return new KeyValuePair<string, string>();
                     }
             }
             

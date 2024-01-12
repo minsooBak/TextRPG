@@ -18,6 +18,24 @@ namespace TextRPG
         private int InitATK { get; set; }
         private int InitDEF { get; set; }
 
+        public Player()
+        {
+            //CreatePlayer
+            CreatePlayer createPlayer = new CreatePlayer();
+            var Name = createPlayer.Create();
+
+            myState.Name = Name.Key;
+            myState.Class = Name.Value;
+
+            myState.Level = 1;
+            myState.EXP = 0;
+            myState.ATK = 10;
+            myState.DEF = 0;
+            myState.Gold = 0;
+            InitATK = myState.ATK;
+            InitDEF = myState.DEF;
+        }
+
         public Player(ObjectState state)
         {
             myState.Name = state.Name;
@@ -38,9 +56,7 @@ namespace TextRPG
         public int Level => myState.Level;
         public string Class => myState.Class;
         public bool IsDead => myState.Health <= 0;
-
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;
-
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         public void OnEvent(EventType type, object data)
