@@ -23,26 +23,30 @@ namespace TextRPG
         SkillData,
         Dungeon
     }
-    struct ObjectState
+    struct ObjectState //공통변수들
     {
         public string Name { get; set; }
         public string Class { get; set; }
         public int Health { get; set; }
         public int Gold { get; set; }
-        public int Level { get { return EXP / 100; } }
-        public int EXP { get; set; }
-        public float InitATK { get; set; }
-        public int InitDEF { get; set; }
+        public int Level { get; set; }
+        public int EXP { get; set; }   
         public int ATK { get; set; }
         public int DEF { get; set; }
+        public int MP { get; set; }
     }
 
-    interface IObject
+    interface IObject //던전에서 실행될 메서드
     {
+        int MP { get;}
+        int Health { get;}
+        int Level { get; }
+        string Class { get; }
+        bool IsDead { get; }
         void SetSkill(Skill skill);
         int Attack(AttackType attackType);
         void TakeDamage(int damage);
-        bool IsDead();
+        bool PirntDead();
     }
 
 

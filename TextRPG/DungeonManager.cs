@@ -50,6 +50,7 @@ namespace TextRPG
         public bool showMonsterMode = false;
 
         public int playerHp = 100;  // 임시 플레이어 체력
+        public int playerMp = 0;  // 임시 플레이어 마나
         public int playerAtk = 10;  // 임시 플레이어 공격력
         public string playerJob = "전사"; // 임시 플레이어 직업
 
@@ -180,13 +181,21 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            
-            int input = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
-            input--;
-            if (0 <= input && input < skillManager.GetMySkillCount(playerJob))
+
+            bool ManaCheck = false;
+            while(!ManaCheck)
+            int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(playerJob)); //임시 플레이어 직업 전사 
+            skillIdx--;
+            if (0 <= skillIdx && skillIdx < skillManager.GetMySkillCount(playerJob))
             {
-                player.SetSkill(skillManager.GetMySkill(playerJob, input)); //선택한 스킬 할당
-                SelectMonster(AttackType.Skill);
+                player.SetSkill(skillManager.GetMySkill(playerJob, skillIdx)); //선택한 스킬 할당
+                if (player.Skill.Cost > player.Mp)  //마나가 모자르다면
+                {
+                    Console.WriteLine("마나가 부족합니다.");
+                    SelectSkill();
+                }
+                else
+                    SelectMonster(AttackType.Skill);
             }
             else
             {
@@ -205,7 +214,12 @@ namespace TextRPG
             Console.Write("HP ");
             Utilities.TextColorWithNoNewLine($"{playerHp}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine("100\n\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine("100\n", ConsoleColor.DarkRed);
+
+            Console.Write("MP ");
+            Utilities.TextColorWithNoNewLine($"{playerMp}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
+            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+            Utilities.TextColorWithNoNewLine("50\n\n", ConsoleColor.DarkRed);
         }
 
         // 몬스터 보여주기

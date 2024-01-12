@@ -68,6 +68,7 @@ namespace TextRPG
 
     public class Monster : IListener, IObject
     {
+        
         public Skill Skill { get; set; }
         public string Name { get; private set; } //몬스터 이름
         public int Lv { get; private set; } // 레벨
@@ -141,7 +142,7 @@ namespace TextRPG
             Console.WriteLine($"{(this.isDead ? "Dead" : this.Hp)}");
         }
 
-        public bool IsDead()
+        public bool PrintDead()
         {
             if (this.isDead)
             {

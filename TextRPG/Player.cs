@@ -14,28 +14,29 @@ namespace TextRPG
     //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
     internal class Player : IListener, IObject
     {
-        public string Name { get; }
-        public string Job { get; }
-        public int Level { get; }
-        public int Atk { get; }
-        public int Def { get; }
-        public int Hp { get; }
-        public int Gold { get; }
-        public int Mp { get; }
+        ObjectState myState;
 
-        public Player(string name = "chad", string job = "전사", int level = 1, int atk=100, int def=5, int hp=100, int gold=1500)
+        public Player(string name = "chad", string job = "전사", int level = 1, int atk = 10, int def = 5, int hp = 100, int gold = 1500)
         {
-            Name = name;
+            myState.Name = name;
             Job = job;
             Level = level;
             Atk = atk;
             Def = def;
             Hp = hp;
             Gold = gold;
-            Mp = 50;
+            Mp = 0;
         }
-
         public Skill Skill { get; set; }
+
+        public int Health => myState.Health;
+
+        public int Level => throw new NotImplementedException();
+
+        public string Class => throw new NotImplementedException();
+
+        bool IObject.IsDead => throw new NotImplementedException();
+
         public void SetSkill(Skill skill)
         {
             Skill = skill;
@@ -79,5 +80,9 @@ namespace TextRPG
             throw new NotImplementedException();
         }
 
+        public bool PirntDead()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
