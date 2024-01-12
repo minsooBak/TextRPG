@@ -52,14 +52,14 @@
             {
                 MakeMonsters((int)data);
             }
-            else if(type == EventType.eClearMonsters)
+            else if (type == EventType.eClearMonsters)
             {
                 ClearMonsterList();
             }
         }
     }
 
-    public class Monster : IListener, IObject
+    public class Monster : IObject
     {
         private ObjectState myState;
 
@@ -188,9 +188,6 @@
                 myState.ATK = 8;
             }
         }
-        public void OnEvent(EventType type, object? data = null) //이벤트 타입으로 메소드를 실행한다.
-        {
-            //Console.WriteLine();
-        }
+        
     }
 }

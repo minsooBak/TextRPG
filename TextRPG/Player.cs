@@ -11,6 +11,7 @@
         private int PrevHealth { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
 
+
         public Player()
         {
             EventManager.Instance.AddListener(EventType.Player, this);
@@ -31,26 +32,33 @@
             InitATK = myState.ATK;
             InitDEF = myState.DEF;
 
-            maxHealth = 100;
-            maxMP = 100;
+            maxHealth = myState.Health;
+            maxMP = myState.MP;
         }
 
         public Player(ObjectState state)
         {
             myState.Name = state.Name;
             myState.Class = state.Class;
-            myState.Level = state.Level;
-            myState.ATK = state.ATK;
-            myState.DEF = state.DEF;
-            myState.Health = state.Health;
-            myState.Gold = state.Gold;
-            myState.MP = state.MP;
 
+            myState.Health = state.Health;
+            myState.MP = state.MP;
+            myState.Level = state.Level;
+            myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
+            myState.DEF = state.DEF;
+            myState.Gold = state.Gold;
             InitATK = state.ATK;
             InitDEF = state.DEF;
         }
 
+        public int Health => myState.Health;
+        public int MP => myState.MP;
+        public int Level => myState.Level;
+        public string Name => myState.Name;
         public string Class => myState.Class;
+        public int ATK => myState.ATK;
+        public int DEF => myState.DEF;
+        public int Gold => myState.Gold;
         public bool IsDead => myState.Health <= 0;
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
@@ -61,29 +69,23 @@
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, int>?)data;
-                //var b = a == null ? data as KeyValuePair<ePlayerType, Tuple<int, int>>? : null;
-                //if(b != null)
-                //{
-                //    myState.ATK -= b.Value.Value.Item1;
-                //    myState.DEF -= b.Value.Value.Item2;
-                //    return;
-                //}
-                switch(a.Value.Key)
+                var a = (KeyValuePair<ePlayerType, int>)data;
+                
+                switch(a.Key)
                 {
                     case ePlayerType.HP:
                         {
-                            myState.Health = Math.Clamp(myState.Health + a.Value.Value, 0, maxHealth);
+                            myState.Health = Math.Clamp(myState.Health + a.Value, 0, maxHealth);
                             break;
                         }
                     case ePlayerType.MP:
                         {
-                            myState.Health = Math.Clamp(a.Value.Value, 0, maxMP);
+                            myState.Health = Math.Clamp(a.Value, 0, maxMP);
                             break;
                         }
                     case ePlayerType.Gold:
                         {
-                            myState.Gold = Math.Clamp(a.Value.Value, 0, 100);
+                            myState.Gold = Math.Clamp(a.Value, 0, 100);
                             break;
                         }
                 }

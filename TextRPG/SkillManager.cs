@@ -26,7 +26,7 @@ namespace TextRPG
             }
             foreach (var skill in skillList)
             {
-                if (classNames.Find(x => x == skill.Class)== null)
+                if (classNames.Find(x => x == skill.Class) == null)
                     classNames.Add(skill.Class);
             }
             foreach (string className in classNames) //이름 배열로 스킬들 할당
@@ -48,7 +48,7 @@ namespace TextRPG
                 }
             }
 
-            if(list == null)
+            if (list == null)
             {
                 Console.Error.WriteLine("SkillsAdd Fail! ClassName : " + className);
                 return;
@@ -105,7 +105,7 @@ namespace TextRPG
             }
             return null;
         }
-        public Skill GetMySkill(string className,int number) //플레이어 스킬 반환
+        public Skill GetMySkill(string className, int number) //플레이어 스킬 반환
         {
             return skillDictionary[className][number];
         }
