@@ -25,8 +25,6 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
             List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
             dungeons = d;
-            Console.WriteLine("던전 매니저 생성");
-            Console.ReadKey();
             // 플레이어 정보 받아오기
             this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
         }
@@ -54,8 +52,6 @@ namespace TextRPG
         
         public bool showMonsterMode = false;
 
-        public string playerJob = "전사"; // 임시 플레이어 직업
-
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
         public void Encounter(List<Monster> dungeonMonsters)
@@ -68,7 +64,7 @@ namespace TextRPG
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
-            while (player.Health > 0)
+            while (player.IsDead == false)
             {
                 // MonsterManager에서 몬스터가 죽으면 리스트에서 제거되는 로직 추가 후 수정하기(List.Count = 0이 되면 while문 탈출)
                 deadCounter = 0;
@@ -187,18 +183,17 @@ namespace TextRPG
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
 
-            bool ManaCheck = false;
+            // 마나가 부족할 경우, SelectSkill()을 다시 호출.
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
             skillIdx--;
+
             player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx)); //선택한 스킬 할당
-            if (player.IsUseSkill)  //마나가 모자르다면
+            if (player.IsUseSkill == false)  //마나가 모자르다면
             {
                 Console.WriteLine("마나가 부족합니다.");
-                SelectSkill();
             }
             else
                 SelectMonster(AttackType.Skill);
-
         }
         // 내 스탯 보여주기
 
@@ -210,7 +205,7 @@ namespace TextRPG
             {
                 if (monster.IsDead)
                 {
-                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.DarkGray);
+                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
                 }
                 else
                 {
@@ -284,14 +279,13 @@ namespace TextRPG
                 Console.WriteLine("Victory\n");
 
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
-
-                Console.WriteLine($"Lv.1 Chad\nHP 100 -> {player.Health}\n");
+                player.ShowResult();
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
-                Console.WriteLine("Lv.1 Chad\nHP 100 -> 0\n");
+                player.ShowResult();
             }
             Console.WriteLine("\n0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
