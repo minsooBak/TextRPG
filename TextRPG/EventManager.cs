@@ -15,8 +15,6 @@ public enum EventType
     eUpdateGold,
     eUpdateStat,
     eGameEnd,
-    eSetSkill,
-    eShowSkill
 }
 
 public interface IListener
