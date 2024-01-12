@@ -41,8 +41,8 @@ namespace TextRPG
         {
             deadCounter = 0;
             dungeonStage = ++stage; ; // 0  1 2 3 3 3 3 3 3 3 3 
-            if(dungeonStage > 3)
-                dungeonStage
+            if (dungeonStage > 3)
+                dungeonStage = 3;
             MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
         }
 
