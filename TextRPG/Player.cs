@@ -30,7 +30,7 @@ namespace TextRPG
             myState.Name = Name.Key;
             myState.Class = Name.Value;
 
-            myState.Health = 100;
+            myState.Health = 1000;
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
@@ -74,6 +74,29 @@ namespace TextRPG
         {
             //이벤트 받아서 switch문으로 구현
 
+        }
+
+        public int ShowHealth()
+        {
+            return myState.Health;
+        }
+
+        public void ShowStats()
+        {
+            Console.WriteLine("\n[내 정보]");
+            Console.Write("Lv.");
+            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
+            Console.WriteLine($"{myState.Name} ({myState.Class})");         // 나중에 player.Name, player.Job으로 수정하기
+
+            Console.Write("HP ");
+            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
+            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+            Utilities.TextColorWithNoNewLine($"100\n", ConsoleColor.DarkRed);
+
+            Console.Write("MP ");
+            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
+            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+            Utilities.TextColorWithNoNewLine($"100\n", ConsoleColor.DarkRed);
         }
 
         public int Attack(AttackType attackType)

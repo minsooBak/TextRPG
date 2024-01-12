@@ -274,10 +274,10 @@ namespace TextRPG
                 Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
                 Console.WriteLine($"Lv.1 Chad");
-                Console.Write($"{playerHp} -> ");
+                Console.Write($"{player.Health} -> ");
                 player.TakeDamage(damage);
 
-                Console.WriteLine($"{(playerHp <= 0 ? playerHp = 0 : playerHp)}");
+                Console.WriteLine($"{(player.Health <= 0 ? 0 : player.Health)}");
             }
 
             Console.WriteLine("\n0. 다음\n");
