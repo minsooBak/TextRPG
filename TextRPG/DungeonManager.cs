@@ -125,7 +125,6 @@
                 monsterAttackType = rnd.Next(1, 3);// 1 ~2
 
                 //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
-                //만약 몬스터의 스킬이 랜덤으로 나가게 설정하실거면 ObjectState의 MP를 제거해야합니다
                 if ((AttackType)monsterAttackType == AttackType.Skill)
                     monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
                 //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
