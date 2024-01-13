@@ -12,6 +12,13 @@
     {
         private Player player;
         private SkillManager skillManager = new SkillManager();
+        public List<Dungeon> dungeons = [];
+        public IObject[] monsters;
+        public int deadCounter = 0;
+        public int dungeonStage = -1; // 1
+        public bool showMonsterMode = false;
+
+
         public DungeonManager(Player player)
         {
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
@@ -20,57 +27,37 @@
             // 플레이어 정보 받아오기
             this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
         }
-        public List<Dungeon> dungeons = [];
-        public int deadCounter = 0;
-        public int dungeonStage = -1; // 1
-        public Monster[] monsters;
-        public bool isEnd = false;
 
         // 선택된 던전 스테이지의 몬스터 만들기
         public void SelectDungeonStage(int stage) // 2
         {
             deadCounter = 0;
             dungeonStage = ++stage;
-            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
+            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeons[dungeonStage].dungeonMonsterType);
         }
-
-        public void MakeMonsters(int dungeonMonsterType)//1
-        {
-            // 몬스터 생성
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
-        }
-        
-        public bool showMonsterMode = false;
-
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
         public void Encounter(List<Monster> dungeonMonsters)
         {
             monsters = dungeonMonsters.ToArray();
-
+            
             StartBattle();
         }
 
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
-            while (player.IsDead == false)
+            //if (deadCounter >= monsters.Length) break; 이 조건문을 while조건문으로 넣었습니다
+            // deadCounter를 몬스터가 데미지를 받을때 오르게 바꾸고 deadCounter의 초기화를 던전선택할때만 하게했습니다.
+            while (player.IsDead == false && deadCounter < monsters.Length)
             {
-                // MonsterManager에서 몬스터가 죽으면 리스트에서 제거되는 로직 추가 후 수정하기(List.Count = 0이 되면 while문 탈출)
-                deadCounter = 0;
-                foreach (Monster monster in monsters)
-                {
-                    if (monster.IsDead) deadCounter++;
-                }
-                if (deadCounter >= monsters.Length) break;
-
                 Console.Clear();
 
                 Utilities.TextColor("Battle!!\n", ConsoleColor.DarkYellow);
 
                 ShowMonsterList(showMonsterMode = false);
 
-                ShowPlayerStats();
+                player.ShowStats(); // 플레이어 정보창에는 번호가 추가되거나 그런것이 없어서 메서드 제거 후 호출했습니다.
 
                 Utilities.TextColorWithNoNewLine("1.", ConsoleColor.DarkRed);
                 Console.WriteLine(" 공격");
@@ -85,7 +72,7 @@
                 switch ((AttackType)Utilities.GetInputKey(1, 2))
                 {
                     case AttackType.Attack:
-                        SelectMonster(AttackType.Attack);
+                        SelectMonster();//매개변수의 값이 기본값이 Attack임으로 지워놨습니다.
                         break;
                     case AttackType.Skill:
                         SelectSkill();
@@ -104,9 +91,9 @@
 
             Console.WriteLine("Battle!! - 대상 선택\n");
 
-            ShowMonsterList(showMonsterMode = true);        // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
+            ShowMonsterList(showMonsterMode = true); // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
 
-            ShowPlayerStats();
+            player.ShowStats();
 
             Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
             Console.WriteLine(" 취소\n");
@@ -114,11 +101,11 @@
             Console.WriteLine("대상을 선택해주세요.");
             Utilities.TextColorWithNoNewLine(">> ", ConsoleColor.Yellow);
 
-            Random rnd = new Random();
-            int monsterAttackType;
-
             int input = Utilities.GetInputKey(0, monsters.Length);
             if (input == 0) return;
+
+            Random rnd = new Random();
+            int monsterAttackType;
 
             for (int i = 1; i <= monsters.Length; i++)
             {
@@ -132,17 +119,21 @@
                     ShowBattle(monsters[i - 1], isPlayerTurn, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
                     isPlayerTurn = false;
 
-                    foreach (Monster monster in monsters)
+                    foreach (Monster monster in (Monster[])monsters)
                     {
                         if (monster.IsDead)
                         {
+                            //break; 1번을 죽일경우 공격을 안하게 되기에 continue로 수정
                             continue;
                         }
 
                         monsterAttackType = rnd.Next(1, 3);// 1 ~2
 
+                        //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
+                        //만약 몬스터의 스킬이 랜덤으로 나가게 설정하실거면 ObjectState의 MP를 제거해야합니다
                         if ((AttackType)monsterAttackType == AttackType.Skill)
-                            monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
+                            monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
+                            //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
 
                         ShowBattle(monster, isPlayerTurn, (AttackType)monsterAttackType);
                     }
@@ -161,7 +152,7 @@
 
             ShowMonsterList(showMonsterMode = false); //몬스터 번호 없이 출력
 
-            ShowPlayerStats(); // 플레이어 상태 표시
+            player.ShowStats(); // 플레이어 상태 표시
 
             //EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력 
             skillManager.ShowSkillList(player.Class);// 플레이어 직업의 스킬 출력 
@@ -184,11 +175,6 @@
             else
                 SelectMonster(AttackType.Skill);
         }
-        // 내 스탯 보여주기
-        private void ShowPlayerStats()
-        {
-            player.ShowStats();
-        }
 
         // 몬스터 보여주기
         private void ShowMonsterList(bool mode)
@@ -198,13 +184,14 @@
             {
                 if (monster.IsDead)
                 {
-                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
+                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.DarkGray);
                 }
                 else
                 {
                     Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
                 }
                 monster.ShowStats();
+                Console.WriteLine();
                 i++;
             }
         }
@@ -213,14 +200,14 @@
         
 
         // 공격 진행하기(ShowBattle)
-        public void ShowBattle(Monster monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
+        public void ShowBattle(IObject monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
         {
             Console.Clear();
 
-            int damage;
 
             Utilities.TextColor("Battle!! - 전투 진행\n", ConsoleColor.DarkYellow);
 
+            int damage;
             if (isPlayerTurn)
             {
                 // 몬스터 공격하기.
@@ -231,6 +218,8 @@
                 damage = player.Attack(attackType); //공격 종류에 따라 달리 작동
 
                 monster.TakeDamage(damage);
+
+                deadCounter += monster.IsDead ? 1 : 0; 
             }
             else
             {
