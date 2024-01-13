@@ -64,6 +64,16 @@ namespace TextRPG
         //    return new KeyValuePair<T, string>(t, data);
         //}
 
+        //public static KeyValuePair<T, Item> EventPair<T>(T t, Item data)
+        //{
+        //    return new KeyValuePair<T, Item>(t, data);
+        //}
+
+        //public static KeyValuePair<T, Item[]> EventPair<T>(T t, Item[] data)
+        //{
+        //    return new KeyValuePair<T, Item[]>(t, data);
+        //}
+
         static StringBuilder sb = new StringBuilder(400);
 
         public static void AddLine(string str)
