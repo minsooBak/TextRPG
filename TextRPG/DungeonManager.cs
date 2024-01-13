@@ -102,9 +102,6 @@
             int input = Utilities.GetInputKey(0, monsters.Length);
             if (input == 0) return;
 
-            Random rnd = new Random();
-            int monsterAttackType;
-
             //선택한 몬스터가 죽었다면 return하게 변경(이중반복문 돌리면서 찾을 이유가 없기때문에)
             if (monsters[input - 1].IsDead)
             {
@@ -122,7 +119,7 @@
                     continue;
                 }
 
-                monsterAttackType = rnd.Next(1, 3);// 1 ~2
+                AttackType monsterAttackType = (AttackType)new Random().Next(1, 3);// 1 ~2
 
                 //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
                 if ((AttackType)monsterAttackType == AttackType.Skill)
