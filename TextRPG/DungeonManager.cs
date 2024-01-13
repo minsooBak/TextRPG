@@ -87,8 +87,6 @@
         {
             Console.Clear();
 
-            bool isPlayerTurn = true;
-
             Console.WriteLine("Battle!! - 대상 선택\n");
 
             ShowMonsterList(showMonsterMode = true); // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
@@ -107,46 +105,39 @@
             Random rnd = new Random();
             int monsterAttackType;
 
-            for (int i = 1; i <= monsters.Length; i++)
+            //선택한 몬스터가 죽었다면 return하게 변경(이중반복문 돌리면서 찾을 이유가 없기때문에)
+            if (monsters[input - 1].IsDead)
             {
-                if (input == i)
+                return;
+            }
+
+            //플레이어 공격
+            ShowBattle(monsters[input - 1], true, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
+
+            foreach (Monster monster in (Monster[])monsters)
+            {
+                if (monster.IsDead)
                 {
-                    if (monsters[i - 1].IsDead)
-                    {
-                        break;
-                    }
-
-                    ShowBattle(monsters[i - 1], isPlayerTurn, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
-                    isPlayerTurn = false;
-
-                    foreach (Monster monster in (Monster[])monsters)
-                    {
-                        if (monster.IsDead)
-                        {
-                            //break; 1번을 죽일경우 공격을 안하게 되기에 continue로 수정
-                            continue;
-                        }
-
-                        monsterAttackType = rnd.Next(1, 3);// 1 ~2
-
-                        //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
-                        //만약 몬스터의 스킬이 랜덤으로 나가게 설정하실거면 ObjectState의 MP를 제거해야합니다
-                        if ((AttackType)monsterAttackType == AttackType.Skill)
-                            monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
-                            //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
-
-                        ShowBattle(monster, isPlayerTurn, (AttackType)monsterAttackType);
-                    }
-                    isPlayerTurn = true;
+                    //break; 1번을 죽일경우 공격을 안하게 되기에 continue로 수정
+                    continue;
                 }
+
+                monsterAttackType = rnd.Next(1, 3);// 1 ~2
+
+                //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
+                //만약 몬스터의 스킬이 랜덤으로 나가게 설정하실거면 ObjectState의 MP를 제거해야합니다
+                if ((AttackType)monsterAttackType == AttackType.Skill)
+                    monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
+                //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
+
+                //몬스터 공격
+                ShowBattle(monster, false, (AttackType)monsterAttackType);
             }
         }
         // 스킬 선택
         public void SelectSkill()
         {
             Console.Clear();
-
-            bool isPlayerTurn = true;
 
             Utilities.TextColor("Battle!!\n", ConsoleColor.DarkYellow);
 
@@ -165,9 +156,8 @@
 
             // 마나가 부족할 경우, SelectSkill()을 다시 호출.
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
-            skillIdx--;
+            player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx - 1)); //선택한 스킬 할당
 
-            player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx)); //선택한 스킬 할당
             if (player.IsUseSkill == false)  //마나가 모자르다면
             {
                 Console.WriteLine("마나가 부족합니다.");
