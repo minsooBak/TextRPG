@@ -137,7 +137,7 @@
             if (attackType == AttackType.Skill)
             {
                 damage = myState.Skill.GetATK(damage);
-                myState.MP -= myState.Skill.Cost;
+                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
             }
 
             if (attackType == AttackType.Attack)
@@ -153,7 +153,7 @@
 
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
             Console.Write($"{myState.HP} ->");
-            myState.HP -= Math.Clamp(damage, 0 , 100);
+            myState.HP = Math.Clamp(myState.HP - damage, 0 , 100);
             Console.Write($"{myState.HP}");
         }
 
