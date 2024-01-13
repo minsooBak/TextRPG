@@ -9,12 +9,18 @@
     //정원우님 구현
     internal class MonsterManager : IListener
     {
+        //몬스터를 생성해서 넘겨주고 몬스터매니저에서 쓰는것이 없기에 Make에서 생성해주고 넘겨준 뒤 클리어해주었습니다.
+        //List<Monster>dungeonMonsters = [];
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
-            EventManager.Instance.AddListener(EventType.eClearMonsters, this);
         }
 
+        //추가로 구현하면 좋은것은
+        //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
+        //2. 전체 몬스터 데이터를 배열로 가지고있다가 type에 맞는 몬스터를 꺼내주기
+        //3. CreateMonster에서의 역활은 굳이 int값을 복사해서 MakeMonsters에서도 할수있는것을 넘기는것이기에 MakeMonsters에서 추가해주기
+        //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
             List<Monster> dungeonMonsters = [];
@@ -30,7 +36,9 @@
             }
 
             EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
+            dungeonMonsters.Clear();
         }
+
         public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
         {
             Monster newMonster = new Monster((MonsterType)random);
