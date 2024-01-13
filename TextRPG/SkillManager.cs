@@ -34,10 +34,8 @@ namespace TextRPG
                 AddSkills(className, skillList); //직업마다 스킬 저장
             }
         }
-        /// <summary>
-        /// 클래스네임에 따라 다른 스킬배열을 넣어줌(Player Class, Monster Name)
-        /// </summary>
-        public void AddSkills(string className, Skill[] skillList) //스킬 추가 - 생성자에서 호출
+
+        private void AddSkills(string className, Skill[] skillList) //스킬 추가 - 생성자에서 호출
         {
             List<Skill> list = new List<Skill>();
             foreach (Skill skill in skillList) //전체 스킬 목록에서 
