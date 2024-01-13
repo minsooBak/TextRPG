@@ -9,16 +9,16 @@
     //정원우님 구현
     internal class MonsterManager : IListener
     {
-        public List<Monster> dungeonMonsters;
-
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
             EventManager.Instance.AddListener(EventType.eClearMonsters, this);
-            dungeonMonsters = new List<Monster>();
         }
+
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
+            List<Monster> dungeonMonsters = [];
+
             Random rnd = new Random();
             int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
             if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
@@ -36,25 +36,12 @@
             Monster newMonster = new Monster((MonsterType)random);
             return newMonster;
         }
-        public int DungeonMonstersCount() //던전에 나온 몬스터 마리수
-        {
-            return dungeonMonsters.Count;
-        }
-
-        public void ClearMonsterList()
-        {
-            dungeonMonsters.Clear();
-        }
 
         public void OnEvent(EventType type, object data)
         {
             if (type == EventType.eMakeMonsters)
             {
                 MakeMonsters((int)data);
-            }
-            else if (type == EventType.eClearMonsters)
-            {
-                ClearMonsterList();
             }
         }
     }
@@ -149,9 +136,9 @@
             Console.Write($"{myState.HP} -> ");
 
             if (r <= 15)
-                myState.HP -= criticalDamage;
+                myState.HP = Math.Clamp(myState.HP - criticalDamage, 0, myState.MaxHP);
             else
-                myState.HP -= damage;
+                myState.HP = Math.Clamp(myState.HP - damage, 0, myState.MaxHP);
 
             Console.WriteLine($"{(IsDead ? "Dead" : myState.HP)}");
         }
