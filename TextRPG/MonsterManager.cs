@@ -189,6 +189,7 @@
                 myState.ATK = 8;
             }
 
+            myState.Name = myState.Class;
             myState.MaxHP = myState.HP;
             myState.MaxMP = myState.MP;
         }
