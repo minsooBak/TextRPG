@@ -141,17 +141,17 @@
             }
 
             if (attackType == AttackType.Attack)
-                Console.WriteLine("Chad 의 공격!");
+                Console.WriteLine($"{myState.Name} 의 공격!");
             else
-                Console.WriteLine($"Chad 의 {myState.Skill.Name} 스킬 공격!");
+                Console.WriteLine($"{myState.Name} 의 {myState.Skill.Name} 스킬 공격!");
             return damage;
         }
 
         public void TakeDamage(int damage)
         {
-            Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
+            Console.WriteLine($"{myState.Name} 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
-            Console.WriteLine($"Lv.1 Chad");
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
             Console.Write($"{myState.HP} ->");
             myState.HP -= Math.Clamp(damage, 0 , 100);
             Console.Write($"{myState.HP}");
@@ -159,8 +159,10 @@
 
         public void ShowResult()
         {
-            Console.WriteLine($"Lv.1 Chad\nHP {PrevHP} -> {myState.HP}");
-            Console.WriteLine($"Lv.1 Chad\nMP {PrevMp} -> {myState.MP}\n");
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
+
+            Console.WriteLine($"HP {PrevHP} -> {myState.HP}");
+            Console.WriteLine($"MP {PrevMp} -> {myState.MP}\n");
             PrevHP = 0;
             PrevMp = 0;
         }
