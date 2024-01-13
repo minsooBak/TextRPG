@@ -165,6 +165,13 @@
             Console.WriteLine($"MP {PrevMp} -> {myState.MP}\n");
             PrevHP = 0;
             PrevMp = 0;
+
+            //죽엇을때 부활 체력 마나
+            if(IsDead)
+            {
+                myState.HP = 60;
+                myState.MP = 60;
+            }
         }
     }
 }
