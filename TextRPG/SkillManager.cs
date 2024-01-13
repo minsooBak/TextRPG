@@ -11,15 +11,15 @@ namespace TextRPG
 {
     internal class SkillManager /*: IListener*/
     {
-        private readonly Skill[] skillList = []; //전체 스킬데이터
-        private Dictionary<string, List<Skill>> skillDictionary = [];//직업별 스킬 데이터{ [직업] , 스킬 리스트}
+        // private readonly Skill[] skillList = []; //전체 스킬데이터를 어차피 딕셔너리에서 바로 넣어주기에 저장할 이유없음
+        private readonly Dictionary<string, List<Skill>> skillDictionary = [];//직업별 스킬 데이터{ [직업] , 스킬 리스트}
         // public List<string> classNames; //직업 이름 배열
         public SkillManager()
         {
             //EventManager.Instance.AddListener(EventType.eShowSkill,this);
             //EventManager.Instance.AddListener(EventType.eSetSkill, this);
             List<string> classNames = new List<string>(); //클래스 이름 배열
-            skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
+            Skill[] skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
             if (skillList == null)
             {
                 Console.Error.WriteLine("SkillLoad Faill!");
@@ -31,13 +31,13 @@ namespace TextRPG
             }
             foreach (string className in classNames) //이름 배열로 스킬들 할당
             {
-                AddSkills(className); //직업마다 스킬 저장
+                AddSkills(className, skillList); //직업마다 스킬 저장
             }
         }
         /// <summary>
         /// 클래스네임에 따라 다른 스킬배열을 넣어줌(Player Class, Monster Name)
         /// </summary>
-        public void AddSkills(string className) //스킬 추가 - 생성자에서 호출
+        public void AddSkills(string className, Skill[] skillList) //스킬 추가 - 생성자에서 호출
         {
             List<Skill> list = new List<Skill>();
             foreach (Skill skill in skillList) //전체 스킬 목록에서 
