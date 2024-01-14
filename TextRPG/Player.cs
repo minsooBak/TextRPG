@@ -67,7 +67,7 @@ namespace TextRPG
         public int DEF => myState.DEF;
         public int Gold => myState.Gold;
         public bool IsDead => myState.Health <= 0;
-        public bool IsUseSkill => myState.Skill.Cost < myState.MP;
+        public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         public void OnEvent(EventType type, object data)
