@@ -85,9 +85,9 @@
             if (attackType == AttackType.Skill)
                 damage *= (int)myState.Skill.ATKRatio;
             if(attackType == AttackType.Attack)
-                Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 공격!");
+                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 공격!");
             else
-                Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 {myState.Skill.Name} 스킬 공격!");
+                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 {myState.Skill.Name} 스킬 공격!");
 
             return damage;
         }

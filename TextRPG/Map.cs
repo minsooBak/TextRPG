@@ -10,6 +10,7 @@
             StartBattle,
             Inventory,
             Shop,
+            Quest
         }
 
         Player player = new Player();
@@ -38,6 +39,9 @@
                     case GameState.Inventory:
                         ShowInventory();
                         break;
+                    case GameState.Quest:
+                        
+                        break;
                     default:
                         StartGame(); 
                         break;
@@ -65,7 +69,7 @@
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 3))
+            switch ((GameState)Utilities.GetInputKey(1, 4))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
@@ -75,6 +79,9 @@
                     break;
                 case GameState.Inventory:
                     gameState = GameState.Inventory;
+                    break;
+                case GameState.Quest:
+                    gameState = GameState.Quest;
                     break;
             }
         }

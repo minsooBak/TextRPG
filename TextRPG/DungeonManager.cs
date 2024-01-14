@@ -203,14 +203,14 @@ namespace TextRPG
             int i = 1;
             foreach (Monster monster in monsters)
             {
-                if (monster.IsDead)
-                {
-                    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
-                }
-                else
-                {
-                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
-                }
+                //if (monster.IsDead)
+                //{
+                //    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
+                //}
+                //else
+                //{
+                //    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
+                //}
                 monster.ShowStats();
                 i++;
             }
@@ -246,13 +246,9 @@ namespace TextRPG
                 // player.TakeDamage(monster.Attack());
 
                 damage = monster.Attack(attackType);
-                Console.WriteLine($"Chad 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
-                Console.WriteLine($"Lv.1 Chad");
-                Console.Write($"{player.Health} -> ");
                 player.TakeDamage(damage);
 
-                Console.WriteLine($"{(player.Health <= 0 ? 0 : player.Health)}");
             }
 
             Console.WriteLine("\n0. 다음\n");
