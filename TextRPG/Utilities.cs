@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace TextRPG
@@ -27,13 +24,15 @@ namespace TextRPG
     {
         public string Name { get; set; }
         public string Class { get; set; }
-        public int Health { get; set; }
+        public int HP { get; set; }
+        public int MP { get; set; }
         public int Gold { get; set; }
+        public int MaxHP { get; set; }
+        public int MaxMP { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }   
         public int ATK { get; set; }
         public int DEF { get; set; }
-        public int MP { get; set; }
         public Skill Skill { get; set; }
     }
 
@@ -48,9 +47,33 @@ namespace TextRPG
         void ShowStats();
     }
 
-
     internal static class Utilities
     {
+        public static KeyValuePair<T, object> EventPair<T>(T t, object a)
+        {
+            return new KeyValuePair<T, object>(t, a);
+        }
+
+        //public static KeyValuePair<T, int> EventPair<T>(T t, int data)
+        //{
+        //    return new KeyValuePair<T, int>(t, data);
+        //}
+
+        //public static KeyValuePair<T, string> EventPair<T>(T t, string data)
+        //{
+        //    return new KeyValuePair<T, string>(t, data);
+        //}
+
+        //public static KeyValuePair<T, Item> EventPair<T>(T t, Item data)
+        //{
+        //    return new KeyValuePair<T, Item>(t, data);
+        //}
+
+        //public static KeyValuePair<T, Item[]> EventPair<T>(T t, Item[] data)
+        //{
+        //    return new KeyValuePair<T, Item[]>(t, data);
+        //}
+
         static StringBuilder sb = new StringBuilder(400);
 
         public static void AddLine(string str)

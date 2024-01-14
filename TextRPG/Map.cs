@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static TextRPG.Player;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     //맵의 이동 처리
     internal class Map
@@ -29,18 +19,20 @@ namespace TextRPG
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
 
-        public void Init()
-        {
-            dungeonManager = new DungeonManager(player);
-        }
         public void DrawMap()
         {
-            Init();
+            //Tuple<ePlayerType, 10>
+            //EventManager.Instance.PostEvent(EventType.Player, new KeyValuePair<ePlayerType, Tuple<int, int>>(ePlayerType.Stats, new Tuple<int, int>(10, 10)));
+            dungeonManager = new DungeonManager(player);
+
+            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
+
             while (!isGameEnd)
             {
                 switch (gameState)
                 {
                     case GameState.PlayerInfo:
+                        return;
                         break;
                     case GameState.StartBattle:
                         ShowBattle();
@@ -107,7 +99,7 @@ namespace TextRPG
             Utilities.AddLine($"{player.Name} (player.Class추가?)");
             Utilities.AddLine($"공격력 : {player.ATK}");
             Utilities.AddLine($"방어력 : {player.DEF}");
-            Utilities.AddLine($"체력 : {player.Health}");
+            Utilities.AddLine($"체력 : {player.HP}");
             Utilities.AddLine($"마나 : {player.MP}");
             Utilities.AddLine($"소지금 : {player.Gold}");
             Utilities.AddLine("");

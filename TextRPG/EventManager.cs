@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public enum EventType
+﻿public enum EventType//아이템이벤트
 {
-    NONE, 
+    NONE,
     eMakeMonsters,
     eClearMonsters,
     eSetMonsters,
@@ -15,6 +9,41 @@ public enum EventType
     eUpdateGold,
     eUpdateStat,
     eGameEnd,
+    eSetSkill,
+    eShowSkill,
+    Player
+}
+
+//public enum EventType //이 이벤트들을 듣겠다
+//{
+//    eMakeMonsters,//변경하기
+//    eSetMonsters, //변경하기
+//    Item,
+//    Quest,
+//    Player,
+//    eGameEnd
+//}
+
+enum eItemType//아이템이벤트
+{
+    eUpdateItem,
+    eGetFieldItem,
+}
+
+enum eQuestType//퀘스트이벤트의 조건
+{
+    Item, 
+    Monster,
+    Dungeon,
+    Stats
+}
+
+enum ePlayerType//플레이어이벤트
+{
+    HP,
+    MP,
+    Gold,
+    Stats
 }
 
 public interface IListener

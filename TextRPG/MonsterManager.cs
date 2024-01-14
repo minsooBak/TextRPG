@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     public enum MonsterType
     {
@@ -16,16 +9,22 @@ namespace TextRPG
     //정원우님 구현
     internal class MonsterManager : IListener
     {
-        public List<Monster> dungeonMonsters;
-
+        //몬스터를 생성해서 넘겨주고 몬스터매니저에서 쓰는것이 없기에 Make에서 생성해주고 넘겨준 뒤 클리어해주었습니다.
+        //List<Monster>dungeonMonsters = [];
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
-            EventManager.Instance.AddListener(EventType.eClearMonsters, this);
-            dungeonMonsters = new List<Monster>();
         }
+
+        //추가로 구현하면 좋은것은
+        //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
+        //2. 전체 몬스터 데이터를 배열로 가지고있다가 type에 맞는 몬스터를 꺼내주기
+        //3. CreateMonster에서의 역활은 굳이 int값을 복사해서 MakeMonsters에서도 할수있는것을 넘기는것이기에 MakeMonsters에서 추가해주기
+        //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
+            List<Monster> dungeonMonsters = [];
+
             Random rnd = new Random();
             int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
             if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
@@ -37,20 +36,13 @@ namespace TextRPG
             }
 
             EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
+            dungeonMonsters.Clear();
         }
+
         public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
         {
             Monster newMonster = new Monster((MonsterType)random);
             return newMonster;
-        }
-        public int DungeonMonstersCount() //던전에 나온 몬스터 마리수
-        {
-            return dungeonMonsters.Count;
-        }
-
-        public void ClearMonsterList()
-        {
-            dungeonMonsters.Clear();
         }
 
         public void OnEvent(EventType type, object data)
@@ -59,10 +51,6 @@ namespace TextRPG
             {
                 MakeMonsters((int)data);
             }
-            else if (type == EventType.eClearMonsters)
-            {
-                ClearMonsterList();
-            }
         }
     }
 
@@ -70,17 +58,11 @@ namespace TextRPG
     {
         private ObjectState myState;
 
-        public int MP => myState.MP;
-
-        public int Health => myState.Health;
-
         public int Level => myState.Level;
-
         public string Class => myState.Class;
-
-        public bool IsUseSkill => myState.Skill.Cost < MP;//사용할 수 있는지 체크후 bool
-
-        public bool IsDead => myState.Health <= 0;
+        public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
+        public bool IsDead => myState.HP <= 0;
+        public int GetMP => myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         public void ShowStats()
@@ -94,9 +76,18 @@ namespace TextRPG
             {
                 // 안죽었다면 Level, Class, Hp 출력하기
                 Console.Write("Lv.");
-                Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
-                Console.Write($"{myState.Class} HP ");
-                Utilities.TextColor($"{myState.Health}", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
+                Console.WriteLine($"{myState.Class}");         // 나중에 player.Name, player.Job으로 수정하기
+
+                Console.Write("HP ");
+                Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
+                Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+                Utilities.TextColorWithNoNewLine($"{myState.MaxHP}", ConsoleColor.DarkRed);
+
+                Console.Write(" | MP ");
+                Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
+                Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+                Utilities.TextColorWithNoNewLine($"{myState.MaxMP}\n", ConsoleColor.DarkRed);
             }
         }
 
@@ -108,7 +99,7 @@ namespace TextRPG
             getDamage = myState.ATK / 100.0 * 10;
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
-                damage *= (int)myState.Skill.ATKRatio;
+                damage *= myState.Skill.GetATK(myState.ATK);
             if(attackType == AttackType.Attack)
                 Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 공격!");
             else
@@ -150,14 +141,14 @@ namespace TextRPG
             }
 
             Console.WriteLine($"\n\nLv.{myState.Level} {myState.Name}");
-            Console.Write($"{myState.Health} -> ");
+            Console.Write($"{myState.HP} -> ");
 
             if (r <= 15)
-                myState.Health -= criticalDamage;
+                myState.HP = Math.Clamp(myState.HP - criticalDamage, 0, myState.MaxHP);
             else
-                myState.Health -= damage;
+                myState.HP = Math.Clamp(myState.HP - damage, 0, myState.MaxHP);
 
-            Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
+            Console.WriteLine($"{(IsDead ? "Dead" : myState.HP)}");
         }
 
         public bool PrintDead()
@@ -177,23 +168,30 @@ namespace TextRPG
             {
                 myState.Class = "미니언";
                 myState.Level = 2;
-                myState.Health = 15;
+                myState.HP = 15;
+                myState.MP = 100;
                 myState.ATK = 5;
             }
             else if (monsterType == MonsterType.Monster2)
             {
                 myState.Class = "공허충";
                 myState.Level = 3;
-                myState.Health = 10;
+                myState.HP = 10;
+                myState.MP = 100;
                 myState.ATK = 9;     
             }
             else if (monsterType == MonsterType.Monster3)
             {
                 myState.Class = "대포미니언";
                 myState.Level = 5;
-                myState.Health = 25;
+                myState.HP = 25;
+                myState.MP = 100;
                 myState.ATK = 8;
             }
+
+            myState.Name = myState.Class;
+            myState.MaxHP = myState.HP;
+            myState.MaxMP = myState.MP;
         }
         
     }
