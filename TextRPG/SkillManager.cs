@@ -57,12 +57,6 @@ namespace TextRPG
 
         public int ShowSkillList(string className) // 직업에 해당하는 스킬을 화면에 출력
         {
-            if (skillDictionary.Count == 0)
-            {
-                Console.Error.WriteLine("Skills Empty");
-                return 0;
-            }
-
             List<Skill> list;
             if (skillDictionary.TryGetValue(className, out list) == false) // 스킬이 없다면 에러
             {
@@ -81,12 +75,6 @@ namespace TextRPG
 
         public Skill GetMonsterSkill(string className, int mp)
         {
-            if (skillDictionary.Count == 0)
-            {
-                Console.Error.WriteLine("Skills Empty");
-                return null;
-            }
-
             List<Skill> list;
             if (skillDictionary.TryGetValue(className, out list) == false)
             {
