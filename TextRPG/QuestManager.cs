@@ -140,7 +140,7 @@ namespace TextRPG
                 }
             }
         }
-        public void AddQuest() //퀘스트 추가
+        public void AddQuest() //퀘스트 추가 최대 3개까지 보인다.
         {
             for (int i = quests.Count; i < 3; i++) // 0 1 2 현재 퀘스트 개수가 3개 미만이고 
             {
@@ -159,6 +159,7 @@ namespace TextRPG
             if (type == EventType.Quest)
             {
                 var a = data as KeyValuePair<eQuestType, string>?; //키 벨류 데이터로 변환이 가능하면 하고
+                Console.WriteLine(a.Value);
                 switch (a.Value.Key) //a의 속성 value로 <키,벨류> 쌍을 가르키고 그 중 key로 접근
                 {
                     case eQuestType.Item:
@@ -208,8 +209,8 @@ namespace TextRPG
         public readonly int Gold; // 보상 골드
         public readonly string ItemName; // 보상 아이템 이름
         public readonly int Exp;//보상 경험치
-        public bool isClear = true; //클리어 했는지 여부
-        public bool isActive = true; //수락했을 시
+        public bool isClear = false; //클리어 했는지 여부
+        public bool isActive = false; //수락했을 시
         public int Max; //조건 최대치
         public int current = 0; //현재 조건 달성도
         public string Condition; //퀘스트 조건 설명

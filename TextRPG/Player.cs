@@ -96,6 +96,12 @@
                         case ePlayerType.Exp: //경험치 추가
                             {
                                 myState.EXP += Math.Clamp(c.Value, 0, 300);
+                                if (myState.EXP / 100 != 0)
+                                {
+                                    myState.Level += myState.EXP / 100;
+                                    myState.EXP = myState.EXP % 100;
+                                    Console.WriteLine("레벨 업!!");
+                                }
                                 break;
                             }
                     }

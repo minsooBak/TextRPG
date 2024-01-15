@@ -275,8 +275,11 @@ namespace TextRPG
             {
                 Console.WriteLine("Victory\n");
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
-                for(int i = 0; i < monster; i++)
-                    EventManager.Instance.PostEvent(EventType.Quest,Utilities.EventPair(eQuestType.Monster, monsters[i].Class));
+                for (int i = 0; i < monster; i++)
+                {
+                    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monsters[i].Class)); //퀘스트 이벤트 몬스터 수만큼 호출함
+                    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득
+                }
                 player.ShowResult();
             }
             else

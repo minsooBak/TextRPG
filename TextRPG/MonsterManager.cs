@@ -63,6 +63,7 @@
     public class Monster : IObject
     {
         private ObjectState myState;
+        public int Exp => myState.EXP;
 
         public int MP => myState.MP;
 
@@ -168,6 +169,7 @@
             {
                 myState.Class = "미니언";
                 myState.Level = 2;
+                myState.EXP = 15;
                 myState.Health = 15;
                 myState.ATK = 5;
             }
@@ -175,6 +177,7 @@
             {
                 myState.Class = "공허충";
                 myState.Level = 3;
+                myState.EXP = 20;
                 myState.Health = 10;
                 myState.ATK = 9;     
             }
@@ -182,6 +185,7 @@
             {
                 myState.Class = "대포미니언";
                 myState.Level = 5;
+                myState.EXP = 25;
                 myState.Health = 25;
                 myState.ATK = 8;
             }
