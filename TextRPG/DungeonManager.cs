@@ -16,7 +16,7 @@
         public List<Dungeon> dungeons = [];
         public IObject[] monsters;
         public int deadCounter = 0;
-        public int dungeonStage = 0; // 1
+        public int dungeonStage = 0; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
         public bool showMonsterMode = false;
 
 
@@ -26,11 +26,11 @@
             List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
             dungeons = d;
             // 플레이어 정보 받아오기
-            this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
+            this.player = player;
         }
 
         // 선택된 던전 스테이지의 몬스터 만들기
-        public void SelectDungeonStage(int stage) // 2
+        public void SelectDungeonStage(int stage)
         {
             deadCounter = 0;
 
