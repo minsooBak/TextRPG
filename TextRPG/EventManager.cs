@@ -51,7 +51,7 @@ enum ePlayerType//플레이어이벤트
 
 public interface IListener
 {
-    void OnEvent(EventType type, object data);
+    void OnEvent<T>(EventType type, T data);
 }
 
 namespace TextRPG
@@ -80,7 +80,7 @@ namespace TextRPG
             listener.Add(eventType, listenList); //딕셔너리에 추가
         }
 
-        public void PostEvent(EventType eventType, object? param = null)
+        public void PostEvent<T>(EventType eventType, T param)
         {
             List<IListener>? listenList;
             if (listener.TryGetValue(eventType, out listenList) == false)

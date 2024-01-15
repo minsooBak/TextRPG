@@ -29,7 +29,7 @@
                 dungeonMonsters.Add(CreateMonster(++randomCount));// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
-            EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
+            EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
         }
         public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
         {
@@ -46,11 +46,12 @@
             dungeonMonsters.Clear();
         }
 
-        public void OnEvent(EventType type, object data)
+        public void OnEvent<T>(EventType type, T data)
         {
+            var d = data as KeyValuePair<EventType, int>?;
             if (type == EventType.eMakeMonsters)
             {
-                MakeMonsters((int)data);
+                MakeMonsters(d.Value.Value);
             }
             else if (type == EventType.eClearMonsters)
             {

@@ -63,36 +63,51 @@
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
-        public void OnEvent(EventType type, object data)
+        public void OnEvent<T>(EventType type, T data)
         {
             //이벤트 받아서 switch문으로 구현
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, int>)data;
+                var a = data as KeyValuePair<ePlayerType, int>?;
+                var b = data as KeyValuePair<ePlayerType, Item>?;
 
-                switch(a.Key)
+                if (a != null)
                 {
-                    case ePlayerType.HP:
-                        {
-                            myState.Health = Math.Clamp(myState.Health + (int)a.Value, 0, maxHealth);
-                            break;
-                        }
-                    case ePlayerType.MP:
-                        {
-                            myState.Health = Math.Clamp((int)a.Value, 0, maxMP);
-                            break;
-                        }
-                    case ePlayerType.Gold: //골드 추가
-                        {
-                            myState.Gold += Math.Clamp((int)a.Value, 0, 100);
-                            break;
-                        }
-                    case ePlayerType.Exp: //경험치 추가
-                        {
-                            myState.EXP += Math.Clamp((int)a.Value, 0, 300);
-                            break;
-                        }
+                    var c = a.Value;
+                    switch (c.Key)
+                    {
+                        case ePlayerType.HP:
+                            {
+                                myState.Health = Math.Clamp(myState.Health + c.Value, 0, maxHealth);
+                                break;
+                            }
+                        case ePlayerType.MP:
+                            {
+                                myState.Health = Math.Clamp(c.Value, 0, maxMP);
+                                break;
+                            }
+                        case ePlayerType.Gold: //골드 추가
+                            {
+                                myState.Gold += Math.Clamp(c.Value, 0, 100);
+                                break;
+                            }
+                        case ePlayerType.Exp: //경험치 추가
+                            {
+                                myState.EXP += Math.Clamp(c.Value, 0, 300);
+                                break;
+                            }
+                    }
+                }else if(b!= null)
+                {
+                    var c = b.Value;
+                    if(c.Key == ePlayerType.Stats)
+                    {
+                        myState.ATK += c.Value.ATK;
+                        myState.DEF += c.Value.DEF;
+                    }
+                }
+
                         //case ePlayerType.Stats:
                         //    {
                         //        var num = (int[])a.Value;
@@ -101,7 +116,7 @@
                         //        Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
                         //        break;
                         //    }
-                }
+                
             }
         }
 

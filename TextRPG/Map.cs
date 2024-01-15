@@ -157,7 +157,7 @@ namespace TextRPG
             // if(player.Hp <= 0) isGameEnd = true;
 
             // 전투 종료 후 몬스터 리스트 초기화
-            EventManager.Instance.PostEvent(EventType.eClearMonsters);
+            EventManager.Instance.PostEvent(EventType.eClearMonsters, "");
             // StartGame()으로 돌아가기
             gameState = GameState.NONE;
         }
