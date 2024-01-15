@@ -68,7 +68,8 @@
             //이벤트 받아서 switch문으로 구현
             if(type == EventType.Player)
             {
-                
+                //as : data에 KeyValuePair로 형변환이 가능하다면 KeyValuePair로 넣어주고 아닐경우 null값을 넣어줌
+                //is : data에 KeyValuePair로 형변환 가능 여부를 리턴해줌
                 var a = data as KeyValuePair<ePlayerType, int>?;
                 var b = data as KeyValuePair<ePlayerType, Item>?;
 
@@ -107,16 +108,6 @@
                         myState.DEF += c.Value.DEF;
                     }
                 }
-
-                        //case ePlayerType.Stats:
-                        //    {
-                        //        var num = (int[])a.Value;
-                        //        myState.ATK = num[0];
-                        //        myState.DEF = num[1];
-                        //        Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
-                        //        break;
-                        //    }
-                
             }
         }
 
