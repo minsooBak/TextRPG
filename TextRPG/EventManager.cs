@@ -11,6 +11,7 @@
     eGameEnd,
     eSetSkill,
     eShowSkill,
+    Quest,
     Player
 }
 
@@ -73,8 +74,8 @@ namespace TextRPG
                 return;
             }
 
-            listenList = [_listener];
-            listener.Add(eventType, listenList);
+            listenList = [_listener]; // listenList = new List<IListener> {_listener}; 와 같다. 리스트를 만들고 첫 요소로 리스너를 넣는다.
+            listener.Add(eventType, listenList); //딕셔너리에 추가
         }
 
         public void PostEvent(EventType eventType, object? param = null)
@@ -83,7 +84,7 @@ namespace TextRPG
             if (listener.TryGetValue(eventType, out listenList) == false)
                 return;
 
-            for (int i = 0; i < listenList.Count; i++)
+            for (int i = 0; i < listenList.Count; i++) // 이벤트 타입에 있는  리스너형들이 있는 리스트 목록에서 하나씩 OnEvent 함수를 실행한다.
             {
                 listenList?[i].OnEvent(eventType, param);
             }

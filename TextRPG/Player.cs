@@ -93,6 +93,7 @@
                             var num = (int[])a.Value;
                             myState.ATK = num[0];
                             myState.DEF = num[1];
+                            Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
                             break;
                         }
                 }

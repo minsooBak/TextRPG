@@ -17,6 +17,7 @@
         DungeonManager dungeonManager;
         MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
+        QuestManager questManager = new QuestManager();
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
         public void DrawMap()
@@ -25,6 +26,7 @@
             //EventManager.Instance.PostEvent(EventType.Player, new KeyValuePair<ePlayerType, Tuple<int, int>>(ePlayerType.Stats, new Tuple<int, int>(10, 10)));
 
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
+            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[] { 300,200}));
             dungeonManager = new DungeonManager(player);
             while (!isGameEnd)
             {
