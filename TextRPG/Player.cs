@@ -111,16 +111,16 @@
         {
             Console.WriteLine("\n[내 정보]");
             Console.Write("Lv.");
-            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
-            Console.WriteLine($"{myState.Name} ({myState.Class})");         // 나중에 player.Name, player.Job으로 수정하기
+            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+            Console.WriteLine($"{myState.Name} ({myState.Class})");
 
             Console.Write("HP ");
-            Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
+            Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed); 
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHP}\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
-            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
+            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
         }
