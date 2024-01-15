@@ -207,17 +207,16 @@ namespace TextRPG
             return items;
         }
 
-        public void GetFieldItem(object? data = null)
+        public void GetFieldItem(Item? data = null)
         {
             // 필드에 드랍된 아이템 줍줍
             if (data != null)
             {
-                fieldDisplay.Add((Item)data);
-                foreach (Item item in fieldDisplay)
-                {
-                    inventory.Add(item);
-                    Console.WriteLine($"{item.Name}을 획득했습니다.");
-                }
+                fieldDisplay.Add(data);
+
+                    inventory.Add(data);
+                    Console.WriteLine($"{data.Name}을 획득했습니다.");
+                
             }
             else
             {
