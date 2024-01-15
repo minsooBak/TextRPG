@@ -20,60 +20,47 @@ namespace TextRPG
     {
         private Player player;
         private SkillManager skillManager = new SkillManager();
+        private MonsterManager monsterManager = new MonsterManager();
+        public List<Dungeon> dungeons = [];
+        public IObject[] monsters;
+        public int deadCounter = 0;
+        public int dungeonStage = 2; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
+        public bool showMonsterMode = false;
+        public int getExp = 0;
+
+
         public DungeonManager(Player player)
         {
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
             List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
             dungeons = d;
             // 플레이어 정보 받아오기
-            this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
+            this.player = player;
         }
-        public List<Dungeon> dungeons = [];
-        public int deadCounter = 0;
-        public int dungeonStage = -1; // 1
-        public Monster[] monsters;
-        public bool isEnd = false;
 
         // 선택된 던전 스테이지의 몬스터 만들기
-        public void SelectDungeonStage(int stage) // 2
+        public void SelectDungeonStage(int stage)
         {
             deadCounter = 0;
-            dungeonStage = ++stage; ; // 0  1 2 3 3 3 3 3 3 3 3 
-            if (dungeonStage > 3)
-                dungeonStage = 3;
-            MakeMonsters(dungeons[dungeonStage].dungeonMonsterType); //idx 0
-        }
 
-        public void MakeMonsters(int dungeonMonsterType)//1
-        {
-            // 몬스터 생성
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters, Utilities.EventPair(EventType.eMakeMonsters, dungeonMonsterType));
+            monsterManager.MakeMonsters(dungeons[stage].dungeonMonsterType);
         }
-        
-        public bool showMonsterMode = false;
-
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
         public void Encounter(List<Monster> dungeonMonsters)
         {
             monsters = dungeonMonsters.ToArray();
-
+            
             StartBattle();
         }
 
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
-            while (player.IsDead == false)
+            //if (deadCounter >= monsters.Length) break; 이 조건문을 while조건문으로 넣었습니다
+            // deadCounter를 몬스터가 데미지를 받을때 오르게 바꾸고 deadCounter의 초기화를 던전선택할때만 하게했습니다.
+            while (player.IsDead == false && deadCounter < monsters.Length)
             {
-                // MonsterManager에서 몬스터가 죽으면 리스트에서 제거되는 로직 추가 후 수정하기(List.Count = 0이 되면 while문 탈출)
-                deadCounter = 0;
-                foreach (Monster monster in monsters)
-                {
-                    if (monster.IsDead) deadCounter++;
-                }
-                if (deadCounter >= monsters.Length) break;
-
                 Console.Clear();
 
                 Utilities.TextColor("Battle!!\n", ConsoleColor.DarkYellow);
@@ -95,7 +82,7 @@ namespace TextRPG
                 switch ((AttackType)Utilities.GetInputKey(1, 2))
                 {
                     case AttackType.Attack:
-                        SelectMonster(AttackType.Attack);
+                        SelectMonster();//매개변수의 값이 기본값이 Attack임으로 지워놨습니다.
                         break;
                     case AttackType.Skill:
                         SelectSkill();
@@ -110,11 +97,9 @@ namespace TextRPG
         {
             Console.Clear();
 
-            bool isPlayerTurn = true;
-
             Console.WriteLine("Battle!! - 대상 선택\n");
 
-            ShowMonsterList(showMonsterMode = true);        // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
+            ShowMonsterList(showMonsterMode = true); // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
 
             player.ShowStats();
 
@@ -124,40 +109,35 @@ namespace TextRPG
             Console.WriteLine("대상을 선택해주세요.");
             Utilities.TextColorWithNoNewLine(">> ", ConsoleColor.Yellow);
 
-            Random rnd = new Random();
-            int monsterAttackType;
-
             int input = Utilities.GetInputKey(0, monsters.Length);
             if (input == 0) return;
 
-            for (int i = 1; i <= monsters.Length; i++)
+            //선택한 몬스터가 죽었다면 return하게 변경(이중반복문 돌리면서 찾을 이유가 없기때문에)
+            if (monsters[input - 1].IsDead)
             {
-                if (input == i)
+                return;
+            }
+
+            //플레이어 공격
+            ShowBattle(monsters[input - 1], true, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
+
+            foreach (Monster monster in (Monster[])monsters)
+            {
+                if (monster.IsDead)
                 {
-                    if (monsters[i - 1].IsDead)
-                    {
-                        break;
-                    }
-
-                    ShowBattle(monsters[i - 1], isPlayerTurn, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
-                    isPlayerTurn = false;
-
-                    foreach (Monster monster in monsters)
-                    {
-                        if (monster.IsDead)
-                        {
-                            continue;
-                        }
-
-                        monsterAttackType = rnd.Next(1, 3);// 1 ~2
-
-                        if ((AttackType)monsterAttackType == AttackType.Skill)
-                            monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
-
-                        ShowBattle(monster, isPlayerTurn, (AttackType)monsterAttackType);
-                    }
-                    isPlayerTurn = true;
+                    //break; 1번을 죽일경우 공격을 안하게 되기에 continue로 수정
+                    continue;
                 }
+
+                AttackType monsterAttackType = (AttackType)new Random().Next(1, 3);// 1 ~2
+
+                //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
+                if ((AttackType)monsterAttackType == AttackType.Skill)
+                    monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
+                //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
+
+                //몬스터 공격
+                ShowBattle(monster, false, (AttackType)monsterAttackType);
             }
         }
 
@@ -165,8 +145,6 @@ namespace TextRPG
         public void SelectSkill()
         {
             Console.Clear();
-
-            bool isPlayerTurn = true;
 
             Utilities.TextColor("Battle!!\n", ConsoleColor.DarkYellow);
 
@@ -185,9 +163,9 @@ namespace TextRPG
 
             // 마나가 부족할 경우, SelectSkill()을 다시 호출.
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
-            skillIdx--;
+            if (skillIdx == 0) return;
+            player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx - 1)); //선택한 스킬 할당
 
-            player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx)); //선택한 스킬 할당
             if (player.IsUseSkill == false)  //마나가 모자르다면
             {
                 Console.WriteLine("마나가 부족합니다.");
@@ -195,7 +173,6 @@ namespace TextRPG
             else
                 SelectMonster(AttackType.Skill);
         }
-        // 내 스탯 보여주기
 
         // 몬스터 보여주기
         private void ShowMonsterList(bool mode)
@@ -203,16 +180,18 @@ namespace TextRPG
             int i = 1;
             foreach (Monster monster in monsters)
             {
-                Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
-                //if (monster.IsDead)
-                //{
-                //    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);
-                //}
-                //else
-                //{
-                //    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
-                //}
+                if (monster.IsDead)
+                {
+                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
+                }
+
                 monster.ShowStats();
+
+                Console.WriteLine();
                 i++;
             }
         }
@@ -221,14 +200,14 @@ namespace TextRPG
 
 
         // 공격 진행하기(ShowBattle)
-        public void ShowBattle(Monster monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
+        public void ShowBattle(IObject monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
         {
             Console.Clear();
 
-            int damage;
 
             Utilities.TextColor("Battle!! - 전투 진행\n", ConsoleColor.DarkYellow);
 
+            int damage;
             if (isPlayerTurn)
             {
                 // 몬스터 공격하기.
@@ -239,6 +218,8 @@ namespace TextRPG
                 damage = player.Attack(attackType); //공격 종류에 따라 달리 작동
 
                 monster.TakeDamage(damage);
+
+                deadCounter += monster.IsDead ? 1 : 0;
             }
             else
             {
@@ -278,26 +259,36 @@ namespace TextRPG
                 for (int i = 0; i < monster; i++)
                 {
                     EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monsters[i].Class)); //퀘스트 이벤트 몬스터 수만큼 호출함
-                    EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득
+                    // EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득 (동일해서 지움)
                 }
-                player.ShowResult();
+                player.ShowResult(monsterManager.GetExp()); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
+                //monsterManager.GetReward(); 
+                GetReward();
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
-                player.ShowResult();
+                player.ShowResult(0);
             }
             Console.WriteLine("\n0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             if (Utilities.GetInputKey(0, 0) == 0)
             {
+                monsterManager.ClearMonsterList();
                 Console.Clear();
                 return;
             }
         }
 
-        public void OnEvent<T>(EventType type, T data)
+        //public void OnEvent<T>(EventType type, T data) 기존 OnEvent
+        public void GetReward()
+        {
+
+            monsterManager.GetReward();
+        }
+
+        public void OnEvent(EventType type, object data)
         {
             if (type == EventType.eSetMonsters)
             {

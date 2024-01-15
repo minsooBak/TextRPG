@@ -16,9 +16,10 @@ namespace TextRPG
 
         Player player = new Player();
         DungeonManager dungeonManager;
-        QuestManager questManager = new QuestManager();
-        MonsterManager monsterManager = new MonsterManager();
+        //MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
+        QuestManager questManager = new QuestManager();
+
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
         public void DrawMap()

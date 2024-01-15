@@ -206,17 +206,21 @@ namespace TextRPG
             return items;
         }
 
+        public Item[] GetItems()
+        {
+            return items;
+        }
+
         public void GetFieldItem(Item? data = null)
         {
             // 필드에 드랍된 아이템 줍줍
             if (data != null)
             {
                 fieldDisplay.Add(data);
-                foreach (Item item in fieldDisplay)
-                {
-                    inventory.Add(item);
-                    Console.WriteLine($"{item.Name}을 획득했습니다.");
-                }
+
+                inventory.Add(data); //인벤토리에 아이템 추가
+                Console.WriteLine($"{data.Name}을 획득했습니다.");
+            
             }
             else
             {
@@ -260,29 +264,73 @@ namespace TextRPG
         {
             var d = data as KeyValuePair<EventType, Item>?;
             // 게임 이벤트에 따른 인벤토리 기능 구현
-           if(type == EventType.eGameEnd)
+            if(d != null)
             {
-                SaveData itemData = new SaveData();
-                itemData.inventory = inventory.Select(x => x.Name).ToArray();
-                itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
-                itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+                switch (d.Value.Key)
+                {
+                    case EventType.eGameEnd:
+                    {
+                        SaveData itemData = new SaveData();
+                        itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                        itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                        itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+                        itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
 
-                Utilities.SaveFile(SaveType.SaveData, itemData);
+                        Utilities.SaveFile(SaveType.ItemData, itemData);
+                        break;
+                    }
+                    case EventType.eGetFieldItem: 
+                    {
+                        foreach (var item in items) //전체 아이템 목록에서 하나 씩 아이템을 꺼내서
+                        {
+                            if (item.Name.Equals(data.ToString())) // 아이템의 이름과  매개변수data의 이름이 같으면
+                            {
+                                GetFieldItem(item);//아이템을 인벤토리에 넣는다. 얻었는지 못 얻었는지 출력문 
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
             }
+        //    if(type == EventType.eGameEnd)
+        //     {
+        //         SaveData itemData = new SaveData();
+        //         itemData.inventory = inventory.Select(x => x.Name).ToArray();
+        //         itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+        //         itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+        //         itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+
+        //         Utilities.SaveFile(SaveType.ItemData, itemData);
+        //         break;
+
+        //         // case가 eGetItem인 경우 필드 아이템 획득
+        //         case EventType.eGetFieldItem:
+        //             foreach (var item in items)
+        //             {
+        //                 if (item.Name.Equals(data.ToString()))
+        //                 {
+        //                     GetFieldItem(item);
+        //                     break;
+        //                 }
+        //             }
+        //             break;
+        //     }
 
             var a = data as KeyValuePair<eItemType, Item>?;
             var b = data as KeyValuePair<EventType, int>?;
 
-            switch (a.Value.Key)
+            if(a != null)
             {
-                case eItemType.eGetFieldItem:
-                    {
-                        GetFieldItem(a.Value.Value);//수정할 부분
-                        break;
-                    }
-            }
-            
+                switch (a.Value.Key)
+                {
+                    case eItemType.eGetFieldItem:
+                        {
+                            GetFieldItem(a.Value.Value);//수정할 부분
+                            break;
+                        }                               
+                }
+            }  
         }
     }
 
