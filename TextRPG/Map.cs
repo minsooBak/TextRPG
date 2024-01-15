@@ -122,7 +122,7 @@
             Console.WriteLine("");
 
             Console.WriteLine($"Lv. {player.Level}");
-            Console.WriteLine($"{player.Name} (player.Class추가?)");
+            Console.WriteLine($"{player.Name} ({player.Class})");
             Console.WriteLine($"공격력 : {player.ATK}");
             Console.WriteLine($"방어력 : {player.DEF}");
             Console.WriteLine($"체력 : {player.Health}");

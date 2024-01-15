@@ -117,14 +117,14 @@ namespace TextRPG
                     {
                         //Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine(">>");
+                        Console.Write(">>");
                     }
                 }
                 else
                 {
                     //Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine(">>");
+                    Console.Write(">>");
                 }
             }
         }
@@ -148,14 +148,14 @@ namespace TextRPG
                     {
                         Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine(">>");
+                        Console.Write(">>");
                     }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine(">>");
+                    Console.Write(">>");
                 }
             }
         }
