@@ -20,10 +20,18 @@ namespace TextRPG
             quests.Add(questMenu[2]);
         }
         public int QuestCount { get { return quests.Count;} } //
-        public void ShowQuests() //최대 3개의 퀘스트 목록 보여주기
+        public bool ShowQuests() //최대 3개의 퀘스트 목록 보여주기
         {
-            if (quests.Count < 3)
+            if (quests.Count < 3) //다음 퀘스트가 있다면 채워준다.
                 AddQuest();
+
+            if (quests.Count == 0)//퀘스트가 없다면 
+            {
+                Console.WriteLine("퀘스트가 없습니다.");
+                Console.WriteLine();
+                return false;
+            }
+
             int i = 1;
             foreach (Quest quest in quests) 
             {
@@ -37,6 +45,7 @@ namespace TextRPG
                 i++;
             }
             Console.WriteLine();
+            return true;
         }
         public void ShowQuest(int idx) //idx에 해당하는 퀘스트 보여주기
         {

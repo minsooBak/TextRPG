@@ -65,14 +65,24 @@ namespace TextRPG
             {
                 Console.Clear();
                 Utilities.TextColor("Quest!!\n", ConsoleColor.DarkYellow);
-                questManager.ShowQuests(); //목록들 보여주고
+                bool isNull = questManager.ShowQuests(); //목록들 보여주고
 
                 Utilities.TextColorWithNoNewLine("0", ConsoleColor.DarkRed);
                 Console.WriteLine(". 나가기");
-
-                Utilities.AddLine("원하시는 퀘스트를 선택해주세요.");
-                Utilities.Add(">>");
-                QuestCount = questManager.QuestCount; //퀘스트 목록 노출
+                 
+                if (isNull)//퀘스트가 있다면 
+                {
+                    Utilities.AddLine("원하시는 퀘스트를 선택해주세요.");
+                    Utilities.Add(">>");
+                    QuestCount = questManager.QuestCount;
+                }
+                else //퀘스트가 없다면
+                {
+                    Utilities.AddLine("원하시는 행동을 선택해주세요.");
+                    Utilities.Add(">>");
+                    QuestCount = 0;
+                }
+                 
                 switch (Utilities.GetInputKey(0, QuestCount)) //퀘스트 노출된 만큼만 입력 받음
                 {
                     case 0: //나가기 눌렀을 때 
