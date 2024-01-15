@@ -16,7 +16,7 @@
         public List<Dungeon> dungeons = [];
         public IObject[] monsters;
         public int deadCounter = 0;
-        public int dungeonStage = -1; // 1
+        public int dungeonStage = 0; // 1
         public bool showMonsterMode = false;
 
 
