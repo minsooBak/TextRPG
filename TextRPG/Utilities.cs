@@ -50,9 +50,10 @@ namespace TextRPG
     {
         static StringBuilder sb = new StringBuilder(400);
 
-        public static KeyValuePair<T, T1> EventPair<T, T1>(T type, T1 data)
+        //| T1 == Type / T2 == data | 원래 데이터만 보내던것을 type이라는 enum열거형으로 묶어서 보낸다
+        public static KeyValuePair<T1, T2> EventPair<T1, T2>(T1 type, T2 data)
         {
-            return new KeyValuePair<T, T1>(type, data);
+            return new KeyValuePair<T1, T2>(type, data);
         }
 
         public static void AddLine(string str)
