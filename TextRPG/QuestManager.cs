@@ -159,7 +159,6 @@ namespace TextRPG
             if (type == EventType.Quest)
             {
                 var a = data as KeyValuePair<eQuestType, string>?; //키 벨류 데이터로 변환이 가능하면 하고
-                Console.WriteLine(a.Value);
                 switch (a.Value.Key) //a의 속성 value로 <키,벨류> 쌍을 가르키고 그 중 key로 접근
                 {
                     case eQuestType.Item:
