@@ -20,17 +20,20 @@ namespace TextRPG
         SkillData,
         Dungeon
     }
+
     struct ObjectState //공통변수들
     {
         public string Name { get; set; }
         public string Class { get; set; }
-        public int Health { get; set; }
+        public int HP { get; set; }
+        public int MP { get; set; }
         public int Gold { get; set; }
+        public int MaxHP { get; set; }
+        public int MaxMP { get; set; }
         public int Level { get; set; }
-        public int EXP { get; set; }   
+        public int EXP { get; set; }
         public int ATK { get; set; }
         public int DEF { get; set; }
-        public int MP { get; set; }
         public Skill Skill { get; set; }
     }
 
