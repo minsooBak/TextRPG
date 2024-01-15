@@ -206,12 +206,12 @@ namespace TextRPG
             return items;
         }
 
-        public void GetFieldItem(object? data = null)
+        public void GetFieldItem(Item? data = null)
         {
             // 필드에 드랍된 아이템 줍줍
             if (data != null)
             {
-                fieldDisplay.Add((Item)data);
+                fieldDisplay.Add(data);
                 foreach (Item item in fieldDisplay)
                 {
                     inventory.Add(item);
@@ -258,60 +258,29 @@ namespace TextRPG
 
         public void OnEvent<T>(EventType type, T data)
         {
-            //var d = data as KeyValuePair<EventType, Item>?;
-            //// 게임 이벤트에 따른 인벤토리 기능 구현
-            //switch (type)
-            //{
-            //    // case가 eGameEnd인 경우 ItemData를 저장
-            //    case EventType.eGameEnd:
-            //        SaveData itemData = new SaveData();
-            //        itemData.inventory = inventory.Select(x => x.Name).ToArray();
-            //        itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-            //        itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
-            //        itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
-
-            //        Utilities.SaveFile(SaveType.SaveData, itemData);
-            //        break;
-
-            //    // case가 eGetItem인 경우 필드 아이템 획득
-            //    case EventType.eGetFieldItem:
-            //        GetFieldItem(d.Value.Value);
-            //        break;
-            //}
-
-            //var a = (KeyValuePair<eItemType, Item>)data;
-            //var b = (KeyValuePair<EventType, int>)data;
-            var a = data as KeyValuePair<eItemType, Item>?;
-            var b = data as KeyValuePair<EventType, Item>?;
-
-            if (a != null)
+            var d = data as KeyValuePair<EventType, Item>?;
+            // 게임 이벤트에 따른 인벤토리 기능 구현
+           if(type == EventType.eGameEnd)
             {
-                switch (a.Value.Key)
-                {
-                    case eItemType.eGetFieldItem:
-                        {
-                            GetFieldItem(a.Value.Value);
-                            break;
-                        }
-                }
+                SaveData itemData = new SaveData();
+                itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+                itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+
+                Utilities.SaveFile(SaveType.SaveData, itemData);
             }
 
-            if (b != null)
-            {
-                switch (b.Value.Key)
-                {
-                    case EventType.eGameEnd:
-                        {
-                            SaveData itemData = new SaveData();
-                            itemData.inventory = inventory.Select(x => x.Name).ToArray();
-                            itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                            itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
-                            itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+            var a = data as KeyValuePair<eItemType, Item>?;
+            var b = data as KeyValuePair<EventType, int>?;
 
-                            Utilities.SaveFile(SaveType.SaveData, itemData);
-                            break;
-                        }
-                }
+            switch (a.Value.Key)
+            {
+                case eItemType.eGetFieldItem:
+                    {
+                        GetFieldItem(a.Value.Value);
+                        break;
+                    }
             }
             
         }
