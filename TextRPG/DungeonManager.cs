@@ -47,7 +47,7 @@ namespace TextRPG
         public void MakeMonsters(int dungeonMonsterType)//1
         {
             // 몬스터 생성
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeonMonsterType);
+            EventManager.Instance.PostEvent(EventType.eMakeMonsters, Utilities.EventPair(EventType.eMakeMonsters, dungeonMonsterType));
         }
         
         public bool showMonsterMode = false;
@@ -292,12 +292,13 @@ namespace TextRPG
             }
         }
 
-        public void OnEvent(EventType type, object data)
+        public void OnEvent<T>(EventType type, T data)
         {
             if (type == EventType.eSetMonsters)
             {
+                var d = data as KeyValuePair<EventType, List<Monster>>?;
                 // MonsterManager에서 생성된 몬스터 리스트 받기
-                Encounter((List<Monster>)data);
+                Encounter(d.Value.Value);
             }
         }
     }

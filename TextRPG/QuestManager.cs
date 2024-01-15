@@ -158,12 +158,12 @@ namespace TextRPG
                 }
             }
         }
-        public void OnEvent(EventType type, object data)
+        public void OnEvent<T>(EventType type, T data)
         {
             if (type == EventType.Quest)
             {
-                var a = (KeyValuePair<eQuestType, string>)data;
-                switch (a.Key)
+                var a = data as KeyValuePair<eQuestType, string>?;
+                switch (a.Value.Key)
                 {
                     case eQuestType.Item:
                         {

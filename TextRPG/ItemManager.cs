@@ -69,7 +69,7 @@
             fieldItems = list.FindAll(x => x.IsOnField == true).ToArray();
             
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
-            EventManager.Instance.PostEvent(EventType.eUpdateItem, null);
+            EventManager.Instance.PostEvent(EventType.eUpdateItem, "");
 
             // ItemManager에 Event Listener 등록
             EventManager.Instance.AddListener(EventType.eGetFieldItem, this);
@@ -210,8 +210,9 @@
             }
         }
 
-        public void OnEvent(EventType type, object data)
+        public void OnEvent<T>(EventType type, T data)
         {
+            var d = data as KeyValuePair<EventType, Item>?;
             // 게임 이벤트에 따른 인벤토리 기능 구현
             switch (type)
             {
@@ -228,7 +229,7 @@
 
                 // case가 eGetItem인 경우 필드 아이템 획득
                 case EventType.eGetFieldItem:
-                    GetFieldItem(data);
+                    GetFieldItem(d.Value.Value);
                     break;
             }
         }
