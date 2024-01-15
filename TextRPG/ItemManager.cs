@@ -49,34 +49,6 @@ namespace TextRPG
             shopDisplay = [];
             fieldDisplay = [];
 
-            // 인벤토리 저장 파일 불러오기
-            ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
-            if (data != null)
-            // 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
-            {
-                foreach (string item in data.Value.inventory)
-                {
-                    Item _item = list.Find(x => x.Name == item);
-
-                    inventory.Add(_item);
-                }
-                foreach (string item in data.Value.equippedItem)
-                {
-                    Item _item = list.Find(x => x.Name == item);
-                    _item.IsEquipped = true;
-                }
-                foreach (string item in data.Value.saleItem)
-                {
-                    Item _item = list.Find(x => x.Name == item);
-                    shopDisplay.Add(_item);
-                }
-                foreach (string item in data.Value.fieldItem)
-                {
-                    Item _item = list.Find(x => x.Name == item);
-                    fieldDisplay.Add(_item);
-                }
-            }
-
             foreach (Item item in items)
             {
                 if (item.IsOnField)
@@ -84,6 +56,34 @@ namespace TextRPG
                 if (item.IsSale)
                     shopDisplay.Add(item);
             }
+
+            //// 인벤토리 저장 파일 불러오기
+            //ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
+            //if (data != null)
+            //// 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
+            //{
+            //    foreach (string item in data.Value.inventory)
+            //    {
+            //        Item _item = list.Find(x => x.Name == item);
+
+            //        inventory.Add(_item);
+            //    }
+            //    foreach (string item in data.Value.equippedItem)
+            //    {
+            //        Item _item = list.Find(x => x.Name == item);
+            //        _item.IsEquipped = true;
+            //    }
+            //    foreach (string item in data.Value.saleItem)
+            //    {
+            //        Item _item = list.Find(x => x.Name == item);
+            //        shopDisplay.Add(_item);
+            //    }
+            //    foreach (string item in data.Value.fieldItem)
+            //    {
+            //        Item _item = list.Find(x => x.Name == item);
+            //        fieldDisplay.Add(_item);
+            //    }
+            //}
 
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
             EventManager.Instance.PostEvent(EventType.eUpdateItem, null);

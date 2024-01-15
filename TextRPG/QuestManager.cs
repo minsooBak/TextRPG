@@ -17,7 +17,7 @@ namespace TextRPG
         {
             if (type == EventType.Quest)
             {
-                var a = (KeyValuePair<eQuestType, object>)data;
+                var a = (KeyValuePair<eQuestType, string>)data;
                 switch (a.Key)
                 {
                     case eQuestType.Item:

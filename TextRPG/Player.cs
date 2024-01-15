@@ -28,7 +28,7 @@
             myState.EXP = 0;
             myState.ATK = 100;
             myState.DEF = 0;
-            myState.Gold = 0;
+            myState.Gold = 1000;
             InitATK = myState.ATK;
             InitDEF = myState.DEF;
 
@@ -69,7 +69,7 @@
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, object>)data;
+                var a = (KeyValuePair<ePlayerType, int>)data;
 
                 switch(a.Key)
                 {
@@ -90,10 +90,10 @@
                         }
                     case ePlayerType.Stats:
                         {
-                            var num = (int[])a.Value;
-                            myState.ATK = num[0];
-                            myState.DEF = num[1];
-                            Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
+                            // var num = (int[])a.Value;
+                            //myState.ATK = num[0];
+                            //myState.DEF = num[1];
+                            //Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
                             break;
                         }
                 }
