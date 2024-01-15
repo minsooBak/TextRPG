@@ -26,7 +26,22 @@
             List<Monster> dungeonMonsters = [];
 
             Random rnd = new Random();
-            int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
+            
+            // 스테이지에 따라 생성 가능한 몬스터 마리 수 정하기
+            int monsterCount = 0;
+            switch (listOfMonsterCount)
+            {
+                case 1:
+                    monsterCount = rnd.Next(1, 3);
+                    break;
+                case 2:
+                    monsterCount = rnd.Next(2, 4);
+                    break;
+                case 3:
+                    monsterCount = rnd.Next(3, 5);
+                    break;
+            }
+
             if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
                 listOfMonsterCount = (int)MonsterType.Monster3; //1 2 3 
             for (int i = 0; i < monsterCount; i++)
