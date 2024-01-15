@@ -24,7 +24,7 @@ namespace TextRPG
         public List<Dungeon> dungeons = [];
         public IObject[] monsters;
         public int deadCounter = 0;
-        public int dungeonStage = 0; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
+        public int dungeonStage = 2; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
         public bool showMonsterMode = false;
         public int getExp = 0;
 

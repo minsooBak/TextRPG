@@ -110,6 +110,7 @@
         public int GetMP => myState.MP;
 
         public void SetSkill(Skill skill) => myState.Skill = skill;
+
         public int Attack(AttackType attackType = AttackType.Attack)
         {
             int damage = 0;
@@ -118,7 +119,7 @@
             getDamage = myState.ATK / 100.0 * 10;
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
-                damage *= (int)myState.Skill.ATKRatio;
+                damage += (int)myState.Skill.ATKRatio;
             if(attackType == AttackType.Attack)
                 Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 공격!");
             else
@@ -131,16 +132,16 @@
             // 몬스터가 죽었는지 확인하기 -> 죽어있다면 Dead, 색깔 변경하기
             if (IsDead)
             {
-                Utilities.TextColor($"Lv.{myState.Level} {myState.Class} Dead", ConsoleColor.DarkGray);
+                Utilities.TextColorWithNoNewLine($"Lv.{myState.Level} {myState.Class} Dead", ConsoleColor.DarkGray);
             }
             else
             {
                 // 안죽었다면 Level, Class, Hp 출력하기
                 Console.Write("Lv.");
                 Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
-                Console.WriteLine($"{myState.Class}");         // 나중에 player.Name, player.Job으로 수정하기
+                Console.Write($"{myState.Class}");         // 나중에 player.Name, player.Job으로 수정하기
 
-                Console.Write("HP ");
+                Console.Write(" HP ");
                 Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
             }
         }
@@ -181,10 +182,9 @@
             Console.Write($"{myState.Health} -> ");
 
             if (r <= 15)
-                myState.Health = Math.Clamp(myState.Health - criticalDamage, 0, myState.Health);
+                myState.Health -= criticalDamage;
             else
-                myState.Health = Math.Clamp(myState.Health - damage, 0, myState.Health);
-
+                myState.Health -= damage;
 
             Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
         }
@@ -229,8 +229,6 @@
             }
 
             myState.Name = myState.Class;
-            //int MaxHP = myState.Health;
-            //MaxMP = myState.MP;
         }
         
     }

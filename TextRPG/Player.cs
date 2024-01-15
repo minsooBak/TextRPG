@@ -166,7 +166,7 @@
         public void ShowResult(int exp)
         {
             PrevExp = myState.EXP;
-            myState.EXP = exp;
+            myState.EXP += exp;
 
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nHP {PrevHealth} -> {myState.Health}");
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nMP {PrevMp} -> {myState.MP}\n");
