@@ -12,6 +12,7 @@
     {
         private Player player;
         private SkillManager skillManager = new SkillManager();
+        private MonsterManager monsterManager = new MonsterManager();
         public List<Dungeon> dungeons = [];
         public IObject[] monsters;
         public int deadCounter = 0;
@@ -33,8 +34,7 @@
         {
             deadCounter = 0;
 
-            dungeonStage = ++stage;
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeons[dungeonStage].dungeonMonsterType);
+            monsterManager.MakeMonsters(dungeons[stage].dungeonMonsterType);
         }
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
@@ -154,6 +154,7 @@
 
             // 마나가 부족할 경우, SelectSkill()을 다시 호출.
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
+            if (skillIdx == 0) return;
             player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx - 1)); //선택한 스킬 할당
 
             if (player.IsUseSkill == false)  //마나가 모자르다면
