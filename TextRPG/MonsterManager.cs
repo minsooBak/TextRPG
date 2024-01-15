@@ -21,8 +21,9 @@
                 arrayOfMonsters[i] = monster;
             }
         }
-
-        Monster[] arrayOfMonsters = new Monster[3];
+        // maxMonsterType : 생성 가능한 몬스터 종류 수
+        static int maxMonsterType = 3;
+        Monster[] arrayOfMonsters = new Monster[maxMonsterType];
 
         //추가로 구현하면 좋은것은
         //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
@@ -50,8 +51,9 @@
                     break;
             }
 
-            if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
-                listOfMonsterCount = (int)MonsterType.Monster3; //1 2 3 
+            // 던전매니저에서 호출한 몬스터의 타입 값이 전체 몬스터 종류 수(maxMonsterType)보다 클 경우, 값을 maxMonsterType로 고정하기.
+            if (listOfMonsterCount > maxMonsterType)
+                listOfMonsterCount = maxMonsterType; //1 2 3 
             for (int i = 0; i < monsterCount; i++)
             {
                 int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
