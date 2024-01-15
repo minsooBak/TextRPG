@@ -11,6 +11,7 @@
     eGameEnd,
     eSetSkill,
     eShowSkill,
+    Quest,
     Player
 }
 
