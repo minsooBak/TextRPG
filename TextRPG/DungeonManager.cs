@@ -1,4 +1,12 @@
-﻿namespace TextRPG
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TextRPG
 {
     //송상화님 던전 구현 
     // 전투 결과 구현하기
@@ -59,8 +67,7 @@
 
                 ShowMonsterList(showMonsterMode = false);
 
-                player.ShowStats(); // 플레이어 정보창에는 번호가 추가되거나 그런것이 없어서 메서드 제거 후 호출했습니다.
-
+                player.ShowStats();
 
                 Utilities.TextColorWithNoNewLine("1.", ConsoleColor.DarkRed);
                 Console.WriteLine(" 공격");
@@ -133,6 +140,7 @@
                 ShowBattle(monster, false, (AttackType)monsterAttackType);
             }
         }
+
         // 스킬 선택
         public void SelectSkill()
         {
@@ -180,6 +188,7 @@
                 {
                     Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
                 }
+
                 monster.ShowStats();
 
                 Console.WriteLine();
@@ -219,7 +228,9 @@
                 // player.TakeDamage(monster.Attack());
 
                 damage = monster.Attack(attackType);
+
                 player.TakeDamage(damage);
+
             }
 
             Console.WriteLine("\n0. 다음\n");

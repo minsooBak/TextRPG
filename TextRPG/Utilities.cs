@@ -24,15 +24,13 @@ namespace TextRPG
     {
         public string Name { get; set; }
         public string Class { get; set; }
-        public int HP { get; set; }
-        public int MP { get; set; }
+        public int Health { get; set; }
         public int Gold { get; set; }
-        public int MaxHP { get; set; }
-        public int MaxMP { get; set; }
         public int Level { get; set; }
         public int EXP { get; set; }   
         public int ATK { get; set; }
         public int DEF { get; set; }
+        public int MP { get; set; }
         public Skill Skill { get; set; }
     }
 
@@ -54,15 +52,27 @@ namespace TextRPG
             return new KeyValuePair<T, object>(t, a);
         }
 
-        //public static KeyValuePair<T, int> EventPair<T>(T t, int data)
-        //{
-        //    return new KeyValuePair<T, int>(t, data);
-        //}
+        public static KeyValuePair<T, string> EventPair<T>(T t, string a)
+        {
+            return new KeyValuePair<T, string>(t, a);
+        }
 
-        //public static KeyValuePair<T, string> EventPair<T>(T t, string data)
-        //{
-        //    return new KeyValuePair<T, string>(t, data);
-        //}
+        public static KeyValuePair<T, int> EventPair<T>(T t, int a)
+        {
+            return new KeyValuePair<T, int>(t, a);
+        }
+
+        public static KeyValuePair<T, Item> EventPair<T>(T t, Item a)
+        {
+            return new KeyValuePair<T, Item>(t, a);
+        }
+
+        public static KeyValuePair<T, Item[]> EventPair<T>(T t, Item[] a)
+        {
+            return new KeyValuePair<T, Item[]>(t, a);
+        }
+
+
 
         //public static KeyValuePair<T, Item> EventPair<T>(T t, Item data)
         //{
@@ -117,14 +127,14 @@ namespace TextRPG
                     {
                         //Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
+                        Console.Write(">>");
                     }
                 }
                 else
                 {
                     //Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine("===================================================");
+                    Console.Write(">>");
                 }
             }
         }
@@ -148,14 +158,14 @@ namespace TextRPG
                     {
                         Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
+                        Console.Write(">>");
                     }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine("===================================================");
+                    Console.Write(">>");
                 }
             }
         }
@@ -186,9 +196,11 @@ namespace TextRPG
                     }
                 case LoadType.ItemData:
                     {
-                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\I_Data.json";
+                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\I_Data.json";
                         if (File.Exists(path) == false)
+                        {
                             return null;
+                        }
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -197,7 +209,7 @@ namespace TextRPG
                             JObject json = (JObject)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            //return JsonConvert.DeserializeObject<ItemData>(str);
+                            // return JsonConvert.DeserializeObject<ItemData>(str);
 
                         }
                         break;
@@ -216,13 +228,13 @@ namespace TextRPG
                             JArray json = (JArray)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            //return JsonConvert.DeserializeObject<List<Item>>(str);
+                            return JsonConvert.DeserializeObject<List<Item>>(str);
                         }
                         break;
                     }
                 case LoadType.Player:
                     {
-                        path += @"\P_Data.json";
+                        path += @"\Data\P_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -241,7 +253,7 @@ namespace TextRPG
                 case LoadType.Monster:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Monster_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Data\Monster_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -259,7 +271,7 @@ namespace TextRPG
                 case LoadType.SkillData:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Skill_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Skill_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);
@@ -278,7 +290,7 @@ namespace TextRPG
                 case LoadType.Dungeon:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Dungeon_Data.json";
+                            .Parent.Parent.Parent.FullName + @"\Data\Dungeon_Data.json";
                         if (File.Exists(path) == false)
                             return null;
                         StreamReader? file = File.OpenText(path);

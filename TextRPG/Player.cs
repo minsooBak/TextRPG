@@ -6,9 +6,9 @@
         private ObjectState myState;
         private int InitATK { get; set; }
         private int InitDEF { get; set; }
-        private int maxHP;
+        private int maxHealth;
         private int maxMP;
-        private int PrevHP { get; set; } // 이전 hp값
+        private int PrevHealth { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
         private int PrevExp;
 
@@ -22,17 +22,17 @@
             myState.Name = Name.Key;
             myState.Class = Name.Value;
 
-            myState.HP = 100;
+            myState.Health = 1000;
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
             myState.ATK = 100;
             myState.DEF = 0;
-            myState.Gold = 0;
+            myState.Gold = 1000;
             InitATK = myState.ATK;
             InitDEF = myState.DEF;
 
-            maxHP = myState.HP;
+            maxHealth = myState.Health;
             maxMP = myState.MP;
             PrevExp = myState.EXP;
         }
@@ -42,7 +42,7 @@
             myState.Name = state.Name;
             myState.Class = state.Class;
 
-            myState.HP = state.HP;
+            myState.Health = state.Health;
             myState.MP = state.MP;
             myState.Level = state.Level;
             myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
@@ -52,7 +52,7 @@
             InitDEF = state.DEF;
         }
 
-        public int HP => myState.HP;
+        public int Health => myState.Health;
         public int MP => myState.MP;
         public int Level => myState.Level;
         public string Name => myState.Name;
@@ -60,10 +60,8 @@
         public int ATK => myState.ATK;
         public int DEF => myState.DEF;
         public int Gold => myState.Gold;
-//<<<<<<< HEAD
-//        public bool IsDead => myState.Health <= 0;
-//=======
-        public bool IsDead => myState.HP <= 0;
+
+        public bool IsDead => myState.Health <= 0;
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
@@ -73,18 +71,18 @@
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, object>)data;
+                var a = (KeyValuePair<ePlayerType, int>)data;
 
                 switch(a.Key)
                 {
                     case ePlayerType.HP:
                         {
-                            myState.HP = Math.Clamp(myState.HP + (int)a.Value, 0, maxHP);
+                            myState.Health = Math.Clamp(myState.Health + (int)a.Value, 0, maxHealth);
                             break;
                         }
                     case ePlayerType.MP:
                         {
-                            myState.MP = Math.Clamp((int)a.Value, 0, maxMP);
+                            myState.Health = Math.Clamp((int)a.Value, 0, maxMP);
                             break;
                         }
                     case ePlayerType.Gold:
@@ -94,9 +92,10 @@
                         }
                     case ePlayerType.Stats:
                         {
-                            var num = (int[])a.Value;
-                            myState.ATK = num[0];
-                            myState.DEF = num[1];
+                            // var num = (int[])a.Value;
+                            //myState.ATK = num[0];
+                            //myState.DEF = num[1];
+                            //Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
                             break;
                         }
                 }
@@ -105,7 +104,7 @@
 
         public int ShowHealth()
         {
-            return myState.HP;
+            return myState.Health;
         }
 
         public void ShowStats()
@@ -116,9 +115,11 @@
             Console.WriteLine($"{myState.Name} ({myState.Class})");
 
             Console.Write("HP ");
-            Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed); 
+
+            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
+
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{maxHP}\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
@@ -128,9 +129,9 @@
 
         public int Attack(AttackType attackType)
         {
-            if (PrevHP == 0)
+            if (PrevHealth == 0)
             {
-                PrevHP = myState.HP;
+                PrevHealth = myState.Health;
                 PrevMp = myState.MP;
             }
 
@@ -156,9 +157,10 @@
             Console.WriteLine($"{myState.Name} 을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
-            Console.Write($"{myState.HP} ->");
-            myState.HP = Math.Clamp(myState.HP - damage, 0 , 100);
-            Console.Write($"{myState.HP}");
+
+            Console.Write($"{myState.Health} ->");
+            myState.Health -= Math.Clamp(damage, 0 , 100);
+            Console.Write($"{myState.Health}\n");
         }
 
         public void ShowResult(int exp)
@@ -166,13 +168,11 @@
             PrevExp = myState.EXP;
             myState.EXP = exp;
 
-            Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
-
-            Console.WriteLine($"HP {PrevHP} -> {myState.HP}");
-            Console.WriteLine($"MP {PrevMp} -> {myState.MP}");
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nHP {PrevHealth} -> {myState.Health}");
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nMP {PrevMp} -> {myState.MP}\n");
             Console.WriteLine($"EXP {PrevExp} -> {myState.EXP}\n");
 
-            PrevHP = 0;
+            PrevHealth = 0;
             PrevMp = 0;
 
             //죽엇을때 부활 체력 마나

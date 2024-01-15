@@ -1,0 +1,45 @@
+[
+    {
+        "Name": "낡은 대검",
+        "Type": 0,
+        "ATK": 3,
+        "DEF": 0,
+        "Description": "아직은 쓸만해 보이는 낡은 대검입니다.",
+        "Cost": 100,
+        "IsSale": "TRUE",
+        "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "초보자의 갑옷",
+      "Type": 1,
+      "ATK": 0,
+      "DEF": 2,
+      "Description": "모험을 떠날 준비가 되었다!",
+      "Cost": 100,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "가시 갑옷",
+      "Type": 1,
+      "ATK": 3,
+      "DEF": 5,
+      "Description": "자신을 공격하는 적에게 고통을 선물해보세요.",
+      "Cost": 999,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "테스트용 개사기검",
+      "Type": 0,
+      "ATK": 999,
+      "DEF": 0,
+      "Description": "개발자용",
+      "Cost": 9999,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+]

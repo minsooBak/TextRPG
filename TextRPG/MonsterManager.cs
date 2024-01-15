@@ -33,6 +33,7 @@
         //3. CreateMonster에서의 역활은 굳이 int값을 복사해서 MakeMonsters에서도 할수있는것을 넘기는것이기에 MakeMonsters에서 추가해주기
         //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
+
         {
             //List<Monster> dungeonMonsters = [];
 
@@ -96,13 +97,35 @@
     {
         private ObjectState myState;
 
+        public int MP => myState.MP;
+
+        public int Health => myState.Health;
+
         public int Level => myState.Level;
+
         public string Class => myState.Class;
+
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
         public bool IsDead => myState.HP <= 0;
         public int GetMP => myState.MP;
-        public void SetSkill(Skill skill) => myState.Skill = skill;
 
+        public void SetSkill(Skill skill) => myState.Skill = skill;
+        public int Attack(AttackType attackType = AttackType.Attack)
+        {
+            int damage = 0;
+            double getDamage;
+
+            getDamage = myState.ATK / 100.0 * 10;
+            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
+            if (attackType == AttackType.Skill)
+                damage *= (int)myState.Skill.ATKRatio;
+            if(attackType == AttackType.Attack)
+                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 공격!");
+            else
+                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 {myState.Skill.Name} 스킬 공격!");
+
+            return damage;
+        }
         public void ShowStats()
         {
             // 몬스터가 죽었는지 확인하기 -> 죽어있다면 Dead, 색깔 변경하기
@@ -179,14 +202,15 @@
             }
 
             Console.WriteLine($"\n\nLv.{myState.Level} {myState.Name}");
-            Console.Write($"{myState.HP} -> ");
+            Console.Write($"{myState.Health} -> ");
 
             if (r <= 15)
                 myState.HP = Math.Clamp(myState.HP - criticalDamage, 0, myState.MaxHP);
             else
                 myState.HP = Math.Clamp(myState.HP - damage, 0, myState.MaxHP);
 
-            Console.WriteLine($"{(IsDead ? "Dead" : myState.HP)}");
+
+            Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
         }
 
         public bool PrintDead()
@@ -216,6 +240,7 @@
                 myState.Level = 3;
                 myState.HP = 10;
                 myState.MP = 100;
+
                 myState.ATK = 9;     
             }
             else if (monsterType == MonsterType.Monster3)
