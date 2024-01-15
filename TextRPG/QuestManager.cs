@@ -172,7 +172,7 @@ namespace TextRPG
 
                             break;
                         }
-                    case eQuestType.Monster: //몬스터가 죽은 수만큼 Quest의 currnt를 증가시킨다.
+                    case eQuestType.Monster: //몬스터가 죽은 수만큼 Quest의 currnt(현재 달성도)를 증가시킨다.
                         {
                             foreach (var quest in quests)
                             {
