@@ -57,33 +57,24 @@ namespace TextRPG
                     shopDisplay.Add(item);//상점 아이템 저장
             }
 
-            //// 인벤토리 저장 파일 불러오기
-            //SaveData? saveData = (SaveData?)Utilities.LoadFile(LoadType.SaveData);
-            //if (data != null)
-            //// 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
-            //{
-            //    foreach (string item in data.Value.inventory)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
+            // 인벤토리 저장 파일 불러오기
+            SaveData? saveData = (SaveData?)Utilities.LoadFile(LoadType.SaveData);
+            if (saveData != null)
 
-            //        inventory.Add(_item);
-            //    }
-            //    foreach (string item in data.Value.equippedItem)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
-            //        _item.IsEquipped = true;
-            //    }
-            //    foreach (string item in data.Value.saleItem)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
-            //        shopDisplay.Add(_item);
-            //    }
-            //    foreach (string item in data.Value.fieldItem)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
-            //        fieldDisplay.Add(_item);
-            //    }
-            //}
+            // 아이템 정보를 saveData에서 읽어와서 inventory와 기타 값 불러오기
+            {
+                foreach (string item in saveData.Value.inventory)
+                {
+                    Item _item = list.Find(x => x.Name == item);
+
+                    inventory.Add(_item);
+                }
+                foreach (string item in saveData.Value.equippedItem)
+                {
+                    Item _item = list.Find(x => x.Name == item);
+                    _item.IsEquipped = true;
+                }
+            }
 
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
             EventManager.Instance.PostEvent(EventType.eUpdateItem, null);
@@ -262,22 +253,14 @@ namespace TextRPG
                     SaveData itemData = new SaveData();
                     itemData.inventory = inventory.Select(x => x.Name).ToArray();
                     itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                    itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
-                    itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
 
                     Utilities.SaveFile(SaveType.SaveData, itemData);
                     break;
-
-                // case가 eGetItem인 경우 필드 아이템 획득
-                case EventType.eGetFieldItem:
-                    GetFieldItem(data);
-                    break;
             }
 
-            var a = (KeyValuePair<eItemType, Item>)data;
-            var b = (KeyValuePair<EventType, int>)data;
+            var a = data as KeyValuePair<eItemType, Item>?;
 
-            switch (a.Key)
+            switch (a.Value.Key)
             {
                 case eItemType.eGetFieldItem:
                     {
@@ -286,20 +269,6 @@ namespace TextRPG
                     }
             }
 
-            switch (b.Key)
-            {
-                case EventType.eGameEnd:
-                    {
-                        SaveData itemData = new SaveData();
-                        itemData.inventory = inventory.Select(x => x.Name).ToArray();
-                        itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                        itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
-                        itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
-
-                        Utilities.SaveFile(SaveType.SaveData, itemData);
-                        break;
-                    }
-            }
         }
     }
 

@@ -42,4 +42,15 @@
       "IsSale": "TRUE",
       "IsOnField": "FALSE"
     }
+    ,
+    {
+      "Name": "던전 드랍용 아이템",
+      "Type": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "Description": "IsOnField가 True인 최초의 아이템입니다.",
+      "Cost": 0,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
 ]

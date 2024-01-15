@@ -10,7 +10,8 @@
             StartBattle,
             Inventory,
             Shop,
-            Quest
+            Quest,
+            EndGame = 9
         }
 
         Player player = new Player();
@@ -47,6 +48,9 @@
                     case GameState.Quest:
                         
                         break;
+                    case GameState.EndGame:
+                        isGameEnd = true;
+                        break;
                     default:
                         itemManager.Mode = 0; // 메인 화면 호출 시 Mode 기본값으로 변경
                         StartGame(); 
@@ -54,6 +58,7 @@
                 }
             }
             //저장처리
+            EventManager.Instance.PostEvent(EventType.eGameEnd, null);
         }
         
         public void StartGame()
@@ -77,7 +82,7 @@
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 4))
+            switch ((GameState)Utilities.GetInputKey(0, 4))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
@@ -93,6 +98,9 @@
                     break;
                 case GameState.Quest:
                     gameState = GameState.Quest;
+                    break;
+                case GameState.NONE:
+                    gameState = GameState.EndGame;
                     break;
             }
         }
