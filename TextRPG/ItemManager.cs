@@ -14,7 +14,7 @@ namespace TextRPG
         Armor
     }
 
-    struct ItemData
+    struct SaveData
     {
         public string[] inventory;
         public string[] equippedItem;
@@ -58,7 +58,7 @@ namespace TextRPG
             }
 
             //// 인벤토리 저장 파일 불러오기
-            //ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
+            //SaveData? saveData = (SaveData?)Utilities.LoadFile(LoadType.SaveData);
             //if (data != null)
             //// 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
             //{
@@ -259,19 +259,46 @@ namespace TextRPG
             {
                 // case가 eGameEnd인 경우 ItemData를 저장
                 case EventType.eGameEnd:
-                    ItemData itemData = new ItemData();
+                    SaveData itemData = new SaveData();
                     itemData.inventory = inventory.Select(x => x.Name).ToArray();
                     itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                    itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
                     itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+                    itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
 
-                    Utilities.SaveFile(SaveType.ItemData, itemData);
+                    Utilities.SaveFile(SaveType.SaveData, itemData);
                     break;
 
                 // case가 eGetItem인 경우 필드 아이템 획득
                 case EventType.eGetFieldItem:
                     GetFieldItem(data);
                     break;
+            }
+
+            var a = (KeyValuePair<eItemType, Item>)data;
+            var b = (KeyValuePair<EventType, int>)data;
+
+            switch (a.Key)
+            {
+                case eItemType.eGetFieldItem:
+                    {
+                        GetFieldItem(a.Value);
+                        break;
+                    }
+            }
+
+            switch (b.Key)
+            {
+                case EventType.eGameEnd:
+                    {
+                        SaveData itemData = new SaveData();
+                        itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                        itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                        itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+                        itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+
+                        Utilities.SaveFile(SaveType.SaveData, itemData);
+                        break;
+                    }
             }
         }
     }

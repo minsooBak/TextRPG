@@ -7,7 +7,7 @@ namespace TextRPG
     enum SaveType
     {
         Player,
-        ItemData
+        SaveData
     }
 
     enum LoadType
@@ -15,7 +15,7 @@ namespace TextRPG
         Player,
         Map,
         Item,
-        ItemData,
+        SaveData,
         Monster,
         SkillData,
         Dungeon
@@ -184,22 +184,24 @@ namespace TextRPG
                         }
                         break;
                     }
-                case LoadType.ItemData:
+                case LoadType.SaveData:
                     {
-                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\I_Data.json";
+                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\Save_Data.json";
                         if (File.Exists(path) == false)
                         {
+                            Console.WriteLine("저장된 파일이 없습니다.");
                             return null;
                         }
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
+                            Console.WriteLine("저장된 파일을 불러옵니다.");
                             JsonTextReader reader = new JsonTextReader(file);
 
                             JObject json = (JObject)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            // return JsonConvert.DeserializeObject<ItemData>(str);
+                            return JsonConvert.DeserializeObject<SaveData>(str);
 
                         }
                         break;
@@ -310,11 +312,11 @@ namespace TextRPG
                         File.WriteAllText(path, JsonConvert.SerializeObject((ObjectState)data, Formatting.Indented));
                         break;
                     }
-                case SaveType.ItemData:
+                case SaveType.SaveData:
                     {
-                        path += @"\I_Data.json";
-                        //string json = JsonConvert.SerializeObject((ItemData)data, Formatting.Indented);
-                        //File.WriteAllText(path, json);
+                        path += @"\Data\Save_Data.json";
+                        string json = JsonConvert.SerializeObject((SaveData)data, Formatting.Indented);
+                        File.WriteAllText(path, json);
                         break;
                     }
             }
