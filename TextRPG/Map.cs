@@ -67,7 +67,7 @@ namespace TextRPG
             {
                 Console.Clear();
                 Utilities.TextColor("Quest!!\n", ConsoleColor.DarkYellow);
-                bool isNull = questManager.ShowQuests(); //목록들 보여주고
+                bool isNull = questManager.ShowQuests(); //목록들 보여주고 퀘스트가 없다면 false 있다면 true
 
                 Utilities.TextColorWithNoNewLine("0", ConsoleColor.DarkRed);
                 Console.WriteLine(". 나가기");

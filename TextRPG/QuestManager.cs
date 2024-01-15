@@ -140,7 +140,7 @@ namespace TextRPG
                     case 1: //보상 받기
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, quests[idx].Exp)); //플레이어 경험치 추가
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 골드 추가
-                        EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, questItem[idx]));
+                        EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, quests[idx].ItemName));//아이템 획득
                         //아이템 얻는 이벤트 추가해야 함.
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
                         clearCount++; //클리어 횟수 증가
@@ -173,7 +173,17 @@ namespace TextRPG
                 {
                     case eQuestType.Item:
                         {
-                            
+                            foreach (var quest in quests)
+                            {
+                                if (quest.isActive && quest.Target == a.Value.Value) //이름이 같은 몬스터 이고 퀘스트가 활성화 되어있을 때
+                                {
+                                    quest.current++;
+                                    if (quest.current >= quest.Max) //최고치에 도달하면 
+                                    {
+                                        quest.isClear = true; //퀘스트 클리어
+                                    }
+                                }
+                            }
                             break;
                         }
                     case eQuestType.Dungeon:
@@ -203,7 +213,17 @@ namespace TextRPG
                         }
                     case eQuestType.PlayerLevel:
                         {
-                           
+                            foreach (var quest in quests)
+                            {
+                                if (quest.isActive && quest.Target == "레벨업") //이름이 같은 몬스터 이고 퀘스트가 활성화 되어있을 때
+                                {
+                                    quest.current += Int32.Parse(a.Value.Value);
+                                    if (quest.current >= quest.Max) //최고치에 도달하면 
+                                    {
+                                        quest.isClear = true; //퀘스트 클리어
+                                    }
+                                }
+                            }
                             break;
                         }
                 }

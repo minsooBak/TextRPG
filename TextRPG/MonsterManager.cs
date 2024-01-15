@@ -21,15 +21,18 @@ namespace TextRPG
             {
                 arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
             }
+            monsterItemName[0] = "낡은 대검";
+            monsterItemName[1] = "초보자의 갑옷";
+            monsterItemName[2] = "가시 갑옷";
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
         static int maxMonsterType = 3;
         // 생성 가능한 몬스터 타입 배열
         public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
-        public Item[] monsterItem = [];
+        //public Item[] monsterItem = [];
 
         List<Monster> dungeonMonsters = [];
-
+        string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
         //추가로 구현하면 좋은것은
         //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
         //2. 전체 몬스터 데이터를 배열로 가지고있다가 type에 맞는 몬스터를 꺼내주기
@@ -77,8 +80,8 @@ namespace TextRPG
             foreach (Monster monster in dungeonMonsters)
             {
                 // 해당 몬스터 리스트의 총 경험치량 저장
-                exp += monster.Level;
-                //exp += monster.Exp; 몬스터의 경험치를 더하는 것이 괜찮을 것 같아서
+                //exp += monster.Level;
+                exp += monster.Exp; //몬스터의 경험치를 더하는 것이 괜찮을 것 같아서
             }
             return exp;
         }
@@ -86,19 +89,19 @@ namespace TextRPG
         public void GetReward()
         {
             Random rnd = new Random();
-            int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷
+            int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷 총 3개의 아이템만 떨군다.
             int gold = 0;
             int i = 0;
 
             foreach (Monster monster in dungeonMonsters)
             {
-                if (rnd.Next(0, 101) <= 50)
+                if (rnd.Next(1, 101) <= 8) //8퍼 확률로
                 {
-                    EventManager.Instance.PostEvent(EventType.eGetFieldItem, monster.item);
-                    
-                    if(monster.Level == 2)
+                    EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem,monster.item)); //아이템 드랍 이벤트 수정
+
+                    if (monster.Level == 2)
                     {
-                        itemsCounter[0]++;
+                        itemsCounter[0]++; //떨어뜨릴 아이템 리스트에 추가 
                     }
                     else if (monster.Level == 3)
                     {
@@ -109,9 +112,12 @@ namespace TextRPG
                         itemsCounter[2]++;
                     }
                 }
-                gold += monster.Gold;
+                EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monster.Class)); //몬스터 수만큼 처치 이벤트 발생
+                gold += monster.Gold; //몬스터 골드 총합
             }
 
+            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, gold)); //플레이어 골드 증가 이벤트
+            Console.WriteLine();
             Console.WriteLine("[획득 아이템]");
             Console.WriteLine($"{gold} Gold");
             
@@ -119,7 +125,8 @@ namespace TextRPG
             {
                 if (itemsCounter[i] > 0)
                 {
-                    Console.WriteLine($"{dungeonMonsters[i].item} - {itemsCounter[i]}");
+                    //Console.WriteLine($"{dungeonMonsters[i].item} - {itemsCounter[i]}"); // 몬스터가 가지고 있는 아이템 이름 - 개수 
+                    Console.WriteLine($"{monsterItemName[i]} - {itemsCounter[i]}"); // 테스트로 monsterItemName 이라는 아이템 배열을 만들어서 수정 필요
                 }
             }
         }
@@ -152,7 +159,7 @@ namespace TextRPG
 
         public string Class => myState.Class;
 
-        public string item { get; }
+        public string item { get; set; }
         public int Gold => myState.Gold;
 
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool

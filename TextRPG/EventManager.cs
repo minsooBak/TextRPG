@@ -1,35 +1,40 @@
-﻿public enum EventType//아이템이벤트
-{
-    NONE,
-    eMakeMonsters,
-    eClearMonsters,
-    eSetMonsters,
-    eUpdateItem,
-    eGetFieldItem,
-    eUpdateGold,
-    eUpdateStat,
-    eGameEnd,
-    eSetSkill,
-    eShowSkill,
-    Item,
-    Quest,
-    Player
-}
-
-//public enum EventType //이 이벤트들을 듣겠다
+﻿//public enum EventType//아이템이벤트
 //{
-//    eMakeMonsters,//변경하기
-//    eSetMonsters, //변경하기
+//    NONE,
+//    eMakeMonsters,
+//    eClearMonsters,
+//    eSetMonsters,
+//    eUpdateItem,
+//    eGetFieldItem,
+//    eUpdateGold,
+//    eUpdateStat,
+//    eGameEnd,
+//    eSetSkill,
+//    eShowSkill,
 //    Item,
 //    Quest,
-//    Player,
-//    eGameEnd
+//    Player
 //}
+
+public enum EventType //이 이벤트들을 듣겠다
+{
+    eMakeMonsters,//변경하기
+    eSetMonsters, //변경하기
+    eUpdateStat,//변경하기
+    eUpdateGold,//변경하기
+    eClearMonsters,//변경하기
+    Item,
+    Quest,
+    Player,
+    eGameEnd
+}
 
 enum eItemType//아이템이벤트
 {
-    eUpdateItem,
+    //eUpdateItem, //잘 모르겠음
     eGetFieldItem,
+    eGameEnd,
+    EquipQuest
 }
 
 enum eQuestType//퀘스트이벤트의 조건

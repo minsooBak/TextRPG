@@ -24,7 +24,7 @@ namespace TextRPG
         public List<Dungeon> dungeons = [];
         public IObject[] monsters;
         public int deadCounter = 0;
-        public int dungeonStage = 2; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
+        public int dungeonStage = 0; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
         public bool showMonsterMode = false;
         public int getExp = 0;
 
@@ -256,14 +256,15 @@ namespace TextRPG
             {
                 Console.WriteLine("Victory\n");
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
-                for (int i = 0; i < monster; i++)
-                {
-                    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monsters[i].Class)); //퀘스트 이벤트 몬스터 수만큼 호출함
-                    // EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득 (동일해서 지움)
-                }
-                player.ShowResult(monsterManager.GetExp()); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
+                //for (int i = 0; i < monster; i++)
+                //{
+                //    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monsters[i].Class)); //퀘스트 이벤트 몬스터 수만큼 호출함
+                //    // EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득 (동일해서 지움)
+                //}
+                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp())); //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가 
+                //player.ShowResult(monsterManager.GetExp()); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
                 //monsterManager.GetReward(); 
-                GetReward();
+                GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
             }
             else
             {

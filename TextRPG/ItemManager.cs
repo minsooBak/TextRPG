@@ -4,7 +4,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace TextRPG
 {
@@ -86,11 +88,12 @@ namespace TextRPG
             //}
 
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
-            EventManager.Instance.PostEvent(EventType.eUpdateItem, "");
+            //EventManager.Instance.PostEvent(EventType.eUpdateItem, "");
 
             // ItemManager에 Event Listener 등록
-            EventManager.Instance.AddListener(EventType.eGetFieldItem, this);
-            EventManager.Instance.AddListener(EventType.eGameEnd, this);
+            EventManager.Instance.AddListener(EventType.Item, this);
+            //EventManager.Instance.AddListener(EventType.eGetFieldItem, this);
+            //EventManager.Instance.AddListener(EventType.eGameEnd, this);
 
         }
 
@@ -108,10 +111,10 @@ namespace TextRPG
                 Console.Write("-");
                 if (mode >= 1)
                 {
-                if (item.IsEquipped)
-                    Console.Write($"{count} [E] ");
-                else
-                    Console.Write($"{count} [-] ");
+                    if (item.IsEquipped)
+                        Console.Write($"{count} [E] ");
+                    else
+                        Console.Write($"{count} [-] ");
                 }
                 Console.WriteLine($"{item.Name} | " +
                     $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} | ") : "")} " +
@@ -208,13 +211,17 @@ namespace TextRPG
 
         public void GetFieldItem(Item? data = null)
         {
+            Item newItem = new Item(data.Name, (int)data.Type, data.ATK, data.DEF, data.Description, data.Cost, data.IsSale, data.IsOnField);
+            //Item newitem = new Item(); //새로운 아이템 객체
+            //newitem.CopyItem(data); //아이템 깊은 복사
+
             // 필드에 드랍된 아이템 줍줍
             if (data != null)
             {
-                fieldDisplay.Add(data);
+                //fieldDisplay.Add(newitem); //
 
-                inventory.Add(data); //인벤토리에 아이템 추가
-                Console.WriteLine($"{data.Name}을 획득했습니다.");
+                inventory.Add(newItem); //인벤토리에 아이템 추가
+                Console.WriteLine($"{newItem.Name}을 획득했습니다.");
             
             }
             else
@@ -250,43 +257,49 @@ namespace TextRPG
                 item.IsEquipped = true;
                 Console.WriteLine($"{item.Name}을 착용했습니다.");
                 Console.ReadLine();
+                EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Item, inventory[itemNum - 1].Name));//장착하면 아이템 이름으로 이벤트 발생
             }
             // EventManager로 스탯 변경 이벤트 전달
             EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
+            
         }
 
         public void OnEvent<T>(EventType type, T data)
         {
-            var d = data as KeyValuePair<EventType, Item>?;
-            // 게임 이벤트에 따른 인벤토리 기능 구현
-            if(d != null)
+            if (type == EventType.Item)
             {
-                switch (d.Value.Key)
+                var d = data as KeyValuePair<eItemType, String>?;
+                // 게임 이벤트에 따른 인벤토리 기능 구현
+                if (d != null)
                 {
-                    case EventType.eGameEnd:
+                    switch (d.Value.Key)
                     {
-                        SaveData itemData = new SaveData();
-                        itemData.inventory = inventory.Select(x => x.Name).ToArray();
-                        itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                        itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
-                        itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
-
-                        //Utilities.SaveFile(SaveType.ItemData, itemData); //기존 것
-                        Utilities.SaveFile(SaveType.SaveData, itemData);
-
-                            break;
-                    }
-                    case EventType.eGetFieldItem: 
-                    {
-                        foreach (var item in items) //전체 아이템 목록에서 하나 씩 아이템을 꺼내서
-                        {
-                            if (item.Name.Equals(data.ToString())) // 아이템의 이름과  매개변수data의 이름이 같으면
+                        case eItemType.eGameEnd:
                             {
-                                GetFieldItem(item);//아이템을 인벤토리에 넣는다. 얻었는지 못 얻었는지 출력문 
+                                SaveData itemData = new SaveData();
+                                itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                                itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                                itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
+                                itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+
+                                //Utilities.SaveFile(SaveType.ItemData, itemData); //기존 것
+                                Utilities.SaveFile(SaveType.SaveData, itemData);
+
                                 break;
                             }
-                        }
-                        break;
+                        case eItemType.eGetFieldItem:
+                            {
+                                foreach (var item in items) //전체 아이템 목록에서 하나 씩 아이템을 꺼내서
+                                {
+                                    //if (item.Name.Equals(data.ToString)) // 아이템의 이름과  매개변수data의 이름이 같으면
+                                    if (item.Name.Equals(d.Value.Value))
+                                    {
+                                        GetFieldItem(item);//아이템을 인벤토리에 넣는다. 얻었는지 못 얻었는지 출력문 
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
                     }
                 }
             }
@@ -314,20 +327,20 @@ namespace TextRPG
         //             break;
         //     }
 
-            var a = data as KeyValuePair<eItemType, Item>?;
-            var b = data as KeyValuePair<EventType, int>?;
+        //    var a = data as KeyValuePair<eItemType, Item>?;
+        //    var b = data as KeyValuePair<EventType, int>?;
 
-            if(a != null)
-            {
-                switch (a.Value.Key)
-                {
-                    case eItemType.eGetFieldItem:
-                        {
-                            GetFieldItem(a.Value.Value);//수정할 부분
-                            break;
-                        }                               
-                }
-            }  
+        //    if(a != null)
+        //    {
+        //        switch (a.Value.Key)
+        //        {
+        //            case eItemType.eGetFieldItem:
+        //                {
+        //                    GetFieldItem(a.Value.Value);//수정할 부분
+        //                    break;
+        //                }                               
+        //        }
+        //    }  
         }
     }
 
@@ -345,9 +358,7 @@ namespace TextRPG
         public bool IsEquipped { get; set; } // 장비 착용 여부
         public bool IsSale { get; set; } // 상점에서 판매 가능한 지의 여부
         public bool IsOnField { get; private set; } // 던전에서 얻을 수 있는 지의 여부
-
-        public Item(string name, int type, int atk, int def, string description, int cost, bool isSale, bool isOnField)
-        // Item 클래스 생성자
+        public Item(string name, int type, int atk, int def, string description, int cost, bool isSale, bool isOnField) // Item 클래스 생성자
         {
             Name = name;
             Type = (ItemType)type;

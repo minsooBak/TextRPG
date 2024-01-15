@@ -1,4 +1,6 @@
-﻿namespace TextRPG
+﻿using System.Threading;
+
+namespace TextRPG
 {
     //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
     internal class Player : IListener, IObject
@@ -74,6 +76,7 @@
                 //is : data에 KeyValuePair로 형변환 가능 여부를 리턴해줌
                 var a = data as KeyValuePair<ePlayerType, int>?;
                 var b = data as KeyValuePair<ePlayerType, Item>?;
+                var d = data as KeyValuePair<ePlayerType, string>?;
 
                 if (a != null)
                 {
@@ -82,25 +85,29 @@
                     {
                         case ePlayerType.Gold: //골드 추가
                             {
-                                myState.Gold = Math.Clamp(myState.Gold + c.Value, 0, 999999999);
+                                myState.Gold += Math.Clamp(myState.Gold + c.Value, 0, 999999999);
                                 break;
                             }
                         case ePlayerType.Exp: //경험치 추가
                             {
                                 myState.EXP += Math.Clamp(c.Value, 0, 300);
+                                int LevelUp = 0;
                                 if (myState.EXP / 100 != 0)
                                 {
-                                    myState.Level += myState.EXP / 100;
+                                    LevelUp = myState.EXP / 100;
+                                    myState.Level += LevelUp;
                                     myState.EXP = myState.EXP % 100;
-                                    Console.WriteLine("레벨 업!!");
+                                    Console.WriteLine("레벨 업!!\n");
+                                    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.PlayerLevel, LevelUp.ToString()));
                                 }
                                 break;
                             }
                     }
-                }else if(b!= null)
+                }
+                else if (b != null)
                 {
                     var c = b.Value;
-                    if(c.Key == ePlayerType.Stats)
+                    if (c.Key == ePlayerType.Stats)
                     {
                         myState.ATK += c.Value.ATK;
                         myState.DEF += c.Value.DEF;
