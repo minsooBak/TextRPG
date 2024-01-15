@@ -183,7 +183,7 @@
             itemManager.ShowShop(itemManager.Mode);
             Console.WriteLine("");
 
-            if (itemManager.Mode == 0)
+            if (itemManager.Mode == 0) // Mode가 0일 때(기본 상태)
             {
                 Console.WriteLine("1. 아이템 구매");
                 Console.WriteLine("0. 나가기");
@@ -202,7 +202,7 @@
                         ShowShop(); // Mode를 1로 바꾸고 다시 ShowShop() 호출
                         break;
                 }
-            } // Mode가 0일 때(기본 상태)
+            }
             else if (itemManager.Mode == 1) // Mode가 1일 때(아이템 구매 상태)
             {
                 Console.WriteLine("0. 나가기");
