@@ -117,14 +117,14 @@ namespace TextRPG
                     {
                         //Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
+                        Console.WriteLine(">>");
                     }
                 }
                 else
                 {
                     //Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine("===================================================");
+                    Console.WriteLine(">>");
                 }
             }
         }
@@ -148,14 +148,14 @@ namespace TextRPG
                     {
                         Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
+                        Console.WriteLine(">>");
                     }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine("===================================================");
+                    Console.WriteLine(">>");
                 }
             }
         }
@@ -188,7 +188,9 @@ namespace TextRPG
                     {
                         path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\I_Data.json";
                         if (File.Exists(path) == false)
+                        {
                             return null;
+                        }
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -197,7 +199,7 @@ namespace TextRPG
                             JObject json = (JObject)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            //return JsonConvert.DeserializeObject<ItemData>(str);
+                            // return JsonConvert.DeserializeObject<ItemData>(str);
 
                         }
                         break;

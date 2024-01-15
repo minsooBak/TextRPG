@@ -1,4 +1,12 @@
-﻿namespace TextRPG
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TextRPG
 {
     enum ItemType
     {
@@ -27,18 +35,22 @@
         public int GetShopDisplaySize { get { return shopDisplay.Count; } }
         public int GetFieldDisplaySize { get { return fieldDisplay.Count; } }
 
+        public int Mode { get; set;}
 
         public ItemManager() 
         // ItemManager 생성자 : 
         {
+            Mode = 0;
+
             List<Item>? list = (List<Item>)Utilities.LoadFile(LoadType.Item);
             items = list.ToArray();
 
-            ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
             inventory = [];
             shopDisplay = [];
             fieldDisplay = [];
 
+            // 인벤토리 저장 파일 불러오기
+            ItemData? data = (ItemData?)Utilities.LoadFile(LoadType.ItemData);
             if (data != null)
             // 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
             {
@@ -65,9 +77,14 @@
                 }
             }
 
-            shopItems = list.FindAll(x => x.IsSale == true).ToArray();
-            fieldItems = list.FindAll(x => x.IsOnField == true).ToArray();
-            
+            foreach (Item item in items)
+            {
+                if (item.IsOnField)
+                    fieldDisplay.Add(item);
+                if (item.IsSale)
+                    shopDisplay.Add(item);
+            }
+
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
             EventManager.Instance.PostEvent(EventType.eUpdateItem, null);
 
@@ -94,14 +111,14 @@
                     Console.Write($"-{count} [-] ");
 
                 Console.WriteLine($"{item.Name} | " +
-                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK}") : "")} " +
-                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF}") : "")} " +
-                    $"{item.Description} | " );
+                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} |  ") : "")} " +
+                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF} |  ") : "")} " +
+                    $"{item.Description}  | " );
             }
             
         }
 
-        public void ShowShop()
+        public void ShowShop(int mode)
         {
             Console.WriteLine("[아이템 목록]");
 
@@ -111,14 +128,17 @@
             // 1. {아이템 이름}    | {공격력 or 방어력} {추가 스탯}  | {설명} | {가격} G
             {
                 count++;
+                if (mode == 1) // mode가 1이면 아이템 옆에 숫자 뜨게 하기
+                    Console.Write($"-{count} ");
+                
                 Console.Write($"{item.Name} | " +
-                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK}") : "")} " +
-                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF}") : "")} " +
-                    $"{item.Description}");
+                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} |  ") : "")}" +
+                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF} |  ") : "")}" +
+                    $"{item.Description}  | ");
                 if (item.IsSale)
                     Console.WriteLine($"{item.Cost} G");
                 else
-                    Console.WriteLine("구매 완료");
+                    Console.WriteLine("[구매 완료]");
             }
             
         }
@@ -127,19 +147,30 @@
         {
             // 아이템 구매 관련 메서드
             Item item = shopDisplay[itemNum - 1];
-            if (item.Cost > myWallet)
+            if (item.IsSale == false)
             {
-                Console.WriteLine("소지금이 부족합니다.");
+                Console.WriteLine("이미 구매한 아이템입니다.");
+                Console.ReadLine();
                 return;
             }
             else
             {
-                item.IsSale = false;
-                inventory.Add(item);
-                Console.WriteLine($"{item.Name}을 구매했습니다.");
+                if (item.Cost > myWallet)
+                {
+                    Console.WriteLine("소지금이 부족합니다.");
+                    Console.ReadLine();
+                    return;
+                }
+                else
+                {
+                    item.IsSale = false;
+                    inventory.Add(item);
+                    Console.WriteLine($"{item.Name}을 구매했습니다.");
+                    Console.ReadLine();
 
-                // EventManager로 골드 변경 이벤트 전달
-                EventManager.Instance.PostEvent(EventType.eUpdateGold, -item.Cost);
+                    // EventManager로 골드 변경 이벤트 전달
+                    EventManager.Instance.PostEvent(EventType.eUpdateGold, -item.Cost);
+                }
             }
         }
 
@@ -249,7 +280,7 @@
         public bool IsSale { get; set; } // 상점에서 판매 가능한 지의 여부
         public bool IsOnField { get; private set; } // 던전에서 얻을 수 있는 지의 여부
 
-        public Item(string name, int type, int atk, int def, string description, int reqGold, bool isSale, bool isOnField)
+        public Item(string name, int type, int atk, int def, string description, int cost, bool isSale, bool isOnField)
         // Item 클래스 생성자
         {
             Name = name;
@@ -257,7 +288,7 @@
             ATK = atk;
             DEF = def;
             Description = description;
-            Cost = reqGold;
+            Cost = cost;
             IsSale = isSale;
             IsOnField = isOnField;
         }
