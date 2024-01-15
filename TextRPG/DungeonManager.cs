@@ -259,6 +259,8 @@ namespace TextRPG
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
                 player.ShowResult(monsterManager.GetExp());
+                //monsterManager.GetReward(); 
+                GetReward();
             }
             else
             {
@@ -274,6 +276,12 @@ namespace TextRPG
                 Console.Clear();
                 return;
             }
+        }
+
+        public void GetReward()
+        {
+
+            monsterManager.GetReward();
         }
 
         public void OnEvent(EventType type, object data)

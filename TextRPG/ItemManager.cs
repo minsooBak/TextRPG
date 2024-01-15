@@ -202,6 +202,11 @@ namespace TextRPG
 
         }
 
+        public Item[] GetItems()
+        {
+            return items;
+        }
+
         public void GetFieldItem(object? data = null)
         {
             // 필드에 드랍된 아이템 줍줍
@@ -270,7 +275,14 @@ namespace TextRPG
 
                 // case가 eGetItem인 경우 필드 아이템 획득
                 case EventType.eGetFieldItem:
-                    GetFieldItem(data);
+                    foreach (var item in items)
+                    {
+                        if (item.Name.Equals(data.ToString()))
+                        {
+                            GetFieldItem(item);
+                            break;
+                        }
+                    }
                     break;
             }
         }

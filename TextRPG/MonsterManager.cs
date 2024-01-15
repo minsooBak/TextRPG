@@ -1,4 +1,6 @@
-﻿namespace TextRPG
+﻿using System.Threading;
+
+namespace TextRPG
 {
     public enum MonsterType
     {
@@ -24,6 +26,7 @@
         static int maxMonsterType = 3;
         // 생성 가능한 몬스터 타입 배열
         public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
+        public Item[] monsterItem = [];
 
         List<Monster> dungeonMonsters = [];
 
@@ -70,13 +73,54 @@
         public int GetExp()
         {
             int exp = 0;
+
             foreach (Monster monster in dungeonMonsters)
             {
                 // 해당 몬스터 리스트의 총 경험치량 저장
                 exp += monster.Level;
             }
-
             return exp;
+        }
+
+        public void GetReward()
+        {
+            Random rnd = new Random();
+            int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷
+            int gold = 0;
+            int i = 0;
+
+            foreach (Monster monster in dungeonMonsters)
+            {
+                if (rnd.Next(0, 101) <= 50)
+                {
+                    EventManager.Instance.PostEvent(EventType.eGetFieldItem, monster.item);
+                    
+                    if(monster.Level == 2)
+                    {
+                        itemsCounter[0]++;
+                    }
+                    else if (monster.Level == 3)
+                    {
+                        itemsCounter[1]++;
+                    }
+                    else
+                    {
+                        itemsCounter[2]++;
+                    }
+                }
+                gold += monster.Gold;
+            }
+
+            Console.WriteLine("[획득 아이템]");
+            Console.WriteLine($"{gold} Gold");
+            
+            for(i = 0; i < itemsCounter.Length; i++)
+            {
+                if (itemsCounter[i] > 0)
+                {
+                    Console.WriteLine($"{dungeonMonsters[i].item} - {itemsCounter[i]}");
+                }
+            }
         }
 
         public void ClearMonsterList()
@@ -104,6 +148,9 @@
         public int Level => myState.Level;
 
         public string Class => myState.Class;
+
+        public string item { get; }
+        public int Gold => myState.Gold;
 
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
         public bool IsDead => myState.Health <= 0;
@@ -209,6 +256,8 @@
                 myState.Health = 15;
                 myState.MP = 100;
                 myState.ATK = 5;
+                myState.Gold = 100;
+                item = "낡은 대검";
             }
             else if (monsterType == MonsterType.Monster2)
             {
@@ -216,8 +265,9 @@
                 myState.Level = 3;
                 myState.Health = 10;
                 myState.MP = 100;
-
-                myState.ATK = 9;     
+                myState.ATK = 9;
+                myState.Gold = 200;
+                item = "초보자의 갑옷";
             }
             else if (monsterType == MonsterType.Monster3)
             {
@@ -226,6 +276,8 @@
                 myState.Health = 25;
                 myState.MP = 100;
                 myState.ATK = 8;
+                myState.Gold = 500;
+                item = "가시 갑옷";
             }
 
             myState.Name = myState.Class;
