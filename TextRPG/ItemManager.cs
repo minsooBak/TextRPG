@@ -81,7 +81,7 @@ namespace TextRPG
                 if (item.IsSale)
                     shopDisplay.Add(item);
             }
-            
+
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
             EventManager.Instance.PostEvent(EventType.eUpdateItem, null);
 
@@ -126,13 +126,13 @@ namespace TextRPG
             {
                 count++;
                 Console.Write($"{item.Name} | " +
-                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK}") : "")} " +
-                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF}") : "")} " +
-                    $"{item.Description}");
+                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} | ") : "")}" +
+                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF} | ") : "")}" +
+                    $"{item.Description} | ");
                 if (item.IsSale)
                     Console.WriteLine($"{item.Cost} G");
                 else
-                    Console.WriteLine("구매 완료");
+                    Console.WriteLine("[구매 완료]");
             }
             
         }

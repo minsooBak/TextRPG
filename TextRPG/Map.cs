@@ -64,23 +64,23 @@ namespace TextRPG
         {
             Console.Clear();
 
-            Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다.");
-            Utilities.AddLine("이제 전투를 시작할 수 있습니다.");
-            Utilities.AddLine("");
+            Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+            Console.WriteLine("이제 전투를 시작할 수 있습니다.");
+            Console.WriteLine("");
 
-            Utilities.AddLine("1. 상태 보기");
-            Utilities.AddLine("2. 전투 시작");
-            Utilities.AddLine("3. 인벤토리 보기");
-            Utilities.AddLine("4. 상점 보기");
-            Utilities.AddLine("");
-            Utilities.AddLine("0. 종료");
+            Console.WriteLine("1. 상태 보기");
+            Console.WriteLine("2. 전투 시작");
+            Console.WriteLine("3. 인벤토리 보기");
+            Console.WriteLine("4. 상점 보기");
+            Console.WriteLine("");
+            Console.WriteLine("0. 종료");
 
             //스킬 출력 예제
             //skillManager.ShowSkillList("전사");
             //skillManager.ShowSkillList("공허충");
 
-            Utilities.AddLine("원하시는 행동을 입력해주세요.");
-            Utilities.Add(">>");
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">>");
             switch ((GameState)Utilities.GetInputKey(0, 4))
             {
                 case GameState.PlayerInfo: // 상태 보기
@@ -122,24 +122,24 @@ namespace TextRPG
             Console.Clear();
 
             Utilities.TextColor("상태 보기", ConsoleColor.Yellow);
-            Utilities.AddLine("캐릭터의 정보가 표시됩니다.");
-            Utilities.AddLine("");
+            Console.WriteLine("캐릭터의 정보가 표시됩니다.");
+            Console.WriteLine("");
 
-            Utilities.AddLine($"Lv. {player.Level}");
-            Utilities.AddLine($"{player.Name} (player.Class추가?)");
-            Utilities.AddLine($"공격력 : {player.ATK}");
-            Utilities.AddLine($"방어력 : {player.DEF}");
-            Utilities.AddLine($"체력 : {player.Health}");
-            Utilities.AddLine($"마나 : {player.MP}");
-            Utilities.AddLine($"소지금 : {player.Gold}");
-            Utilities.AddLine("");
+            Console.WriteLine($"Lv. {player.Level}");
+            Console.WriteLine($"{player.Name} (player.Class추가?)");
+            Console.WriteLine($"공격력 : {player.ATK}");
+            Console.WriteLine($"방어력 : {player.DEF}");
+            Console.WriteLine($"체력 : {player.Health}");
+            Console.WriteLine($"마나 : {player.MP}");
+            Console.WriteLine($"소지금 : {player.Gold}");
+            Console.WriteLine("");
 
-            Utilities.AddLine("0. 나가기");
-            Utilities.AddLine("");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("");
             
 
-            Utilities.AddLine("원하시는 행동을 입력해주세요.");
-            Utilities.Add(">>");
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">>");
             switch ((GameState)Utilities.GetInputKey(0, 0))
             {
                 case GameState.NONE:
@@ -154,18 +154,18 @@ namespace TextRPG
             Console.Clear();
 
             Utilities.TextColor("인벤토리", ConsoleColor.Yellow);
-            Utilities.AddLine("보유 중인 아이템을 관리할 수 있습니다.");
-            Utilities.AddLine("");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine("");
 
             itemManager.ShowInventory();
-            Utilities.AddLine("");
+            Console.WriteLine("");
 
-            Utilities.AddLine("1. 장착 관리");
-            Utilities.AddLine("0. 나가기");
-            Utilities.AddLine("");
+            Console.WriteLine("1. 장착 관리");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("");
 
-            Utilities.AddLine("원하시는 행동을 입력해주세요.");
-            Utilities.Add(">>");
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">>");
             switch ((GameState)Utilities.GetInputKey(0, 1))
             {
                 case GameState.NONE:
@@ -180,21 +180,22 @@ namespace TextRPG
             Console.Clear();
 
             Utilities.TextColor("상점", ConsoleColor.Yellow);
-            Utilities.AddLine("필요한 아이템을 얻을 수 있는 상점입니다.");
-            Utilities.AddLine("");
+            Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+            Console.WriteLine("");
 
-            Utilities.AddLine("[보유 골드]");
-            Utilities.AddLine($"{player.Gold} G");
-            Utilities.AddLine("");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.Gold} G");
+            Console.WriteLine("");
 
             itemManager.ShowShop();
+            Console.WriteLine("");
 
-            Utilities.AddLine("1. 아이템 구매");
-            Utilities.AddLine("0. 나가기");
-            Utilities.AddLine("");
+            Console.WriteLine("1. 아이템 구매");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("");
 
-            Utilities.AddLine("원하시는 행동을 입력해주세요.");
-            Utilities.Add(">>");
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">>");
             switch ((GameState)Utilities.GetInputKey(0, 1))
             {
                 case GameState.NONE:

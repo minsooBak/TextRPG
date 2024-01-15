@@ -94,14 +94,14 @@ namespace TextRPG
                     {
                         //Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
+                        Console.WriteLine(">>");
                     }
                 }
                 else
                 {
                     //Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine("===================================================");
+                    Console.WriteLine(">>");
                 }
             }
         }
@@ -125,14 +125,14 @@ namespace TextRPG
                     {
                         Console.Clear();
                         Console.WriteLine("잘못된 입력입니다!");
-                        Console.WriteLine("===================================================");
+                        Console.WriteLine(">>");
                     }
                 }
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("잘못된 입력입니다!");
-                    Console.WriteLine("===================================================");
+                    Console.WriteLine(">>");
                 }
             }
         }
@@ -163,22 +163,20 @@ namespace TextRPG
                     }
                 case LoadType.ItemData:
                     {
-                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\Item_Data.json";
+                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\I_Data.json";
                         if (File.Exists(path) == false)
                         {
-                            Console.WriteLine("LoadType.ItemData - 파일이 없습니다.");
                             return null;
                         }
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
-                            Console.WriteLine("LoadType.ItemData - 파일 불러왔습니다.");
                             JsonTextReader reader = new JsonTextReader(file);
 
                             JObject json = (JObject)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            return JsonConvert.DeserializeObject<ItemData>(str);
+                            // return JsonConvert.DeserializeObject<ItemData>(str);
 
                         }
                         break;
