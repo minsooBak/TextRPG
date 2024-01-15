@@ -11,6 +11,7 @@ namespace TextRPG
         private Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests = new List<Quest> { }; //화면에 노출되는 퀘스트 목록
         private static int clearCount = 0; //퀘스트 클리어 횟수
+        private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx
         public QuestManager()
         {
             EventManager.Instance.AddListener(EventType.Quest, this);
@@ -111,7 +112,7 @@ namespace TextRPG
                     case 0:
                         break;
                     case 1:
-                        quests[idx].isActive = true;
+                        quests[idx].isActive = true; //수락을 누르면 진행중 상태
                         break;
                     case 2:
                         break;
@@ -128,14 +129,14 @@ namespace TextRPG
                 input = Utilities.GetInputKey(1, 2);
                 switch (input)
                 {
-                    case 1:
+                    case 1: //보상 받기
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, quests[idx].Exp)); //플레이어 경험치 추가
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 골드 추가
                         //아이템 얻는 이벤트 추가해야 함.
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
-                        clearCount++;
+                        clearCount++; //클리어 횟수 증가
                         break;
-                    case 2:
+                    case 2: // 돌아가기
                         break;
                 }
             }
@@ -144,13 +145,13 @@ namespace TextRPG
         {
 
         }
-        public void AddQuest()
+        public void AddQuest() //퀘스트 추가
         {
-            for (int i = quests.Count; i < 3;) //2
+            for (int i = quests.Count; i < 3;) // 0 1 2 현재 퀘스트 개수가 3개 미만이고 
             {
-                if (clearCount + 2 < questMenu.Length - 1)//퀘스트 3개 미만이고 다음 퀘스트가 있다면 //3 <  3
+                if (clearCount + 2 < questMenu.Length)//다음 퀘스트가 있다면 // 0  1 2 <  3
                 {
-                    quests.Add(questMenu[clearCount]);//3번 부터 추가
+                    quests.Add(questMenu[idxCount++]);//추가한다.
                 }
                 else
                 {
@@ -167,7 +168,7 @@ namespace TextRPG
                 {
                     case eQuestType.Item:
                         {
-
+                            
                             break;
                         }
                     case eQuestType.Dungeon:
@@ -175,9 +176,9 @@ namespace TextRPG
 
                             break;
                         }
-                    case eQuestType.Monster:
+                    case eQuestType.Monster: //몬스터가 죽은 수만큼 Quest의 currnt를 증가시킨다.
                         {
-
+                            Int32.Parse(a.Value);
                             break;
                         }
                     case eQuestType.Stats:
@@ -219,5 +220,6 @@ namespace TextRPG
             Max = max;
             Condition = condition;
         }
+
     }
 }
