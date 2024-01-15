@@ -14,7 +14,15 @@
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
+            
+            for(int i = 0; i < 3; i++)
+            {
+                Monster monster = new Monster((MonsterType)(i + 1));
+                arrayOfMonsters[i] = monster;
+            }
         }
+
+        Monster[] arrayOfMonsters = new Monster[3];
 
         //추가로 구현하면 좋은것은
         //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
@@ -47,17 +55,11 @@
             for (int i = 0; i < monsterCount; i++)
             {
                 int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
-                dungeonMonsters.Add(CreateMonster(++randomCount));// 1 2 3 던전 몬스터 리스트에 몬스터 추가
+                dungeonMonsters.Add(arrayOfMonsters[randomCount]);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
             EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
             dungeonMonsters.Clear();
-        }
-
-        public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
-        {
-            Monster newMonster = new Monster((MonsterType)random);
-            return newMonster;
         }
 
         public void OnEvent(EventType type, object data)
