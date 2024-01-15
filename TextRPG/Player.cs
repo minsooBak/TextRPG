@@ -174,6 +174,12 @@
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nMP {PrevMp} -> {myState.MP}\n");
             Console.WriteLine($"EXP {PrevExp} -> {myState.EXP}\n");
 
+            //if (myState.EXP / 100 != 0)  //경험치가 100을 넘는다면
+            //{
+            //    myState.Level += (myState.EXP / 100); //레벨 올리고
+            //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
+            //}
+
             PrevHealth = 0;
             PrevMp = 0;
 

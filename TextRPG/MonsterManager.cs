@@ -78,6 +78,7 @@ namespace TextRPG
             {
                 // 해당 몬스터 리스트의 총 경험치량 저장
                 exp += monster.Level;
+                //exp += monster.Exp; 몬스터의 경험치를 더하는 것이 괜찮을 것 같아서
             }
             return exp;
         }
