@@ -69,7 +69,7 @@
             if(type == EventType.Player)
             {
                 
-                var a = (KeyValuePair<ePlayerType, object>)data;
+                var a = (KeyValuePair<ePlayerType, int>)data;
 
                 switch(a.Key)
                 {
@@ -88,14 +88,14 @@
                             myState.Gold = Math.Clamp((int)a.Value, 0, 100);
                             break;
                         }
-                    case ePlayerType.Stats:
-                        {
-                            var num = (int[])a.Value;
-                            myState.ATK = num[0];
-                            myState.DEF = num[1];
-                            Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
-                            break;
-                        }
+                    //case ePlayerType.Stats:
+                    //    {
+                    //        var num = (int[])a.Value;
+                    //        myState.ATK = num[0];
+                    //        myState.DEF = num[1];
+                    //        Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
+                    //        break;
+                    //    }
                 }
             }
         }

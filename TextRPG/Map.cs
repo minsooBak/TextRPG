@@ -1,4 +1,5 @@
-﻿namespace TextRPG
+﻿
+namespace TextRPG
 {
     //맵의 이동 처리
     internal class Map
@@ -28,7 +29,7 @@
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
             //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[]{300,200}));
             dungeonManager = new DungeonManager(player);
-            questManager.PrintAll();
+            //questManager.ShowQuest();
             Console.ReadKey();
             while (!isGameEnd)
             {
@@ -43,8 +44,11 @@
                     case GameState.Inventory:
                         ShowInventory();
                         break;
+                    case GameState.Shop:
+                        ShowShop();
+                        break;
                     case GameState.Quest:
-                        
+                        ShowQuest();
                         break;
                     default:
                         StartGame(); 
@@ -53,7 +57,31 @@
             }
             //저장처리
         }
-        
+
+        private void ShowQuest()
+        {
+            Console.Clear();
+            Utilities.TextColor("Quest!!\n", ConsoleColor.DarkYellow);
+            questManager.ShowQuests();
+
+            Utilities.AddLine("원하시는 퀘스트를 선택해주세요.");
+            Utilities.Add(">>");
+            int QuestCount = questManager.QuestCount; //퀘스트 목록 노출
+            switch (Utilities.GetInputKey(1, QuestCount))
+            {
+                case 0:
+                    questManager.ShowQuest(0);
+                    break;
+                case 1:
+                    questManager.ShowQuest(1);
+                    break;
+                case 2:
+                    questManager.ShowQuest(2);
+                    break;
+            }
+            gameState = GameState.NONE;
+        }
+
         public void StartGame()
         {
             Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다.");
@@ -63,7 +91,8 @@
             Utilities.AddLine("1. 상태 보기");
             Utilities.AddLine("2. 전투 시작");
             Utilities.AddLine("3. 인벤토리 보기");
-            //Utilities.AddLine("4. 전투 시작");
+            Utilities.AddLine("4. 상점");
+            Utilities.AddLine("5. 퀘스트 보기");
             Utilities.AddLine("");
             Utilities.AddLine("0. 종료");
 
@@ -73,7 +102,7 @@
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 4))
+            switch ((GameState)Utilities.GetInputKey(1, 5))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
@@ -83,6 +112,9 @@
                     break;
                 case GameState.Inventory:
                     gameState = GameState.Inventory;
+                    break;
+                case GameState.Shop:
+                    gameState = GameState.Shop;
                     break;
                 case GameState.Quest:
                     gameState = GameState.Quest;
