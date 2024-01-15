@@ -1,45 +1,179 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
-    internal class Player : IListener
+    //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
+    internal class Player : IListener, IObject
     {
-        private static Character player;
-        static void GameDataSetting()
+        private ObjectState myState;
+        private int InitATK { get; set; }
+        private int InitDEF { get; set; }
+        private int maxHP;
+        private int maxMP;
+        private int PrevHP { get; set; } // 이전 hp값
+        private int PrevMp { get; set; }
+
+
+        public Player()
         {
-            player = new Character("Chad", "전사", 1, 10, 5, 100, 1500);
+            EventManager.Instance.AddListener(EventType.Player, this);
+            //CreatePlayer
+            CreatePlayer createPlayer = new CreatePlayer();
+            var Name = createPlayer.Create();
+
+            myState.Name = Name.Key;
+            myState.Class = Name.Value;
+
+            myState.HP = 100;
+            myState.MP = 100;
+            myState.Level = 1;
+            myState.EXP = 0;
+            myState.ATK = 100;
+            myState.DEF = 0;
+            myState.Gold = 0;
+            InitATK = myState.ATK;
+            InitDEF = myState.DEF;
+
+            maxHP = myState.HP;
+            maxMP = myState.MP;
         }
+
+        public Player(ObjectState state)
+        {
+            myState.Name = state.Name;
+            myState.Class = state.Class;
+
+            myState.HP = state.HP;
+            myState.MP = state.MP;
+            myState.Level = state.Level;
+            myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
+            myState.DEF = state.DEF;
+            myState.Gold = state.Gold;
+            InitATK = state.ATK;
+            InitDEF = state.DEF;
+        }
+
+        public int HP => myState.HP;
+        public int MP => myState.MP;
+        public int Level => myState.Level;
+        public string Name => myState.Name;
+        public string Class => myState.Class;
+        public int ATK => myState.ATK;
+        public int DEF => myState.DEF;
+        public int Gold => myState.Gold;
+        //<<<<<<< HEAD
+        //        public bool IsDead => myState.Health <= 0;
+        //=======
+        public bool IsDead => myState.HP <= 0;
+        public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
+        public void SetSkill(Skill skill) => myState.Skill = skill;
+
         public void OnEvent(EventType type, object data)
         {
             //이벤트 받아서 switch문으로 구현
-            
-        }
-        public class Character
-        {
-            public string Name { get; }
-            public string Job { get; }
-            public int Level { get; }
-            public int Atk { get; }
-            public int Def { get; }
-            public int Hp { get; }
-            public int Gold { get; }
-
-            public Character(string name, string job, int level, int atk, int def, int hp, int gold)
+            if (type == EventType.Player)
             {
-                Name = name;
-                Job = job;
-                Level = level;
-                Atk = atk;
-                Def = def;
-                Hp = hp;
-                Gold = gold;
+
+                var a = (KeyValuePair<ePlayerType, object>)data;
+
+                switch (a.Key)
+                {
+                    case ePlayerType.HP:
+                        {
+                            myState.HP = Math.Clamp(myState.HP + (int)a.Value, 0, maxHP);
+                            break;
+                        }
+                    case ePlayerType.MP:
+                        {
+                            myState.MP = Math.Clamp((int)a.Value, 0, maxMP);
+                            break;
+                        }
+                    case ePlayerType.Gold:
+                        {
+                            myState.Gold = Math.Clamp((int)a.Value, 0, 100);
+                            break;
+                        }
+                    case ePlayerType.Stats:
+                        {
+                            var num = (int[])a.Value;
+                            myState.ATK = num[0];
+                            myState.DEF = num[1];
+                            break;
+                        }
+                }
+            }
+        }
+
+        public int ShowHealth()
+        {
+            return myState.HP;
+        }
+
+        public void ShowStats()
+        {
+            Console.WriteLine("\n[내 정보]");
+            Console.Write("Lv.");
+            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+            Console.WriteLine($"{myState.Name} ({myState.Class})");
+
+            Console.Write("HP ");
+            Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+            Utilities.TextColorWithNoNewLine($"{maxHP}\n", ConsoleColor.DarkRed);
+
+            Console.Write("MP ");
+            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+            Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
+        }
+
+        public int Attack(AttackType attackType)
+        {
+            if (PrevHP == 0)
+            {
+                PrevHP = myState.HP;
+                PrevMp = myState.MP;
+            }
+
+            int damage = 0;
+            double getDamage;
+            getDamage = myState.ATK / 100.0 * 10;
+            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
+            if (attackType == AttackType.Skill)
+            {
+                damage = myState.Skill.GetATK(damage);
+                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
+            }
+
+            if (attackType == AttackType.Attack)
+                Console.WriteLine($"{myState.Name} 의 공격!");
+            else
+                Console.WriteLine($"{myState.Name} 의 {myState.Skill.Name} 스킬 공격!");
+            return damage;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            Console.WriteLine($"{myState.Name} 을(를) 맞췄습니다. [데미지 : {damage}]\n");
+
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
+            Console.Write($"{myState.HP} ->");
+            myState.HP = Math.Clamp(myState.HP - damage, 0, 100);
+            Console.Write($"{myState.HP}");
+        }
+
+        public void ShowResult()
+        {
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
+
+            Console.WriteLine($"HP {PrevHP} -> {myState.HP}");
+            Console.WriteLine($"MP {PrevMp} -> {myState.MP}\n");
+            PrevHP = 0;
+            PrevMp = 0;
+
+            //죽엇을때 부활 체력 마나
+            if (IsDead)
+            {
+                myState.HP = 60;
+                myState.MP = 60;
             }
         }
     }
