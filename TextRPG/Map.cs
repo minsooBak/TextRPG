@@ -53,6 +53,7 @@ namespace TextRPG
                         ShowShop();
                         break;
                     case GameState.NONE:
+                        itemManager.Mode = 0; // 메인 화면 호출 시 Mode 기본값으로 변경
                         StartGame(); 
                         break;
                 }
@@ -187,21 +188,47 @@ namespace TextRPG
             Console.WriteLine($"{player.Gold} G");
             Console.WriteLine("");
 
-            itemManager.ShowShop();
+            itemManager.ShowShop(itemManager.Mode);
             Console.WriteLine("");
 
-            Console.WriteLine("1. 아이템 구매");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine("");
-
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.Write(">>");
-            switch ((GameState)Utilities.GetInputKey(0, 1))
+            if (itemManager.Mode == 0)
             {
-                case GameState.NONE:
-                    gameState = GameState.NONE; // StartGame()으로 돌아가기
-                    StartGame();
-                    break;
+                Console.WriteLine("1. 아이템 구매");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("");
+
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">>");
+                switch (Utilities.GetInputKey(0, 1))
+                {
+                    case 0:
+                        gameState = GameState.NONE; // StartGame()으로 돌아가기
+                        StartGame();
+                        break;
+                    case 1:
+                        itemManager.Mode = 1;
+                        ShowShop(); // Mode를 1로 바꾸고 다시 ShowShop() 호출
+                        break;
+                }
+            } // Mode가 0일 때(기본 상태)
+            else if (itemManager.Mode == 1) // Mode가 1일 때(아이템 구매 상태)
+            {
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("");
+
+                Console.WriteLine("구매할 아이템 번호를 입력해주세요.");
+                Console.Write(">>");
+                int itemNum = Utilities.GetInputKey(0, itemManager.GetShopDisplaySize);
+                switch (itemNum)
+                {
+                    case 0:
+                        gameState = GameState.NONE; // StartGame()으로 돌아가기
+                        StartGame();
+                        break;
+                    default:
+                        itemManager.BuyItem(itemNum, player.Gold);
+                        break;
+                }
             }
         }
     }

@@ -38,7 +38,7 @@ namespace TextRPG
             AddDEF = 0;
             myState.ATK = 100;
             myState.DEF = 0;
-            myState.Gold = 0;
+            myState.Gold = 1000;
             //InitATK = myState.ATK;
             //InitDEF = myState.DEF;
         }
