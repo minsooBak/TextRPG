@@ -141,10 +141,6 @@ namespace TextRPG
                 }
             }
         }
-        public void SelectQuest() 
-        {
-
-        }
         public void AddQuest() //퀘스트 추가
         {
             for (int i = quests.Count; i < 3;) // 0 1 2 현재 퀘스트 개수가 3개 미만이고 
@@ -163,8 +159,8 @@ namespace TextRPG
         {
             if (type == EventType.Quest)
             {
-                var a = data as KeyValuePair<eQuestType, string>?;
-                switch (a.Value.Key)
+                var a = data as KeyValuePair<eQuestType, string>?; //키 벨류 데이터로 변환이 가능하면 하고
+                switch (a.Value.Key) //a의 속성 value로 <키,벨류> 쌍을 가르키고 그 중 key로 접근
                 {
                     case eQuestType.Item:
                         {
@@ -178,7 +174,17 @@ namespace TextRPG
                         }
                     case eQuestType.Monster: //몬스터가 죽은 수만큼 Quest의 currnt를 증가시킨다.
                         {
-                            Int32.Parse(a.Value);
+                            foreach (var quest in quests)
+                            {
+                                if (quest.Target == a.Value.Value && quest.isActive) //이름이 같은 몬스터 이고 퀘스트가 활성화 되어있을 때
+                                {
+                                    quest.current++;
+                                    if (quest.current >= quest.Max) //최고치에 도달하면 
+                                    {
+                                        quest.isClear = true; //퀘스트 클리어
+                                    }
+                                }
+                            }
                             break;
                         }
                     case eQuestType.Stats:
@@ -197,21 +203,21 @@ namespace TextRPG
     }
     public class Quest
     {
-        public readonly int Idx;
+        public readonly string Target; //퀘스트 목적 대상
         public readonly string Name; //퀘스트 이름
-        public readonly string Explanation; //퀘스트 설명
+        public readonly string Explanation; //퀘스트 전체 설명
         public readonly int Gold; // 보상 골드
         public readonly string ItemName; // 보상 아이템 이름
         public readonly int Exp;//보상 경험치
-        public bool isClear = true;
-        public bool isActive = true; //수락했을 시
-        public int Max; //최대치
-        public int current = 0; //현재 달성도
-        public string Condition; //퀘스트 조건
+        public bool isClear = false; //클리어 했는지 여부
+        public bool isActive = false; //수락했을 시
+        public int Max; //조건 최대치
+        public int current = 0; //현재 조건 달성도
+        public string Condition; //퀘스트 조건 설명
 
-        public Quest(int idx, string name, string explanation, int gold, string itemName, int exp, int max, string condition)
+        public Quest(string target, string name, string explanation, int gold, string itemName, int exp, int max, string condition)
         {
-            Idx = idx;
+            Target = target;
             Name = name;
             Explanation = explanation;
             Gold = gold;

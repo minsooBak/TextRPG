@@ -273,8 +273,9 @@ namespace TextRPG
             if (deadCounter >= monster)
             {
                 Console.WriteLine("Victory\n");
-
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
+                for(int i = 0; i < monster; i++)
+                    EventManager.Instance.PostEvent(EventType.Quest,Utilities.EventPair(eQuestType.Monster, monsters[i].Class));
                 player.ShowResult();
             }
             else
