@@ -78,19 +78,9 @@
                     var c = a.Value;
                     switch (c.Key)
                     {
-                        case ePlayerType.HP:
-                            {
-                                myState.Health = Math.Clamp(myState.Health + c.Value, 0, maxHealth);
-                                break;
-                            }
-                        case ePlayerType.MP:
-                            {
-                                myState.Health = Math.Clamp(c.Value, 0, maxMP);
-                                break;
-                            }
                         case ePlayerType.Gold: //골드 추가
                             {
-                                myState.Gold += Math.Clamp(c.Value, 0, 100);
+                                myState.Gold = Math.Clamp(myState.Gold + c.Value, 0, 999999999);
                                 break;
                             }
                         case ePlayerType.Exp: //경험치 추가
@@ -115,11 +105,6 @@
                     }
                 }
             }
-        }
-
-        public int ShowHealth()
-        {
-            return myState.Health;
         }
 
         public void ShowStats()
