@@ -41,6 +41,8 @@ enum eQuestType//퀘스트이벤트의 조건
 
 enum ePlayerType//플레이어이벤트
 {
+    HP,
+    MP,
     Gold,
     ATK,
     DEF

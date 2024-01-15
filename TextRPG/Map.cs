@@ -67,8 +67,11 @@
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 4))
+            switch ((GameState)Utilities.GetInputKey(0, 3))
             {
+                case 0:
+                    Environment.Exit(0);
+                    break;
                 case GameState.PlayerInfo: // 상태 보기
                     Console.Clear();
                     gameState = GameState.PlayerInfo;
