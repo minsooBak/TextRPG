@@ -44,7 +44,8 @@ enum ePlayerType//플레이어이벤트
     HP,
     MP,
     Gold,
-    Stats
+    ATK,
+    DEF
 }
 
 public interface IListener
