@@ -49,6 +49,7 @@
         
         public void StartGame()
         {
+            Console.Clear();
             Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다.");
             Utilities.AddLine("이제 전투를 시작할 수 있습니다.");
             Utilities.AddLine("");
@@ -69,15 +70,19 @@
             switch ((GameState)Utilities.GetInputKey(1, 4))
             {
                 case GameState.PlayerInfo: // 상태 보기
+                    Console.Clear();
                     gameState = GameState.PlayerInfo;
                     break;
                 case GameState.StartBattle: // 전투 시작
+                    Console.Clear();
                     gameState = GameState.StartBattle;
                     break;
                 case GameState.Inventory:
+                    Console.Clear();
                     gameState = GameState.Inventory;
                     break;
                 case GameState.Quest:
+                    Console.Clear();
                     gameState = GameState.Quest;
                     break;
             }
@@ -106,7 +111,7 @@
             Utilities.AddLine("");
 
             Utilities.AddLine($"Lv. {player.Level}");
-            Utilities.AddLine($"{player.Name} (player.Class추가?)");
+            Utilities.AddLine($"{player.Name} ");
             Utilities.AddLine($"공격력 : {player.ATK}");
             Utilities.AddLine($"방어력 : {player.DEF}");
             Utilities.AddLine($"체력 : {player.HP}");
@@ -120,9 +125,10 @@
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 1))
+            switch ((GameState)Utilities.GetInputKey(0, 0))
             {
                 default:
+                    Console.Clear();
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
                     break;
             }
@@ -143,7 +149,7 @@
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 2))
+            switch ((GameState)Utilities.GetInputKey(0, 1))
             {
                 default:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
