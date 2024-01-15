@@ -94,7 +94,7 @@ namespace TextRPG
 
         }
 
-        public void ShowInventory()
+        public void ShowInventory(int mode = 0)
         // 인벤토리 보기 관련 메서드
         {
             Console.WriteLine("[아이템 목록]");
@@ -105,20 +105,25 @@ namespace TextRPG
             // 1. [E] {아이템 이름}    | {공격력 or 방어력} {추가 스탯}  | {설명}          |
             {
                 count++;
+                Console.Write("-");
+                if (mode >= 1)
+                {
                 if (item.IsEquipped)
-                    Console.Write($"-{count} [E] ");
+                    Console.Write($"{count} [E] ");
                 else
-                    Console.Write($"-{count} [-] ");
-
+                    Console.Write($"{count} [-] ");
+                }
                 Console.WriteLine($"{item.Name} | " +
-                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} |  ") : "")} " +
-                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF} |  ") : "")} " +
-                    $"{item.Description}  | " );
+                    $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} | ") : "")} " +
+                    $"{((item.DEF > 0) ? ("방어력" + $" +{item.DEF} | ") : "")} " +
+                    $"{item.Description}  | " +
+                    // mode가 2이면 아이템 옆에 정가 뜨게 하기
+                    $"{((mode == 2) ? $"정가: {item.Cost} G" : "" )}");
             }
             
         }
 
-        public void ShowShop(int mode)
+        public void ShowShop(int mode = 0)
         {
             Console.WriteLine("[아이템 목록]");
 
@@ -128,8 +133,9 @@ namespace TextRPG
             // 1. {아이템 이름}    | {공격력 or 방어력} {추가 스탯}  | {설명} | {가격} G
             {
                 count++;
+                Console.Write("-");
                 if (mode == 1) // mode가 1이면 아이템 옆에 숫자 뜨게 하기
-                    Console.Write($"-{count} ");
+                    Console.Write($"[{count}] ");
                 
                 Console.Write($"{item.Name} | " +
                     $"{((item.ATK > 0) ? ("공격력" + $" +{item.ATK} |  ") : "")}" +
@@ -179,34 +185,21 @@ namespace TextRPG
             // 아이템 판매 관련 메서드
             Item item = inventory[itemNum - 1];
             item.IsSale = true;
-            inventory.Remove(item);
-            Console.WriteLine($"{item.Name}을 판매했습니다.");
+            if (item.IsEquipped) // 장비 중인 아이템을 판매하는 경우
+            {
+                item.IsEquipped = false;
+                // EventManager로 스탯 변경 이벤트 전달
+                EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
+            }
 
             // EventManager로 골드 변경 이벤트 전달
             int resultGold = (int) (item.Cost * 0.85);
             EventManager.Instance.PostEvent(EventType.eUpdateGold, resultGold);
-        }
 
-        public void OnEquipItem(int itemNum)
-        {
-            // 장비 착용 관련 메서드
-            Item item = inventory[itemNum - 1];
-            item.IsEquipped = true;
-            Console.WriteLine($"{item.Name}을 착용했습니다.");
+            inventory.Remove(item);
+            Console.WriteLine($"{item.Name}을 판매했습니다. (판매 금액: {resultGold} G)");
+            Console.ReadLine();
 
-            // EventManager로 스탯 변경 이벤트 전달
-            EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
-        }
-
-        public void OffEquipItem(int itemNum)
-        {
-            // 장비 해제 관련 메서드
-            Item item = inventory[itemNum - 1];
-            item.IsEquipped = false;
-            Console.WriteLine($"{item.Name}을 해제했습니다.");
-
-            // EventManager로 스탯 변경 이벤트 전달
-            EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
         }
 
         public void GetFieldItem(object? data = null)
@@ -239,6 +232,24 @@ namespace TextRPG
                 // EventManager로 스탯 변경 이벤트 전달
                 EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
             }
+        }
+        public void EquipItem(int itemNum)
+        {
+            Item item = inventory[itemNum - 1];
+            if (item.IsEquipped)
+            {
+                item.IsEquipped = false;
+                Console.WriteLine($"{item.Name}을 해제했습니다.");
+                Console.ReadLine();
+            }
+            else
+            {
+                item.IsEquipped = true;
+                Console.WriteLine($"{item.Name}을 착용했습니다.");
+                Console.ReadLine();
+            }
+            // EventManager로 스탯 변경 이벤트 전달
+            EventManager.Instance.PostEvent(EventType.eUpdateStat, item);
         }
 
         public void OnEvent(EventType type, object data)

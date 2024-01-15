@@ -153,21 +153,46 @@
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine("");
 
-            itemManager.ShowInventory();
+            itemManager.ShowInventory(itemManager.Mode);
             Console.WriteLine("");
 
-            Console.WriteLine("1. 장착 관리");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine("");
-
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.Write(">>");
-            switch ((GameState)Utilities.GetInputKey(0, 1))
+            if (itemManager.Mode == 0) // Mode가 0일 때(기본 상태)
             {
-                case GameState.NONE:
-                    gameState = GameState.NONE; // StartGame()으로 돌아가기
-                    StartGame();
-                    break;
+                Console.WriteLine("1. 장착 관리");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("");
+
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">>");
+                switch (Utilities.GetInputKey(0, 1))
+                {
+                    case 0:
+                        gameState = GameState.NONE; // StartGame()으로 돌아가기
+                        break;
+                    case 1:
+                        itemManager.Mode = 1;
+                        gameState = GameState.Inventory; // Mode를 1로 바꾸고 다시 ShowInventory() 호출
+                        break;
+                }
+            }
+            else if (itemManager.Mode == 1) // Mode가 1일 때(장착 관리 상태)
+            {
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("");
+
+                Console.WriteLine("장착할 아이템 번호를 입력해주세요.");
+                Console.Write(">>");
+                int itemNum = Utilities.GetInputKey(0, itemManager.GetInventorySize);
+                switch (itemNum)
+                {
+                    case 0:
+                        itemManager.Mode = 0;
+                        gameState = GameState.NONE; // StartGame()으로 돌아가기
+                        break;
+                    default:
+                        itemManager.EquipItem(itemNum);
+                        break;
+                }
             }
         }
 
@@ -183,31 +208,38 @@
             Console.WriteLine($"{player.Gold} G");
             Console.WriteLine("");
 
-            itemManager.ShowShop(itemManager.Mode);
-            Console.WriteLine("");
-
             if (itemManager.Mode == 0) // Mode가 0일 때(기본 상태)
             {
+                itemManager.ShowShop(itemManager.Mode);
+                Console.WriteLine("");
+
                 Console.WriteLine("1. 아이템 구매");
+                Console.WriteLine("2. 아이템 판매");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine("");
 
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
-                switch (Utilities.GetInputKey(0, 1))
+                switch (Utilities.GetInputKey(0, 2))
                 {
                     case 0:
                         gameState = GameState.NONE; // StartGame()으로 돌아가기
-                        StartGame();
                         break;
                     case 1:
                         itemManager.Mode = 1;
-                        ShowShop(); // Mode를 1로 바꾸고 다시 ShowShop() 호출
+                        gameState = GameState.Shop; // Mode를 1로 바꾸고 다시 ShowShop() 호출
+                        break;
+                    case 2:
+                        itemManager.Mode = 2;
+                        gameState = GameState.Shop;
                         break;
                 }
             }
             else if (itemManager.Mode == 1) // Mode가 1일 때(아이템 구매 상태)
             {
+                itemManager.ShowShop(itemManager.Mode);
+                Console.WriteLine("");
+
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine("");
 
@@ -217,11 +249,33 @@
                 switch (itemNum)
                 {
                     case 0:
-                        gameState = GameState.NONE; // StartGame()으로 돌아가기
-                        StartGame();
+                        itemManager.Mode = 0;
+                        gameState = GameState.Shop; // ShowShop()-Mode0 으로 돌아가기
                         break;
                     default:
                         itemManager.BuyItem(itemNum, player.Gold);
+                        break;
+                }
+            }
+            else if (itemManager.Mode == 2) // Mode가 2일 때(아이템 판매 상태)
+            {
+                itemManager.ShowInventory(itemManager.Mode);
+                Console.WriteLine("");
+
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("");
+
+                Console.WriteLine("판매할 아이템 번호를 입력해주세요. (정가의 85%를 지급 받습니다.)");
+                Console.Write(">>");
+                int itemNum = Utilities.GetInputKey(0, itemManager.GetInventorySize);
+                switch (itemNum)
+                {
+                    case 0:
+                        itemManager.Mode = 0;
+                        gameState = GameState.Shop; // ShowShop()-Mode0 으로 돌아가기
+                        break;
+                    default:
+                        itemManager.SellItem(itemNum, player.Gold);
                         break;
                 }
             }
