@@ -206,11 +206,6 @@ namespace TextRPG
             return items;
         }
 
-        public Item[] GetItems()
-        {
-            return items;
-        }
-
         public void GetFieldItem(Item? data = null)
         {
             // 필드에 드랍된 아이템 줍줍
@@ -276,8 +271,10 @@ namespace TextRPG
                         itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
                         itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
 
-                        Utilities.SaveFile(SaveType.ItemData, itemData);
-                        break;
+                        //Utilities.SaveFile(SaveType.ItemData, itemData); //기존 것
+                        Utilities.SaveFile(SaveType.SaveData, itemData);
+
+                            break;
                     }
                     case EventType.eGetFieldItem: 
                     {

@@ -288,7 +288,7 @@ namespace TextRPG
             monsterManager.GetReward();
         }
 
-        public void OnEvent(EventType type, object data)
+        public void OnEvent<T>(EventType type, T data)
         {
             if (type == EventType.eSetMonsters)
             {
