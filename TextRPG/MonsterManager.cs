@@ -14,16 +14,18 @@
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
-            
-            for(int i = 0; i < 3; i++)
+
+            for(int i = 0; i < maxMonsterType; i++)
             {
-                Monster monster = new Monster((MonsterType)(i + 1));
-                arrayOfMonsters[i] = monster;
+                arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
             }
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
         static int maxMonsterType = 3;
-        Monster[] arrayOfMonsters = new Monster[maxMonsterType];
+        // 생성 가능한 몬스터 타입 배열
+        public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
+        public int getEXP = 0;
+
 
         //추가로 구현하면 좋은것은
         //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
@@ -57,7 +59,13 @@
             for (int i = 0; i < monsterCount; i++)
             {
                 int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
-                dungeonMonsters.Add(arrayOfMonsters[randomCount]);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
+                Monster monster = new Monster(arrayOfMonsterTypes[randomCount]);
+                dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
+            }
+
+            foreach (Monster monster in dungeonMonsters)
+            {
+                getEXP += monster.Level;
             }
 
             EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
