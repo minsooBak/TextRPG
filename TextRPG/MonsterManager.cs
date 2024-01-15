@@ -14,7 +14,18 @@
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
+
+            for(int i = 0; i < maxMonsterType; i++)
+            {
+                arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
+            }
         }
+        // maxMonsterType : 생성 가능한 몬스터 종류 수
+        static int maxMonsterType = 3;
+        // 생성 가능한 몬스터 타입 배열
+        public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
+
+        List<Monster> dungeonMonsters = [];
 
         //추가로 구현하면 좋은것은
         //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
@@ -23,26 +34,53 @@
         //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
-            List<Monster> dungeonMonsters = [];
+            //List<Monster> dungeonMonsters = [];
 
             Random rnd = new Random();
-            int monsterCount = rnd.Next(1, 5); // 1~ 4 마리 선택
-            if ((MonsterType)listOfMonsterCount > MonsterType.Monster3)
-                listOfMonsterCount = (int)MonsterType.Monster3; //1 2 3 
+            
+            // 스테이지에 따라 생성 가능한 몬스터 마리 수 정하기
+            int monsterCount = 0;
+            switch (listOfMonsterCount)
+            {
+                case 1:
+                    monsterCount = rnd.Next(1, 3);
+                    break;
+                case 2:
+                    monsterCount = rnd.Next(2, 4);
+                    break;
+                case 3:
+                    monsterCount = rnd.Next(3, 5);
+                    break;
+            }
+
+            // 던전매니저에서 호출한 몬스터의 타입 값이 전체 몬스터 종류 수(maxMonsterType)보다 클 경우, 값을 maxMonsterType로 고정하기.
+            if (listOfMonsterCount > maxMonsterType)
+                listOfMonsterCount = maxMonsterType; //1 2 3 
             for (int i = 0; i < monsterCount; i++)
             {
                 int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
-                dungeonMonsters.Add(CreateMonster(++randomCount));// 1 2 3 던전 몬스터 리스트에 몬스터 추가
+                Monster monster = new Monster(arrayOfMonsterTypes[randomCount]);
+                dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
             EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
-            dungeonMonsters.Clear();
         }
 
-        public Monster CreateMonster(int random) // random에 해당하는 몬스터 생성
+        public int GetExp()
         {
-            Monster newMonster = new Monster((MonsterType)random);
-            return newMonster;
+            int exp = 0;
+            foreach (Monster monster in dungeonMonsters)
+            {
+                // 해당 몬스터 리스트의 총 경험치량 저장
+                exp += monster.Level;
+            }
+
+            return exp;
+        }
+
+        public void ClearMonsterList()
+        {
+            dungeonMonsters.Clear();
         }
 
         public void OnEvent(EventType type, object data)

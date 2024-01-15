@@ -12,11 +12,13 @@
     {
         private Player player;
         private SkillManager skillManager = new SkillManager();
+        private MonsterManager monsterManager = new MonsterManager();
         public List<Dungeon> dungeons = [];
         public IObject[] monsters;
         public int deadCounter = 0;
-        public int dungeonStage = -1; // 1
+        public int dungeonStage = 0; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
         public bool showMonsterMode = false;
+        public int getExp = 0;
 
 
         public DungeonManager(Player player)
@@ -25,16 +27,15 @@
             List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
             dungeons = d;
             // 플레이어 정보 받아오기
-            this.player = player;    // Player 완성 시 new Player() 지우고 다시 설정하기
+            this.player = player;
         }
 
         // 선택된 던전 스테이지의 몬스터 만들기
-        public void SelectDungeonStage(int stage) // 2
+        public void SelectDungeonStage(int stage)
         {
             deadCounter = 0;
 
-            dungeonStage = ++stage;
-            EventManager.Instance.PostEvent(EventType.eMakeMonsters, dungeons[dungeonStage].dungeonMonsterType);
+            monsterManager.MakeMonsters(dungeons[stage].dungeonMonsterType);
         }
 
         // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
@@ -154,6 +155,7 @@
 
             // 마나가 부족할 경우, SelectSkill()을 다시 호출.
             int skillIdx = Utilities.GetInputKey(0, skillManager.GetMySkillCount(player.Class)); //임시 플레이어 직업 전사 
+            if (skillIdx == 0) return;
             player.SetSkill(skillManager.GetMySkill(player.Class, skillIdx - 1)); //선택한 스킬 할당
 
             if (player.IsUseSkill == false)  //마나가 모자르다면
@@ -208,7 +210,7 @@
 
                 monster.TakeDamage(damage);
 
-                deadCounter += monster.IsDead ? 1 : 0; 
+                deadCounter += monster.IsDead ? 1 : 0;
             }
             else
             {
@@ -245,18 +247,19 @@
 
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
-                player.ShowResult();
+                player.ShowResult(monsterManager.GetExp());
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
-                player.ShowResult();
+                player.ShowResult(0);
             }
             Console.WriteLine("\n0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             if (Utilities.GetInputKey(0, 0) == 0)
             {
+                monsterManager.ClearMonsterList();
                 Console.Clear();
                 return;
             }

@@ -10,7 +10,7 @@
         private int maxMP;
         private int PrevHP { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
-
+        private int PrevExp;
 
         public Player()
         {
@@ -34,6 +34,7 @@
 
             maxHP = myState.HP;
             maxMP = myState.MP;
+            PrevExp = myState.EXP;
         }
 
         public Player(ObjectState state)
@@ -160,12 +161,17 @@
             Console.Write($"{myState.HP}");
         }
 
-        public void ShowResult()
+        public void ShowResult(int exp)
         {
+            PrevExp = myState.EXP;
+            myState.EXP = exp;
+
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
 
             Console.WriteLine($"HP {PrevHP} -> {myState.HP}");
-            Console.WriteLine($"MP {PrevMp} -> {myState.MP}\n");
+            Console.WriteLine($"MP {PrevMp} -> {myState.MP}");
+            Console.WriteLine($"EXP {PrevExp} -> {myState.EXP}\n");
+
             PrevHP = 0;
             PrevMp = 0;
 

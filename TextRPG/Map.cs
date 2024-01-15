@@ -14,7 +14,7 @@
 
         Player player = new Player();
         DungeonManager dungeonManager;
-        MonsterManager monsterManager = new MonsterManager();
+        //MonsterManager monsterManager = new MonsterManager();
         //ItemManager itemManager = new ItemManager();
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
