@@ -203,6 +203,7 @@ namespace TextRPG
             int i = 1;
             foreach (Monster monster in monsters)
             {
+                Utilities.TextColorWithNoNewLine($"{(mode ? i + " " : "")}", ConsoleColor.Blue);
                 //if (monster.IsDead)
                 //{
                 //    Utilities.TextColor($"{(mode ? i + " " : "")}Lv.{monster.Level} {monster.Class} Dead", ConsoleColor.DarkGray);

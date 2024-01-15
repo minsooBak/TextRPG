@@ -49,7 +49,7 @@ enum ePlayerType//플레이어이벤트
     Exp
 }
 
-public interface IListener
+public interface IListener // T == EventPair
 {
     void OnEvent<T>(EventType type, T data);
 }
@@ -91,26 +91,5 @@ namespace TextRPG
                 listenList?[i].OnEvent(eventType, param);
             }
         }
-
-
-        public void RemoveListener(EventType eventType)
-        {
-            Dictionary<EventType, List<IListener>> newListeners = [];
-
-            foreach (KeyValuePair<EventType, List<IListener>> item in listener)
-            {
-                for (int i = item.Value.Count - 1; i >= 0; i--)
-                {
-                    if (item.Value[i].Equals(null))
-                        item.Value.RemoveAt(i);
-                }
-
-                if (item.Value.Count > 0)
-                    newListeners.Add(item.Key, item.Value);
-            }
-
-            listener = newListeners;
-        }
-
     }
 }
