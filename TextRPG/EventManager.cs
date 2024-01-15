@@ -16,21 +16,19 @@
 
 //public enum EventType //이 이벤트들을 듣겠다
 //{
-//    eMakeMonsters,//변경하기
-//    eSetMonsters, //변경하기
 //    Item,
 //    Quest,
 //    Player,
 //    eGameEnd
 //}
 
-enum eItemType//아이템이벤트
+enum eItemType// 인벤토리가 받을 이벤트
 {
     eUpdateItem,
     eGetFieldItem,
 }
 
-enum eQuestType//퀘스트이벤트의 조건
+enum eQuestType//퀘스트이벤트
 {
     Item, 
     Monster,
@@ -38,12 +36,19 @@ enum eQuestType//퀘스트이벤트의 조건
     Stats
 }
 
+//enum eQuestCompleteType//퀘스트 완료 이벤트
+//{
+//    Item,
+//    Monster,
+//    Dungeon,
+//    Stats
+//}
+
 enum ePlayerType//플레이어이벤트
 {
-    HP,
-    MP,
     Gold,
-    Stats
+    ATK,
+    DEF
 }
 
 public interface IListener
