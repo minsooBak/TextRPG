@@ -119,7 +119,7 @@ namespace TextRPG
             Console.WriteLine("2. 전투 시작");
             Console.WriteLine("3. 인벤토리 보기");
             Console.WriteLine("4. 상점 보기");
-            Utilities.AddLine("5. 퀘스트 보기");
+            Console.WriteLine("5. 퀘스트 보기");
             Console.WriteLine("");
             Console.WriteLine("0. 종료");
 
