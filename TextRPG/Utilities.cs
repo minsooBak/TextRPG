@@ -18,7 +18,8 @@ namespace TextRPG
         ItemData,
         Monster,
         SkillData,
-        Dungeon
+        Dungeon,
+        QuestData
     }
     struct ObjectState //공통변수들
     {
@@ -47,11 +48,10 @@ namespace TextRPG
 
     internal static class Utilities
     {
-        public static KeyValuePair<T, object> EventPair<T>(T t, object a)
-        {
-            return new KeyValuePair<T, object>(t, a);
-        }
-
+        //public static KeyValuePair<T, object> EventPair<T>(T t, object a)
+        //{
+        //    return new KeyValuePair<T, object>(t, a);
+        //}
         public static KeyValuePair<T, string> EventPair<T>(T t, string a)
         {
             return new KeyValuePair<T, string>(t, a);
@@ -272,6 +272,25 @@ namespace TextRPG
 
                             file.Close();
                             return JsonConvert.DeserializeObject<Skill[]>(str);
+                        }
+                        break;
+                    }
+                case LoadType.QuestData:
+                    {
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Data\Quest_Data.json";
+                        if (File.Exists(path) == false)
+                            return null;
+                        StreamReader? file = File.OpenText(path);
+                        if (file != null)
+                        {
+                            JsonTextReader reader = new JsonTextReader(file);
+
+                            JArray json = (JArray)JToken.ReadFrom(reader);
+                            string? str = JsonConvert.SerializeObject(json);
+
+                            file.Close();
+                            return JsonConvert.DeserializeObject<Quest[]>(str);
                         }
                         break;
                     }
