@@ -114,7 +114,7 @@
             Utilities.AddLine($"{player.Name} (player.Class추가?)");
             Utilities.AddLine($"공격력 : {player.ATK}");
             Utilities.AddLine($"방어력 : {player.DEF}");
-            Utilities.AddLine($"체력 : {player.Health}");
+            Utilities.AddLine($"체력 : {player.HP}");
             Utilities.AddLine($"마나 : {player.MP}");
             Utilities.AddLine($"소지금 : {player.Gold}");
             Utilities.AddLine("");
