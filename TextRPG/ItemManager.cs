@@ -52,9 +52,9 @@ namespace TextRPG
             foreach (Item item in items)
             {
                 if (item.IsOnField)
-                    fieldDisplay.Add(item);
+                    fieldDisplay.Add(item);//필드 아이템 저장
                 if (item.IsSale)
-                    shopDisplay.Add(item);
+                    shopDisplay.Add(item);//상점 아이템 저장
             }
 
             //// 인벤토리 저장 파일 불러오기
@@ -236,13 +236,13 @@ namespace TextRPG
         public void EquipItem(int itemNum)
         {
             Item item = inventory[itemNum - 1];
-            if (item.IsEquipped)
+            if (item.IsEquipped)//장착 중이면
             {
                 item.IsEquipped = false;
                 Console.WriteLine($"{item.Name}을 해제했습니다.");
                 Console.ReadLine();
             }
-            else
+            else//아니라면
             {
                 item.IsEquipped = true;
                 Console.WriteLine($"{item.Name}을 착용했습니다.");
