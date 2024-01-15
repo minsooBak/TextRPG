@@ -106,7 +106,7 @@
         public string Class => myState.Class;
 
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
-        public bool IsDead => myState.HP <= 0;
+        public bool IsDead => myState.Health <= 0;
         public int GetMP => myState.MP;
 
         public void SetSkill(Skill skill) => myState.Skill = skill;
@@ -141,32 +141,8 @@
                 Console.WriteLine($"{myState.Class}");         // 나중에 player.Name, player.Job으로 수정하기
 
                 Console.Write("HP ");
-                Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
-                Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-                Utilities.TextColorWithNoNewLine($"{myState.MaxHP}", ConsoleColor.DarkRed);
-
-                Console.Write(" | MP ");
-                Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);      // 나중에 player.Mp로 수정하기
-                Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-                Utilities.TextColorWithNoNewLine($"{myState.MaxMP}\n", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
             }
-        }
-
-        public int Attack(AttackType attackType = AttackType.Attack)
-        {
-            int damage = 0;
-            double getDamage;
-
-            getDamage = myState.ATK / 100.0 * 10;
-            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
-            if (attackType == AttackType.Skill)
-                damage = myState.Skill.GetATK(myState.ATK);
-            if(attackType == AttackType.Attack)
-                Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 공격!");
-            else
-                Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 {myState.Skill.Name} 스킬 공격!");
-
-            return damage;
         }
 
         public void TakeDamage(int damage)
@@ -205,9 +181,9 @@
             Console.Write($"{myState.Health} -> ");
 
             if (r <= 15)
-                myState.HP = Math.Clamp(myState.HP - criticalDamage, 0, myState.MaxHP);
+                myState.Health = Math.Clamp(myState.Health - criticalDamage, 0, myState.Health);
             else
-                myState.HP = Math.Clamp(myState.HP - damage, 0, myState.MaxHP);
+                myState.Health = Math.Clamp(myState.Health - damage, 0, myState.Health);
 
 
             Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
@@ -230,7 +206,7 @@
             {
                 myState.Class = "미니언";
                 myState.Level = 2;
-                myState.HP = 15;
+                myState.Health = 15;
                 myState.MP = 100;
                 myState.ATK = 5;
             }
@@ -238,7 +214,7 @@
             {
                 myState.Class = "공허충";
                 myState.Level = 3;
-                myState.HP = 10;
+                myState.Health = 10;
                 myState.MP = 100;
 
                 myState.ATK = 9;     
@@ -247,14 +223,14 @@
             {
                 myState.Class = "대포미니언";
                 myState.Level = 5;
-                myState.HP = 25;
+                myState.Health = 25;
                 myState.MP = 100;
                 myState.ATK = 8;
             }
 
             myState.Name = myState.Class;
-            myState.MaxHP = myState.HP;
-            myState.MaxMP = myState.MP;
+            //int MaxHP = myState.Health;
+            //MaxMP = myState.MP;
         }
         
     }

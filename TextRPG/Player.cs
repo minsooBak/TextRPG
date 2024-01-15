@@ -178,7 +178,7 @@
             //죽엇을때 부활 체력 마나
             if(IsDead)
             {
-                myState.HP = 60;
+                myState.Health = 60;
                 myState.MP = 60;
             }
         }
