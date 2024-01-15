@@ -22,6 +22,17 @@
     }
     ,
     {
+      "Name": "가시 갑옷",
+      "Type": 1,
+      "ATK": 3,
+      "DEF": 5,
+      "Description": "자신을 공격하는 적에게 고통을 선물해보세요.",
+      "Cost": 999,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
       "Name": "테스트용 개사기검",
       "Type": 0,
       "ATK": 999,
