@@ -9,16 +9,15 @@ namespace TextRPG
     internal class QuestManager : IListener
     {
         private Quest[] questMenu; //퀘스트 전체 목록
-        private List<Quest> quests = new List<Quest> { }; //화면에 노출되는 퀘스트 목록
+        private List<Quest> quests; //화면에 노출되는 퀘스트 목록
         private static int clearCount = 0; //퀘스트 클리어 횟수
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx
         public QuestManager()
         {
             EventManager.Instance.AddListener(EventType.Quest, this);
             questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 목록 추가
-            quests.Add(questMenu[0]);
-            quests.Add(questMenu[1]);
-            quests.Add(questMenu[2]);
+            quests = new List<Quest> {};
+            
         }
         public int QuestCount { get { return quests.Count;} } //
         public bool ShowQuests() //최대 3개의 퀘스트 목록 보여주기
@@ -143,9 +142,9 @@ namespace TextRPG
         }
         public void AddQuest() //퀘스트 추가
         {
-            for (int i = quests.Count; i < 3;) // 0 1 2 현재 퀘스트 개수가 3개 미만이고 
+            for (int i = quests.Count; i < 3; i++) // 0 1 2 현재 퀘스트 개수가 3개 미만이고 
             {
-                if (clearCount + 2 < questMenu.Length)//다음 퀘스트가 있다면 // 0  1 2 <  3
+                if (idxCount < questMenu.Length)//다음 퀘스트가 있다면 // 0  1 2 3<  4
                 {
                     quests.Add(questMenu[idxCount++]);//추가한다.
                 }
@@ -176,7 +175,7 @@ namespace TextRPG
                         {
                             foreach (var quest in quests)
                             {
-                                if (quest.Target == a.Value.Value && quest.isActive) //이름이 같은 몬스터 이고 퀘스트가 활성화 되어있을 때
+                                if (quest.isActive && quest.Target == a.Value.Value) //이름이 같은 몬스터 이고 퀘스트가 활성화 되어있을 때
                                 {
                                     quest.current++;
                                     if (quest.current >= quest.Max) //최고치에 도달하면 
@@ -209,8 +208,8 @@ namespace TextRPG
         public readonly int Gold; // 보상 골드
         public readonly string ItemName; // 보상 아이템 이름
         public readonly int Exp;//보상 경험치
-        public bool isClear = false; //클리어 했는지 여부
-        public bool isActive = false; //수락했을 시
+        public bool isClear = true; //클리어 했는지 여부
+        public bool isActive = true; //수락했을 시
         public int Max; //조건 최대치
         public int current = 0; //현재 조건 달성도
         public string Condition; //퀘스트 조건 설명
