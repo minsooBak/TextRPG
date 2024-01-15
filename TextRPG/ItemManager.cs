@@ -278,7 +278,7 @@ namespace TextRPG
             {
                 case eItemType.eGetFieldItem:
                     {
-                        GetFieldItem(a.Value.Value);
+                        GetFieldItem(a.Value.Value); 수정할 부분
                         break;
                     }
             }
