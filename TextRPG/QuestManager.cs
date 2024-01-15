@@ -8,19 +8,21 @@ namespace TextRPG
 {
     internal class QuestManager : IListener
     {
+        Player player;
         private Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests = new List<Quest> { }; //화면에 노출되는 퀘스트 목록
         private static int clearCount = 0; //퀘스트 클리어 횟수
-        public QuestManager()
+        public QuestManager(Player player)
         {
             EventManager.Instance.AddListener(EventType.Quest, this);
             questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 목록 추가
             quests.Add(questMenu[0]);
             quests.Add(questMenu[1]);
             quests.Add(questMenu[2]);
+            this.player = player;
         }
         public int QuestCount { get { return quests.Count;} } //
-        public void ShowQuests()
+        public void ShowQuests() //최대 3개의 퀘스트 목록 보여주기
         {
             if (quests.Count < 3)
                 AddQuest();
@@ -38,12 +40,37 @@ namespace TextRPG
             }
             Console.WriteLine();
         }
-        public void ShowQuest(int idx) 
+        public void ShowQuest(int idx) //idx에 해당하는 퀘스트 보여주기
         {
             if (quests[idx] == null)
                 return;
 
-            Utilities.TextColor($"{quests[idx]}", ConsoleColor.DarkRed);
+            Utilities.TextColor($"Quest!!", ConsoleColor.Yellow);
+            Console.WriteLine();
+
+            Console.WriteLine(quests[idx].Name);
+            Console.WriteLine();
+
+            Console.WriteLine(quests[idx].Explanation);
+            Console.WriteLine();
+
+            //string conditionStr = quests[idx].Condition;//string.Format("미니언 {0}마리 처치",Max);
+            Utilities.TextColorWithNoNewLine($"-", ConsoleColor.Yellow);
+            Console.WriteLine($"{quests[idx].Condition} ({quests[idx].current}/{quests[idx].Max})");
+            Console.WriteLine();
+            Console.ReadKey(); 
+            Utilities.TextColorWithNoNewLine($"-", ConsoleColor.Yellow);
+            Console.WriteLine("보상 ");
+            Utilities.TextColorWithNoNewLine($"-", ConsoleColor.Yellow);
+            //if (quests[idx].ItemName)
+            //    Console.WriteLine($"{quests[idx].Gold}G");
+            //if (quests[idx].Gold != 0)
+            //    Console.WriteLine($"{quests[idx].Gold}G") ;
+
+
+        }
+        public void SelectQuest() 
+        {
 
         }
         public void AddQuest()
@@ -78,7 +105,12 @@ namespace TextRPG
                         }
                     case eQuestType.Stats:
                         {
-
+                            
+                            break;
+                        }
+                    case eQuestType.PlayerLevel:
+                        {
+                           
                             break;
                         }
                 }
@@ -95,7 +127,11 @@ namespace TextRPG
         public readonly int Exp;//보상 경험치
         public bool isClear = false;
         public bool isActive = false; //수락했을 시
-        public Quest(int idx, string name, string explanation, int gold, string itemName, int exp)
+        public int Max; //최대치
+        public int current = 0; //현재 달성도
+        public string Condition; //퀘스트 조건
+
+        public Quest(int idx, string name, string explanation, int gold, string itemName, int exp, int max, string condition)
         {
             Idx = idx;
             Name = name;
@@ -103,6 +139,8 @@ namespace TextRPG
             Gold = gold;
             ItemName = itemName;
             Exp = exp;
+            Max = max;
+            Condition = condition;
         }
     }
 }

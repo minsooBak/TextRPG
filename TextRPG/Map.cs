@@ -16,9 +16,9 @@ namespace TextRPG
 
         Player player = new Player();
         DungeonManager dungeonManager;
+        QuestManager questManager;
         MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
-        QuestManager questManager = new QuestManager();
         private bool isGameEnd = false;
         private GameState gameState = GameState.NONE;
         public void DrawMap()
@@ -29,8 +29,7 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
             //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[]{300,200}));
             dungeonManager = new DungeonManager(player);
-            //questManager.ShowQuest();
-            Console.ReadKey();
+            questManager = new QuestManager(player);
             while (!isGameEnd)
             {
                 switch (gameState)
@@ -69,13 +68,16 @@ namespace TextRPG
             int QuestCount = questManager.QuestCount; //퀘스트 목록 노출
             switch (Utilities.GetInputKey(1, QuestCount))
             {
-                case 0:
+                case 1:
+                    Console.Clear();
                     questManager.ShowQuest(0);
                     break;
-                case 1:
+                case 2:
+                    Console.Clear();
                     questManager.ShowQuest(1);
                     break;
-                case 2:
+                case 3:
+                    Console.Clear();
                     questManager.ShowQuest(2);
                     break;
             }

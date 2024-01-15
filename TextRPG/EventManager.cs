@@ -36,7 +36,8 @@ enum eQuestType//퀘스트이벤트의 조건
     Item, 
     Monster,
     Dungeon,
-    Stats
+    Stats,
+    PlayerLevel
 }
 
 enum ePlayerType//플레이어이벤트
