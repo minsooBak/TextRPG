@@ -16,7 +16,7 @@ namespace TextRPG
 
         Player player = new Player();
         DungeonManager dungeonManager;
-        QuestManager questManager;
+        QuestManager questManager = new QuestManager();
         MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
         private bool isGameEnd = false;
@@ -29,7 +29,7 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
             //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[]{300,200}));
             dungeonManager = new DungeonManager(player);
-            questManager = new QuestManager(player);
+            
             while (!isGameEnd)
             {
                 switch (gameState)
@@ -57,31 +57,43 @@ namespace TextRPG
             //저장처리
         }
 
-        private void ShowQuest()
+        private void ShowQuest()//퀘스트 목록을 보여준다.
         {
-            Console.Clear();
-            Utilities.TextColor("Quest!!\n", ConsoleColor.DarkYellow);
-            questManager.ShowQuests();
-
-            Utilities.AddLine("원하시는 퀘스트를 선택해주세요.");
-            Utilities.Add(">>");
-            int QuestCount = questManager.QuestCount; //퀘스트 목록 노출
-            switch (Utilities.GetInputKey(1, QuestCount))
+            bool isIn = true;
+            int QuestCount;
+            while (isIn)
             {
-                case 1:
-                    Console.Clear();
-                    questManager.ShowQuest(0);
-                    break;
-                case 2:
-                    Console.Clear();
-                    questManager.ShowQuest(1);
-                    break;
-                case 3:
-                    Console.Clear();
-                    questManager.ShowQuest(2);
-                    break;
+                Console.Clear();
+                Utilities.TextColor("Quest!!\n", ConsoleColor.DarkYellow);
+                questManager.ShowQuests(); //목록들 보여주고
+
+                Utilities.TextColorWithNoNewLine("0", ConsoleColor.DarkRed);
+                Console.WriteLine(". 나가기");
+
+                Utilities.AddLine("원하시는 퀘스트를 선택해주세요.");
+                Utilities.Add(">>");
+                QuestCount = questManager.QuestCount; //퀘스트 목록 노출
+                switch (Utilities.GetInputKey(0, QuestCount)) //퀘스트 노출된 만큼만 입력 받음
+                {
+                    case 0: //나가기 눌렀을 때 
+                        isIn = false;
+                        break;
+                    case 1:
+                        Console.Clear();
+                        questManager.ShowQuest(0);//퀘스트 들어가서 보기
+                        break;
+                    case 2:
+                        Console.Clear();
+                        questManager.ShowQuest(1);
+                        break;
+                    case 3:
+                        Console.Clear();
+                        questManager.ShowQuest(2);
+                        break;
+                }
             }
-            gameState = GameState.NONE;
+            Console.Clear();
+            gameState = GameState.NONE;//게임 상태를 마을로 다시 가기
         }
 
         public void StartGame()

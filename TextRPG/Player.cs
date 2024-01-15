@@ -83,19 +83,24 @@
                             myState.Health = Math.Clamp((int)a.Value, 0, maxMP);
                             break;
                         }
-                    case ePlayerType.Gold:
+                    case ePlayerType.Gold: //골드 추가
                         {
-                            myState.Gold = Math.Clamp((int)a.Value, 0, 100);
+                            myState.Gold += Math.Clamp((int)a.Value, 0, 100);
                             break;
                         }
-                    //case ePlayerType.Stats:
-                    //    {
-                    //        var num = (int[])a.Value;
-                    //        myState.ATK = num[0];
-                    //        myState.DEF = num[1];
-                    //        Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
-                    //        break;
-                    //    }
+                    case ePlayerType.Exp: //경험치 추가
+                        {
+                            myState.EXP += Math.Clamp((int)a.Value, 0, 300);
+                            break;
+                        }
+                        //case ePlayerType.Stats:
+                        //    {
+                        //        var num = (int[])a.Value;
+                        //        myState.ATK = num[0];
+                        //        myState.DEF = num[1];
+                        //        Console.WriteLine($"my ATK {myState.ATK}, my DEF{myState.DEF}");
+                        //        break;
+                        //    }
                 }
             }
         }
