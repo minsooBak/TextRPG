@@ -15,8 +15,8 @@ namespace TextRPG
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx
         public QuestManager()
         {
-            EventManager.Instance.AddListener(EventType.Quest, this);
-            questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 목록 추가
+            EventManager.Instance.AddListener(EventType.Quest, this); //Add
+            questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 전체 목록 받아오기
             quests = new List<Quest> {};
             AddQuest();
         }
