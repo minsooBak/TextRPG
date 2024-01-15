@@ -72,6 +72,11 @@ namespace TextRPG
 
         static StringBuilder sb = new StringBuilder(400);
 
+        public static KeyValuePair<T, T1> EventPair<T, T1>(T type, T1 data)
+        {
+            return new KeyValuePair<T, T1>(type, data);
+        }
+
         public static void AddLine(string str)
         {
             sb.AppendLine(str);
@@ -331,7 +336,6 @@ namespace TextRPG
                         break;
                     }
             }
-
         }
     }
 }
