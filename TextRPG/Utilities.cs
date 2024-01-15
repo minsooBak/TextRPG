@@ -48,33 +48,12 @@ namespace TextRPG
 
     internal static class Utilities
     {
-        //public static KeyValuePair<T, object> EventPair<T>(T t, object a)
-        //{
-        //    return new KeyValuePair<T, object>(t, a);
-        //}
-        public static KeyValuePair<T, string> EventPair<T>(T t, string a)
-        {
-            return new KeyValuePair<T, string>(t, a);
-        }
-
-        public static KeyValuePair<T, int> EventPair<T>(T t, int a)
-        {
-            return new KeyValuePair<T, int>(t, a);
-        }
-
-        public static KeyValuePair<T, Item> EventPair<T>(T t, Item a)
-        {
-            return new KeyValuePair<T, Item>(t, a);
-        }
-
-        public static KeyValuePair<T, Item[]> EventPair<T>(T t, Item[] a)
-        {
-            return new KeyValuePair<T, Item[]>(t, a);
-        }
-
-
-
         static StringBuilder sb = new StringBuilder(400);
+
+        public static KeyValuePair<T, T1> EventPair<T, T1>(T type, T1 data)
+        {
+            return new KeyValuePair<T, T1>(type, data);
+        }
 
         public static void AddLine(string str)
         {
@@ -335,7 +314,6 @@ namespace TextRPG
                         break;
                     }
             }
-
         }
     }
 }
