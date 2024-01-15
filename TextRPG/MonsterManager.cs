@@ -99,7 +99,7 @@
             getDamage = myState.ATK / 100.0 * 10;
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
-                damage *= myState.Skill.GetATK(myState.ATK);
+                damage = myState.Skill.GetATK(myState.ATK);
             if(attackType == AttackType.Attack)
                 Console.WriteLine($"Lv.{myState.Level} {myState.Name} 의 공격!");
             else
