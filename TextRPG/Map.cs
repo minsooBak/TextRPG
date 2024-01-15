@@ -29,7 +29,7 @@ namespace TextRPG
             //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
             //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[] { 300,200}));
             dungeonManager = new DungeonManager(player);
-            
+            questManager.ItemSetting(itemManager.GetItems());//퀘스트 내부에 아이템 리스트 복사
             while (!isGameEnd)
             {
                 switch (gameState)

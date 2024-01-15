@@ -10,6 +10,7 @@ namespace TextRPG
     {
         private Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests; //화면에 노출되는 퀘스트 목록
+        private List<Item> questItem = new List<Item>();
         private static int clearCount = 0; //퀘스트 클리어 횟수
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx
         public QuestManager()
@@ -17,7 +18,7 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.Quest, this);
             questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 목록 추가
             quests = new List<Quest> {};
-            
+            AddQuest();
         }
         public int QuestCount { get { return quests.Count;} } //
         public bool ShowQuests() //최대 3개의 퀘스트 목록 보여주기
@@ -46,6 +47,14 @@ namespace TextRPG
             }
             Console.WriteLine();
             return true;
+        }
+        public void ItemSetting(Item[] items)
+        {
+            foreach (var quest in questMenu)
+            {
+                questItem.Add(items.ToList().Find(x => x.Name == quest.ItemName));
+                
+            }
         }
         public void ShowQuest(int idx) //idx에 해당하는 퀘스트 보여주기
         {
@@ -131,6 +140,7 @@ namespace TextRPG
                     case 1: //보상 받기
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, quests[idx].Exp)); //플레이어 경험치 추가
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 골드 추가
+                        EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, questItem[idx]));
                         //아이템 얻는 이벤트 추가해야 함.
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
                         clearCount++; //클리어 횟수 증가
