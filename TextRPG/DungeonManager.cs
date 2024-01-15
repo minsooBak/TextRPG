@@ -18,6 +18,7 @@
         public int deadCounter = 0;
         public int dungeonStage = 0; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
         public bool showMonsterMode = false;
+        public int getExp = 0;
 
 
         public DungeonManager(Player player)
@@ -209,7 +210,7 @@
 
                 monster.TakeDamage(damage);
 
-                deadCounter += monster.IsDead ? 1 : 0; 
+                deadCounter += monster.IsDead ? 1 : 0;
             }
             else
             {
@@ -246,18 +247,19 @@
 
                 Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
 
-                player.ShowResult();
+                player.ShowResult(monsterManager.GetExp());
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
-                player.ShowResult();
+                player.ShowResult(0);
             }
             Console.WriteLine("\n0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             if (Utilities.GetInputKey(0, 0) == 0)
             {
+                monsterManager.ClearMonsterList();
                 Console.Clear();
                 return;
             }

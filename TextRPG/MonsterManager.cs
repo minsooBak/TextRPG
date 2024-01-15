@@ -24,8 +24,8 @@
         static int maxMonsterType = 3;
         // 생성 가능한 몬스터 타입 배열
         public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
-        public int getEXP = 0;
 
+        List<Monster> dungeonMonsters = [];
 
         //추가로 구현하면 좋은것은
         //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
@@ -34,7 +34,7 @@
         //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
         {
-            List<Monster> dungeonMonsters = [];
+            //List<Monster> dungeonMonsters = [];
 
             Random rnd = new Random();
             
@@ -63,12 +63,23 @@
                 dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
+            EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
+        }
+
+        public int GetExp()
+        {
+            int exp = 0;
             foreach (Monster monster in dungeonMonsters)
             {
-                getEXP += monster.Level;
+                // 해당 몬스터 리스트의 총 경험치량 저장
+                exp += monster.Level;
             }
 
-            EventManager.Instance.PostEvent(EventType.eSetMonsters, dungeonMonsters);
+            return exp;
+        }
+
+        public void ClearMonsterList()
+        {
             dungeonMonsters.Clear();
         }
 
