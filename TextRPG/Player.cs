@@ -85,7 +85,7 @@ namespace TextRPG
                     {
                         case ePlayerType.Gold: //골드 추가
                             {
-                                myState.Gold = Math.Clamp(myState.Gold + c.Value, 0, 999999999);
+                                myState.Gold += Math.Clamp(c.Value, 0, 999999999);
                                 break;
                             }
                         case ePlayerType.Exp: //경험치 추가
