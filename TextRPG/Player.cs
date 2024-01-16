@@ -44,13 +44,6 @@ namespace TextRPG
             myState.ATK = 100;
             myState.DEF = 0;
             myState.Gold = 1000;
-            InitATK = myState.ATK;
-            InitDEF = myState.DEF;
-
-            maxHealth = myState.Health;
-            maxMP = myState.MP;
-            PrevExp = myState.EXP;
-
             switch (Name.Value)
             {
                 case "전사":
@@ -85,8 +78,12 @@ namespace TextRPG
                         myState.DEF += 60;
                         break;
                     }
-
             }
+            InitATK = myState.ATK;
+            InitDEF = myState.DEF;
+            maxHealth = myState.Health;
+            maxMP = myState.MP;
+            PrevExp = myState.EXP;
         }
         /*직업 : Warrior, Mage, Archer, Thief
          * 기본 체력 100,마나 100, 공격력 100, 방어력 0 
@@ -113,8 +110,6 @@ namespace TextRPG
             myState.Gold = state.Gold;
             InitATK = state.ATK;
             InitDEF = state.DEF;
-
-            
         }             
 
         public int Health => myState.Health;
@@ -194,7 +189,6 @@ namespace TextRPG
             Console.Write("HP ");
 
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
-
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
@@ -202,6 +196,13 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
+
+            Console.Write("공격력: ");
+            Utilities.TextColorWithNoNewLine($"{myState.ATK}\n", ConsoleColor.DarkRed);
+
+            Console.Write("방어력: ");
+            Utilities.TextColorWithNoNewLine($"{myState.DEF}\n", ConsoleColor.DarkRed);
+
         }
 
         public int Attack(AttackType attackType)
