@@ -7,7 +7,7 @@ namespace TextRPG
         //캐릭터 생성 및 출력
         public KeyValuePair<string, string> Create()
         {
-            Utilities.AddLine("RPG_GAME에 오신것을 환영합니다!");
+            Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다!");
             Utilities.AddLine("이곳은 캐릭터 생성을 하는 곳 입니다.\n");
             Utilities.AddLine("1. 캐릭터 생성");
             Utilities.AddLine("\n0. 종료\n");

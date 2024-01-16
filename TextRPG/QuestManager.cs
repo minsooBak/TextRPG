@@ -21,12 +21,11 @@ namespace TextRPG
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx 
         public QuestManager()
         {
-            EventManager.Instance.AddListener(EventType.eGameEnd, this); //게임 종료시 저장이벤트 등록
-            EventManager.Instance.AddListener(EventType.Quest, this); //퀘스트 관련 이벤트 등록
-            questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 전체 목록 데이터 복사
-            QuestData? data = (QuestData?)Utilities.LoadFile(LoadType.QuestSaveData); //QuestData 타입(현재 진행도 리스트, 클리어한 퀘스트 이름 리스트)으로 받아옴
-            // ? 널러블은 묶여서 한 번  Value로 풀어줘야한다.
-            if (data != null) //세이브 파일이 있다면 (data는 QuestData 형)
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);//게임 종료시 저장이벤트 등록
+            EventManager.Instance.AddListener(EventType.Quest, this); //Add //퀘스트 관련 이벤트 등록
+            questMenu = Utilities.LoadFile<Quest[]>(LoadType.QuestData); //퀘스트 전체 목록 받아오기\
+            QuestData? data = Utilities.LoadFile<QuestData?>(LoadType.QuestSaveData); //QuestData 타입(현재 진행도 리스트, 클리어한 퀘스트 이름 리스트)으로 받아옴
+            if (data != null)
             {
                 foreach (var quest in data.Value.clearQuest) // 클리어한 퀘스트 이름 리스트에서 하나씩 꺼내서
                 {

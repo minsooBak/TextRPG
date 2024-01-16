@@ -16,7 +16,7 @@
 //    Player
 //}
 
-public enum EventType //이 이벤트들을 듣겠다
+public enum EventType //이 타입의 이벤트들을 듣겠다
 {
     eMakeMonsters,//변경하기
     eSetMonsters, //변경하기
@@ -29,7 +29,7 @@ public enum EventType //이 이벤트들을 듣겠다
     eGameEnd
 }
 
-enum eItemType//아이템이벤트
+enum eItemType//아이템내의 이벤트타입으로 데이터를 보내겠다
 {
     //eUpdateItem, //잘 모르겠음
     eGetFieldItem,
@@ -37,7 +37,7 @@ enum eItemType//아이템이벤트
     EquipQuest
 }
 
-enum eQuestType//퀘스트이벤트의 조건
+enum eQuestType//퀘스트이벤트내의 이벤트타입으로 데이터를 보내겠다
 {
     Item, 
     Monster,
@@ -46,7 +46,7 @@ enum eQuestType//퀘스트이벤트의 조건
     PlayerLevel
 }
 
-enum ePlayerType//플레이어이벤트
+enum ePlayerType//플레이어내의 이벤트타입으로 데이터를 보내겠다
 {
     HP,
     MP,
@@ -55,7 +55,7 @@ enum ePlayerType//플레이어이벤트
     Exp
 }
 
-public interface IListener // T == EventPair
+public interface IListener // T == Utilities.EventPair(Enum, data)
 {
     void OnEvent<T>(EventType type, T data);
 }
@@ -64,24 +64,27 @@ namespace TextRPG
 {
     internal class EventManager
     {
-        private static readonly EventManager instance = new EventManager();
+        private static readonly EventManager instance = new EventManager();//싱글톤 자기자신
 
-        static EventManager() { }
-        private EventManager() { }
+        static EventManager() { } 
+        private EventManager() { } // 다른곳에서 생성하지못하도록
 
-        public static EventManager Instance { get { return instance; } }
-        private Dictionary<EventType, List<IListener>> listener = [];
+        public static EventManager Instance { get { return instance; } } // 다른곳에서 참고하기위해
+        private Dictionary<EventType, List<IListener>> listener = []; // AddListener로 추가된 IListener를 상속한 클래스들을 EventType에 따라 보관
 
+        //이벤트를 듣겠다고 등록하는 메서드
         public void AddListener(EventType eventType, IListener _listener)
         {
             List<IListener>? listenList = null;
 
+            //들어온 이벤트 타입으로된 List가 있는지 체크하고 있다면 ListenList에 할당하고, 그 리스트에 클래스를 등록
             if (listener.TryGetValue(eventType, out listenList))
             {
                 listenList.Add(_listener);
                 return;
             }
 
+            //List<IListener>초기화
             listenList = [_listener]; // listenList = new List<IListener> {_listener}; 와 같다. 리스트를 만들고 첫 요소로 리스너를 넣는다.
             listener.Add(eventType, listenList); //딕셔너리에 추가
         }

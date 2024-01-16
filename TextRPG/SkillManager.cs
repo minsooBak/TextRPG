@@ -14,8 +14,10 @@ namespace TextRPG
         private readonly Dictionary<string, List<Skill>> skillDictionary = []; //직업별 스킬 데이터 { [ 직업이름 ] , 스킬 리스트}
         public SkillManager()
         {
+
             List<string> classNames = new List<string>(); //클래스 이름 배열 초기에는 아무 값도 없다.
-            Skill[] skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData); //스킬 데이터 배열을 가져온다.
+            Skill[] skillList = Utilities.LoadFile<Skill[]>(LoadType.SkillData);//스킬 데이터 배열을 가져온다.
+
             if (skillList == null)
             {
                 Console.Error.WriteLine("SkillLoad Faill!");
