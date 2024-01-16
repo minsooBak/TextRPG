@@ -1,0 +1,100 @@
+[
+    {
+        "Name": "낡은 대검",
+        "Type": 0,
+        "ATK": 3,
+        "DEF": 0,
+        "Description": "아직은 쓸만해 보이는 낡은 대검입니다.",
+        "Cost": 100,
+        "IsSale": "TRUE",
+        "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "대장장이의 명검",
+      "Type": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "Description": "마을 대장장이의 영혼이 담긴 예리한 검입니다.",
+      "Cost": 1500,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "란츠크네히트의 할버드",
+      "Type": 0,
+      "ATK": 32,
+      "DEF": 0,
+      "Description": "중세 스위스 용병과의 싸움에서 자주 쓰이던 할버드입니다.",
+      "Cost": 3500,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "초보자의 갑옷",
+      "Type": 1,
+      "ATK": 0,
+      "DEF": 2,
+      "Description": "모험을 떠날 준비가 되었다!",
+      "Cost": 100,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "가시 갑옷",
+      "Type": 1,
+      "ATK": 3,
+      "DEF": 5,
+      "Description": "자신을 공격하는 적에게 고통을 선물해보세요.",
+      "Cost": 800,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "로마 레기온의 무장",
+      "Type": 1,
+      "ATK": 0,
+      "DEF": 22,
+      "Description": "한때 세계를 제패했던 로마 군단병의 무장입니다.",
+      "Cost": 2800,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "오래된 유해의 검",
+      "Type": 0,
+      "ATK": 15,
+      "DEF": 0,
+      "Description": "한 때 던전을 탐험하던 누군가의 검으로 보입니다.",
+      "Cost": 1500,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
+    ,
+    {
+      "Name": "공허의 갑옷",
+      "Type": 1,
+      "ATK": 0,
+      "DEF": 10,
+      "Description": "공허충의 껍질로 만들어진 버려진 갑옷입니다.",
+      "Cost": 1000,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
+    ,
+    {
+      "Name": "오디세우스의 단검",
+      "Type": 0,
+      "ATK": 99,
+      "DEF": 0,
+      "Description": "전설의 영웅 오디세우스가 사용했던 단검입니다.",
+      "Cost": 9000,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
+]
