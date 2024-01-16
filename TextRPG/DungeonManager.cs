@@ -43,16 +43,18 @@ namespace TextRPG
         {
             deadCounter = 0;
 
-            monsterManager.MakeMonsters(dungeons[stage].dungeonMonsterType);
-        }
+            monsters = monsterManager.MakeMonsters(dungeons[stage].dungeonMonsterType).ToArray();
 
-        // 몬스터 배열을 몬스터 리스트에서 받아 생성하기
-        public void Encounter(List<Monster> dungeonMonsters)
-        {
-            monsters = dungeonMonsters.ToArray();
-            
             StartBattle();
         }
+
+        //// 몬스터 배열을 몬스터 리스트에서 받아 생성하기
+        //public void Encounter(List<Monster> dungeonMonsters)
+        //{
+        //    monsters = dungeonMonsters.ToArray();
+            
+        //    StartBattle();
+        //}
 
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
@@ -121,7 +123,7 @@ namespace TextRPG
             //플레이어 공격
             ShowBattle(monsters[input - 1], true, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
 
-            foreach (Monster monster in (Monster[])monsters)
+            foreach (Monster monster in monsters)       // foreach(Monster monster in (Monster[])monsters)
             {
                 if (monster.IsDead)
                 {
@@ -137,7 +139,9 @@ namespace TextRPG
                 //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
 
                 //몬스터 공격
-                ShowBattle(monster, false, (AttackType)monsterAttackType);
+                // 플레이어가 죽으면 종료
+                if (!player.IsDead)
+                    ShowBattle(monster, false, (AttackType)monsterAttackType);
             }
         }
 
@@ -254,23 +258,34 @@ namespace TextRPG
             // 승리 시
             if (deadCounter >= monster)
             {
-                Console.WriteLine("Victory\n");
-                Console.WriteLine($"던전에서 몬스터 {monster}마리를 잡았습니다\n");
+                //Console.WriteLine("Victory\n");
+
+                Utilities.TextColor("Victory\n", ConsoleColor.DarkGreen);
+
+                Console.Write($"던전에서 몬스터 ");
+                Utilities.TextColorWithNoNewLine($"{monster}", ConsoleColor.DarkRed);
+                Console.WriteLine("마리를 잡았습니다.\n");
+
                 //for (int i = 0; i < monster; i++)
                 //{
                 //    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monsters[i].Class)); //퀘스트 이벤트 몬스터 수만큼 호출함
                 //    // EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득 (동일해서 지움)
                 //}
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp())); //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가 
-                //player.ShowResult(monsterManager.GetExp()); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
+                player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
                 //monsterManager.GetReward(); 
                 GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
+
+                // duneongStage가 3보다 커지면 3으로 변경하기
+                if (dungeonStage >= 3)
+                    dungeonStage = 3;
+                else dungeonStage++;
             }
             else
             {
                 Console.WriteLine("You Lose\n");
 
-                player.ShowResult(0);
+                player.ShowResult();
             }
             Console.WriteLine("\n0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
@@ -291,12 +306,13 @@ namespace TextRPG
 
         public void OnEvent<T>(EventType type, T data)
         {
-            if (type == EventType.eSetMonsters)
-            {
-                var d = data as KeyValuePair<EventType, List<Monster>>?;
-                // MonsterManager에서 생성된 몬스터 리스트 받기
-                Encounter(d.Value.Value);
-            }
+            //if (type == EventType.eSetMonsters)
+            //{
+            //    var d = data as KeyValuePair<EventType, List<Monster>>?;
+            //    // MonsterManager에서 생성된 몬스터 리스트 받기
+            //    Encounter(d.Value.Value);
+            //}
+            throw new NotImplementedException();
         }
     }
 
