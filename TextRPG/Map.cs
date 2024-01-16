@@ -175,10 +175,45 @@ namespace TextRPG
             Console.WriteLine($"Lv. {player.Level}");
             Console.WriteLine($"EXP : {player.EXP}");
             Console.WriteLine($"{player.Name} ({player.Class})");
-            Console.WriteLine($"공격력 : {player.ATK}");
-            Console.WriteLine($"방어력 : {player.DEF}");
+
             Console.WriteLine($"체력 : {player.Health}");
             Console.WriteLine($"마나 : {player.MP}");
+            Console.WriteLine($"공격력 : {player.ATK}");
+            Console.WriteLine($"방어력 : {player.DEF}");
+            /*
+            if (player.Class == "전사") //클래스 별 기초스탯 plan a - 실패
+            {
+                Console.WriteLine($"{player.Name} ({player.Class})");
+                Console.WriteLine($"체력 : {player.Health}");
+                Console.WriteLine($"마나 : {player.MP}");
+                Console.WriteLine($"공격력 : {player.ATK}");
+                Console.WriteLine($"방어력 : {player.DEF}");
+            }
+            else if(player.Class == "마법사")
+            {
+                Console.WriteLine($"{player.Name} ({player.Class})");
+                Console.WriteLine($"체력 : {player.Health}");
+                Console.WriteLine($"마나 : {player.MP}");
+                Console.WriteLine($"공격력 : {player.ATK}");
+                Console.WriteLine($"방어력 : {player.DEF}");
+            }
+            else if (player.Class == "궁수")
+            {
+                Console.WriteLine($"{player.Name} ({player.Class})");
+                Console.WriteLine($"체력 : {player.Health}");
+                Console.WriteLine($"마나 : {player.MP}");
+                Console.WriteLine($"공격력 : {player.ATK}");
+                Console.WriteLine($"방어력 : {player.DEF}");
+            }
+            else if (player.Class == "도적")
+            {
+                Console.WriteLine($"{player.Name} ({player.Class})");
+                Console.WriteLine($"체력 : {player.Health}");
+                Console.WriteLine($"마나 : {player.MP}");
+                Console.WriteLine($"공격력 : {player.ATK}");
+                Console.WriteLine($"방어력 : {player.DEF}");
+            }
+            */
             Console.WriteLine($"소지금 : {player.Gold}");
             Console.WriteLine("");
 

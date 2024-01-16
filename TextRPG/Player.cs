@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+
+using System.Numerics;
+using System.ComponentModel.Design;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace TextRPG
@@ -15,6 +18,8 @@ namespace TextRPG
         private int PrevMp { get; set; }
         private int PrevExp;
 
+        private string PlayerClass { get; set; } // 플레이어 직업
+
         public Player()
         {
             EventManager.Instance.AddListener(EventType.Player, this);
@@ -25,7 +30,7 @@ namespace TextRPG
             myState.Name = Name.Key;
             myState.Class = Name.Value;
 
-            myState.Health = 1000;
+            myState.Health = 100;
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
@@ -38,22 +43,72 @@ namespace TextRPG
             maxHealth = myState.Health;
             maxMP = myState.MP;
             PrevExp = myState.EXP;
+
+            switch (Name.Value)
+            {
+                case "전사":
+                   { 
+                    myState.Health += 400;
+                    myState.MP = 100;
+                    myState.ATK += 200;
+                    myState.DEF += 100;
+                    break;
+                    }
+                case "마법사":
+                    {
+                        myState.Health += 100;
+                        myState.MP += 400;
+                        myState.ATK += 150;
+                        myState.DEF += 50;
+                        break;
+                    }
+                case "궁수":
+                    {
+                        myState.Health += 150;
+                        myState.MP += 200;
+                        myState.ATK += 300;
+                        myState.DEF += 80;
+                        break;
+                    }
+                case "도적":
+                    {
+                        myState.Health += 250;
+                        myState.MP += 200;
+                        myState.ATK += 350;
+                        myState.DEF += 60;
+                        break;
+                    }
+
+            }
         }
+        /*직업 : Warrior, Mage, Archer, Thief
+         * 기본 체력 100,마나 100, 공격력 100, 방어력 0 
+         * 전사 : 체력 +400, 마나 그대로, 공격력+200, 방어력+100
+         * 마법사 : 체력 +200, 마나+500, 공격력+150, 방어력+50
+         * 궁수 : 체력 +150, 마나+100, 공격력+300, 방어력+80
+         * 도적 : 체력 +350, 마나+200, 공격력+350, 방어력+60
+        
+        */
+
 
         public Player(ObjectState state)
         {
+            myState.Level = state.Level;
+
             myState.Name = state.Name;
             myState.Class = state.Class;
-
-            myState.Health = state.Health;
+            
+            myState.Health = Health;
             myState.MP = state.MP;
-            myState.Level = state.Level;
             myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
             myState.DEF = state.DEF;
+        
             myState.Gold = state.Gold;
             InitATK = state.ATK;
             InitDEF = state.DEF;
-        }
+
+            
+        }             
 
         public int Health => myState.Health;
         public int MP => myState.MP;
@@ -62,7 +117,7 @@ namespace TextRPG
         public string Name => myState.Name;
         public string Class => myState.Class;
         public int ATK => myState.ATK;
-        public int DEF => myState.DEF;
+        public int DEF => myState.DEF; 
         public int Gold => myState.Gold;
 
         public bool IsDead => myState.Health <= 0;
@@ -71,6 +126,7 @@ namespace TextRPG
 
         public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
 
+        
         public void OnEvent<T>(EventType type, T data)
         {
             //이벤트 받아서 switch문으로 구현
