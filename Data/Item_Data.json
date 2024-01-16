@@ -64,4 +64,37 @@
       "IsSale": "TRUE",
       "IsOnField": "FALSE"
     }
+    ,
+    {
+      "Name": "오래된 유해의 검",
+      "Type": 0,
+      "ATK": 15,
+      "DEF": 0,
+      "Description": "한 때 던전을 탐험하던 누군가의 검으로 보입니다.",
+      "Cost": 1500,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
+    ,
+    {
+      "Name": "공허의 갑옷",
+      "Type": 1,
+      "ATK": 0,
+      "DEF": 10,
+      "Description": "공허충의 껍질로 만들어진 버려진 갑옷입니다.",
+      "Cost": 1000,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
+    ,
+    {
+      "Name": "오디세우스의 단검",
+      "Type": 0,
+      "ATK": 99,
+      "DEF": 0,
+      "Description": "전설의 영웅 오디세우스가 사용했던 단검입니다.",
+      "Cost": 9000,
+      "IsSale": "FALSE",
+      "IsOnField": "TRUE"
+    }
 ]
