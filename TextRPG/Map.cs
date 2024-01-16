@@ -245,7 +245,7 @@ namespace TextRPG
             Console.Write(">>");
             switch ((GameState)Utilities.GetInputKey(0, 0))
             {
-                case GameState.NONE:
+                case 0:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
                     StartGame();
                     break;
