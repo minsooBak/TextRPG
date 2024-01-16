@@ -5,6 +5,7 @@ namespace TextRPG
     internal class CreatePlayer
     {
         //캐릭터 생성 및 출력
+
         public KeyValuePair<string, string> Create()
         {
             Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다!");

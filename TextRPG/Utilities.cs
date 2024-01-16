@@ -71,8 +71,8 @@ namespace TextRPG
         {
             sb.Append(str);
         }
-
         //str에 color로 들어온 값으로 색깔을 변경하고 Console.WriteLine 출력한 뒤 컬러 초기화
+
         static public void TextColor(string str, ConsoleColor color)
         {
             Console.ForegroundColor = color;
@@ -95,7 +95,8 @@ namespace TextRPG
             {
                 Console.Write(sb.ToString());
                 string? str = Console.ReadLine();
-                if (str != null && int.TryParse(str, out int a))
+                int key;
+                if (int.TryParse(str, out key) && key >= min && key <= max)
                 {
                     int key = int.Parse(str);
                     if (key >= min && key <= max)
@@ -127,7 +128,8 @@ namespace TextRPG
                 TextColor(intro, color);
                 Console.Write(sb.ToString());
                 string? str = Console.ReadLine();
-                if (str != null && int.TryParse(str, out int a))
+                int key;
+                if (int.TryParse(str, out key) && key >= min && key <= max)
                 {
                     int key = int.Parse(str);
                     if (key >= min && key <= max)
@@ -148,6 +150,7 @@ namespace TextRPG
                     Console.WriteLine("잘못된 입력입니다!");
                     Console.Write(">>");
                 }
+
             }
         }
 
