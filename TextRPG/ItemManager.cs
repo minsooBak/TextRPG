@@ -17,13 +17,13 @@
     {
         // Save_Data.json에서 불러온 읽기 전용 아이템 목록
         readonly Item[] items;
-        readonly Item[] fieldItems;
         readonly Item[] shopItems;
 
         // 게임에서 실제로 사용되는 아이템 목록
         List<Item> inventory; // 인벤토리
         List<Item> shopDisplay; // 상점에 노출되는 아이템 목록(IsSale이 true인 아이템)
-        List<Item> fieldDisplay; 
+
+        //List<Item> fieldDisplay; 
         /* fieldDisplay는 IsOnField가 true인 아이템 리스트로,
          * 단순히 Item_Data.json 파일에서 상점에 노출되는 아이템과 구분하기 위해 만들어진 리스트입니다.
          * IsSale이 true면서 IsOnField를 true로 설정해서 상점에 노출되면서 던전에서도 사용 가능한 아이템을 만들 수 있고,
@@ -35,7 +35,7 @@
         // 리스트 크기를 반환하는 프로퍼티
         public int GetInventorySize { get { return inventory.Count; } }
         public int GetShopDisplaySize { get { return shopDisplay.Count; } }
-        public int GetFieldDisplaySize { get { return fieldDisplay.Count; } }
+        //public int GetFieldDisplaySize { get { return fieldDisplay.Count; } }
 
         // ShowInventory, ShowShop 메서드에서 사용할 모드(Map.cs에서 사용함)
         public int Mode { get; set;}
@@ -53,13 +53,13 @@
             // 배열 초기화
             inventory = [];
             shopDisplay = [];
-            fieldDisplay = [];
+            //fieldDisplay = [];
 
             // shopDisplay, fieldDisplay에 각 조건에 맞는 아이템 추가
             foreach (Item item in items)
             {
-                if (item.IsOnField)
-                    fieldDisplay.Add(item); //필드 아이템 저장
+                //if (item.IsOnField)
+                //    fieldDisplay.Add(item); //필드 아이템 저장
                 if (item.IsSale)
                     shopDisplay.Add(item); //상점 아이템 저장
             }
@@ -235,23 +235,6 @@
             }
         }
 
-        public void DropItem(int itemNum)
-        // 인벤토리에서 아이템 삭제 기능, 판매와는 다르게 그냥 버리는 것 (현재 안 쓰임)
-        {
-            Item item = inventory[itemNum - 1]; // 인벤토리에서 아이템 선택
-
-            inventory.Remove(item); // 인벤토리에서 아이템 삭제
-            Console.WriteLine($"{item.Name}을 버렸습니다.");
-
-            if (item.IsEquipped) // 버린 아이템이 장비중인 경우
-            {
-                // EventManager로 아이템 정보만큼 스탯 차감 이벤트 전달
-                item.ATK *= -1;
-                item.DEF *= -1;
-                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats, item));
-            }
-        }
-
         public void EquipItem(int itemNum)
         {
             // 인벤토리에서 아이템 장착/해제 관련 메서드
@@ -284,6 +267,23 @@
             }
         }
 
+        //public void DropItem(int itemNum)
+        //// 인벤토리에서 아이템 삭제 기능, 판매와는 다르게 그냥 버리는 것 (현재 안 쓰임)
+        //{
+        //    Item item = inventory[itemNum - 1]; // 인벤토리에서 아이템 선택
+
+        //    inventory.Remove(item); // 인벤토리에서 아이템 삭제
+        //    Console.WriteLine($"{item.Name}을 버렸습니다.");
+
+        //    if (item.IsEquipped) // 버린 아이템이 장비중인 경우
+        //    {
+        //        // EventManager로 아이템 정보만큼 스탯 차감 이벤트 전달
+        //        item.ATK *= -1;
+        //        item.DEF *= -1;
+        //        EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats, item));
+        //    }
+        //}
+
         public void OnEvent<T>(EventType type, T data)
         {
             // 받는 이벤트의 type에 따른 분기
@@ -296,10 +296,6 @@
                 {
                     switch (d.Value.Key)
                     {
-                        case eItemType.eGameEnd:
-                            {
-                                break;
-                            }
                         case eItemType.eGetFieldItem:
                             {
                                 foreach (var item in items) //전체 아이템 목록에서 하나 씩 아이템을 꺼내서

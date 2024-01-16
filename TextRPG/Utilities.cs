@@ -154,13 +154,13 @@ namespace TextRPG
         //LoadType에 따라 경로를 설정하고 Json으로 파일 불러와서 데이터 반환
         public static T? LoadFile<T>(LoadType type)
         {
-            string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string? path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName;
             switch (type)
             {
                 case LoadType.Map:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Map_Data.json";
+                        path += @"\Data\Map_Data.json";
 
                         if (File.Exists(path) == false) // 파일이 존재하는지 체크
                             return default(T);
@@ -178,8 +178,7 @@ namespace TextRPG
                     }
                 case LoadType.SaveData:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Save_Data.json";
+                        path += @"\Data\Save_Data.json";
                         if (File.Exists(path) == false)
                         {
                             Console.WriteLine("저장된 파일이 없습니다.");
@@ -201,8 +200,7 @@ namespace TextRPG
                     }
                 case LoadType.Item:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Item_Data.json";
+                        path += @"\Data\Item_Data.json";
                         if (File.Exists(path) == false)
                             return default(T);
                         StreamReader? file = File.OpenText(path);
@@ -237,8 +235,7 @@ namespace TextRPG
                     }
                 case LoadType.Monster:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Data\Monster_Data.json";
+                        path += @"\Data\Data\Monster_Data.json";
                         if (File.Exists(path) == false)
                             return default(T);
                         StreamReader? file = File.OpenText(path);
@@ -255,8 +252,7 @@ namespace TextRPG
                     }
                 case LoadType.SkillData:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Skill_Data.json";
+                        path += @"\Data\Skill_Data.json";
                         if (File.Exists(path) == false)
                             return default(T);
                         StreamReader? file = File.OpenText(path);
@@ -274,8 +270,7 @@ namespace TextRPG
                     }
                 case LoadType.QuestData:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Quest_Data.json";
+                        path += @"\Data\Quest_Data.json";
                         if (File.Exists(path) == false)
                             return default(T);
                         StreamReader? file = File.OpenText(path);
@@ -293,8 +288,7 @@ namespace TextRPG
                     }
                 case LoadType.QuestSaveData:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Save_Quest.json";
+                        path += @"\Data\Save_Quest.json";
                         if (File.Exists(path) == false)
                             return default(T);
                         StreamReader? file = File.OpenText(path);
@@ -312,8 +306,7 @@ namespace TextRPG
                     }
                 case LoadType.Dungeon:
                     {
-                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                            .Parent.Parent.Parent.FullName + @"\Data\Dungeon_Data.json";
+                        path += @"\Data\Dungeon_Data.json";
                         if (File.Exists(path) == false)
                             return default(T);
                         StreamReader? file = File.OpenText(path);
@@ -341,7 +334,7 @@ namespace TextRPG
             {
                 case SaveType.Player:
                     {
-                        path += @"\P_Data.json";
+                        path += @"\Data\P_Data.json";
                         //path경로에 데이터를를 직렬화하여 라인 들여쓰기(Formatting.Indented)를 마친 text를 파일이 있다면 덮어쓰고 없다면 생성하여 작성
                         File.WriteAllText(path, JsonConvert.SerializeObject(data, Formatting.Indented));
                         break;
