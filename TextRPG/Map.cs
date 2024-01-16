@@ -178,7 +178,7 @@ namespace TextRPG
         {
             Console.Clear();
 
-            player.ShowStats();
+            player.PlayerStats();
 
             Console.WriteLine($"소지금 : {player.Gold} G");
             Console.WriteLine("");

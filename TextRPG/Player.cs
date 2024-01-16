@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.ComponentModel;
+using System;
 
 namespace TextRPG
 {
@@ -183,17 +184,25 @@ namespace TextRPG
             }
         }
 
-        public void ShowStats()
+        public void PlayerStats()
         {
             Console.WriteLine("\n[내 정보]\n");
+            Console.Write("Lv.");
+            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+            Console.Write("EXP :");
+            Utilities.TextColor($"{myState.EXP}", ConsoleColor.Yellow);
+            Console.WriteLine($"{myState.Name} ({myState.Class})");
+            Console.WriteLine($"HP : {myState.Health} / {maxHealth}");
+            Console.WriteLine($"MP : {myState.MP} / {maxMP}");
+            Console.WriteLine($"공격력 : {myState.ATK}");
+            Console.WriteLine($"방어력 : {myState.DEF}");
+        }
 
+        public void ShowStats()
+        {
             Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
-
-            Console.Write("경험치 :");
-            Utilities.TextColorWithNoNewLine($"{myState.EXP}\n\n", ConsoleColor.Yellow);
-            
 
             Console.Write("HP ");
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
@@ -205,13 +214,6 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxMP}\n", ConsoleColor.Blue);
-
-            Console.Write("공격력 ");
-            Utilities.TextColorWithNoNewLine($"{myState.ATK}\n", ConsoleColor.DarkRed);
-          
-            Console.Write("방어력 ");
-            Utilities.TextColorWithNoNewLine($"{myState.DEF}\n", ConsoleColor.Blue);
-         
         }
 
         public int Attack(AttackType attackType)
@@ -228,7 +230,7 @@ namespace TextRPG
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
             {
-                damage = myState.Skill.GetATK(damage);
+                damage = (int)(damage * myState.Skill.ATKRatio);
                 myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
             }
 

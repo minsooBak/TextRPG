@@ -222,11 +222,6 @@ namespace TextRPG
                             }
                             break;
                         }
-                    case eQuestType.Dungeon:
-                        {
-
-                            break;
-                        }
                     case eQuestType.Monster: //몬스터가 죽은 수만큼 Quest의 currnt(현재 달성도)를 증가시킨다.외부에서 반복 호출
                         {
                             foreach (var quest in quests)
@@ -240,11 +235,6 @@ namespace TextRPG
                                     }
                                 }
                             }
-                            break;
-                        }
-                    case eQuestType.Stats:
-                        {
-
                             break;
                         }
                     case eQuestType.PlayerLevel: // Quest의 목적이 "레벨업"인 경우 
