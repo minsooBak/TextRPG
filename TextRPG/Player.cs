@@ -3,6 +3,7 @@ using System.Numerics;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.ComponentModel;
 
 namespace TextRPG
 {
@@ -52,7 +53,9 @@ namespace TextRPG
                     myState.MP = 100;
                     myState.ATK += 200;
                     myState.DEF += 100;
-                    break;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
+                        break;
                     }
                 case "마법사":
                     {
@@ -60,6 +63,8 @@ namespace TextRPG
                         myState.MP += 400;
                         myState.ATK += 150;
                         myState.DEF += 50;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
                         break;
                     }
                 case "궁수":
@@ -68,6 +73,8 @@ namespace TextRPG
                         myState.MP += 200;
                         myState.ATK += 300;
                         myState.DEF += 80;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
                         break;
                     }
                 case "도적":
@@ -76,6 +83,8 @@ namespace TextRPG
                         myState.MP += 200;
                         myState.ATK += 350;
                         myState.DEF += 60;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
                         break;
                     }
             }
@@ -176,22 +185,33 @@ namespace TextRPG
 
         public void ShowStats()
         {
-            Console.WriteLine("\n[내 정보]");
+            Console.WriteLine("\n[내 정보]\n");
+
             Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
 
-            Console.Write("HP ");
+            Console.Write("경험치 :");
+            Utilities.TextColorWithNoNewLine($"{myState.EXP}\n\n", ConsoleColor.Yellow);
+            
 
+            Console.Write("HP ");
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
 
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
-            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{maxMP}\n", ConsoleColor.Blue);
+
+            Console.Write("공격력 ");
+            Utilities.TextColorWithNoNewLine($"{myState.ATK}\n", ConsoleColor.DarkRed);
+          
+            Console.Write("방어력 ");
+            Utilities.TextColorWithNoNewLine($"{myState.DEF}\n", ConsoleColor.Blue);
+         
         }
 
         public int Attack(AttackType attackType)
