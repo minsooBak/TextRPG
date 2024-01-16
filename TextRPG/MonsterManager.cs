@@ -11,12 +11,11 @@ namespace TextRPG
     //정원우님 구현
     internal class MonsterManager : IListener
     {
-        //몬스터를 생성해서 넘겨주고 몬스터매니저에서 쓰는것이 없기에 Make에서 생성해주고 넘겨준 뒤 클리어해주었습니다.
-        //List<Monster>dungeonMonsters = [];
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
 
+            // arrayOfMonsterTypes 배열 생성
             for(int i = 0; i < maxMonsterType; i++)
             {
                 arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
@@ -27,22 +26,15 @@ namespace TextRPG
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
         static int maxMonsterType = 3;
-        // 생성 가능한 몬스터 타입 배열
+        // arrayOfMonsterTypes : 생성 가능한 몬스터 타입 배열
         public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
-        //public Item[] monsterItem = [];
 
         List<Monster> dungeonMonsters = [];
         string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
-        //추가로 구현하면 좋은것은
-        //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
-        //2. 전체 몬스터 데이터를 배열로 가지고있다가 type에 맞는 몬스터를 꺼내주기
-        //3. CreateMonster에서의 역활은 굳이 int값을 복사해서 MakeMonsters에서도 할수있는것을 넘기는것이기에 MakeMonsters에서 추가해주기
-        //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
+        
         public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
 
         {
-            //List<Monster> dungeonMonsters = [];
-
             Random rnd = new Random();
             
             // 스테이지에 따라 생성 가능한 몬스터 마리 수 정하기
@@ -73,6 +65,7 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
         }
 
+        // 던전 승리 시 경험치 얻기
         public int GetExp()
         {
             int exp = 0;
@@ -80,18 +73,17 @@ namespace TextRPG
             foreach (Monster monster in dungeonMonsters)
             {
                 // 해당 몬스터 리스트의 총 경험치량 저장
-                //exp += monster.Level;
-                exp += monster.Exp; //몬스터의 경험치를 더하는 것이 괜찮을 것 같아서
+                exp += monster.Exp; //몬스터의 경험치를 더하는 것이 괜찮을 것 같아서 -> 저도 이 코드가 더 괜찮은 것 같습니다!
             }
             return exp;
         }
 
+        // 던전 승리 시 아이템 얻기
         public void GetReward()
         {
             Random rnd = new Random();
             int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷 총 3개의 아이템만 떨군다.
             int gold = 0;
-            int i = 0;
 
             foreach (Monster monster in dungeonMonsters)
             {
@@ -121,7 +113,7 @@ namespace TextRPG
             Console.WriteLine("[획득 아이템]");
             Console.WriteLine($"{gold} Gold");
             
-            for(i = 0; i < itemsCounter.Length; i++)
+            for(int i = 0; i < itemsCounter.Length; i++)
             {
                 if (itemsCounter[i] > 0)
                 {
