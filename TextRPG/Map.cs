@@ -198,7 +198,7 @@ namespace TextRPG
 
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">>");
-            switch ((GameState)Utilities.GetInputKey(0, 0))
+            switch (Utilities.GetInputKey(0, 0))
             {
                 case 0:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
