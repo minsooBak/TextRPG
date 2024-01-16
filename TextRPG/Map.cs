@@ -18,7 +18,6 @@ namespace TextRPG
 
         Player player = new Player();
         DungeonManager dungeonManager;
-        //MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
         QuestManager questManager = new QuestManager();
 
@@ -26,11 +25,6 @@ namespace TextRPG
         private GameState gameState = GameState.NONE;
         public void DrawMap()
         {
-            //Tuple<ePlayerType, 10>
-            //EventManager.Instance.PostEvent(EventType.Player, new KeyValuePair<ePlayerType, Tuple<int, int>>(ePlayerType.Stats, new Tuple<int, int>(10, 10)));
-
-            //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
-            //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[] { 300,200}));
             dungeonManager = new DungeonManager(player);
             while (!isGameEnd)
             {
@@ -143,10 +137,6 @@ namespace TextRPG
             Console.WriteLine("");
             Console.WriteLine("0. 종료");
 
-            //스킬 출력 예제
-            //skillManager.ShowSkillList("전사");
-            //skillManager.ShowSkillList("공허충");
-
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
             switch ((GameState)Utilities.GetInputKey(0, 5))
@@ -188,52 +178,7 @@ namespace TextRPG
         {
             Console.Clear();
 
-            Utilities.TextColor("상태 보기", ConsoleColor.Yellow);
-            Console.WriteLine("캐릭터의 정보가 표시됩니다.");
-            Console.WriteLine("");
-
-            Console.WriteLine($"Lv. {player.Level}");
-            Console.WriteLine($"EXP : {player.EXP}");
-            Console.WriteLine($"{player.Name} ({player.Class})");
-
-            Console.WriteLine($"체력 : {player.Health}");
-            Console.WriteLine($"마나 : {player.MP}");
-            Console.WriteLine($"공격력 : {player.ATK}");
-            Console.WriteLine($"방어력 : {player.DEF}");
-            /*
-            if (player.Class == "전사") //클래스 별 기초스탯 plan a - 실패
-            {
-                Console.WriteLine($"{player.Name} ({player.Class})");
-                Console.WriteLine($"체력 : {player.Health}");
-                Console.WriteLine($"마나 : {player.MP}");
-                Console.WriteLine($"공격력 : {player.ATK}");
-                Console.WriteLine($"방어력 : {player.DEF}");
-            }
-            else if(player.Class == "마법사")
-            {
-                Console.WriteLine($"{player.Name} ({player.Class})");
-                Console.WriteLine($"체력 : {player.Health}");
-                Console.WriteLine($"마나 : {player.MP}");
-                Console.WriteLine($"공격력 : {player.ATK}");
-                Console.WriteLine($"방어력 : {player.DEF}");
-            }
-            else if (player.Class == "궁수")
-            {
-                Console.WriteLine($"{player.Name} ({player.Class})");
-                Console.WriteLine($"체력 : {player.Health}");
-                Console.WriteLine($"마나 : {player.MP}");
-                Console.WriteLine($"공격력 : {player.ATK}");
-                Console.WriteLine($"방어력 : {player.DEF}");
-            }
-            else if (player.Class == "도적")
-            {
-                Console.WriteLine($"{player.Name} ({player.Class})");
-                Console.WriteLine($"체력 : {player.Health}");
-                Console.WriteLine($"마나 : {player.MP}");
-                Console.WriteLine($"공격력 : {player.ATK}");
-                Console.WriteLine($"방어력 : {player.DEF}");
-            }
-            */
+            player.ShowStats();
             Console.WriteLine($"소지금 : {player.Gold}");
             Console.WriteLine("");
 
@@ -243,11 +188,10 @@ namespace TextRPG
 
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.Write(">>");
-            switch ((GameState)Utilities.GetInputKey(0, 0))
+            switch (Utilities.GetInputKey(0, 0))
             {
-                case GameState.NONE:
+                case 0:
                     gameState = GameState.NONE; // StartGame()으로 돌아가기
-                    StartGame();
                     break;
             }
         }
