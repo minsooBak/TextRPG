@@ -89,7 +89,7 @@ namespace TextRPG
                     Thread.Sleep(1500);
                     return "마법사";
                 case 3:
-                    Console.WriteLine("궁수 기본 스텟 : 체력 250, 마나 200, 공격력 400, 방어력 80");
+                    Console.WriteLine("궁수 기본 스텟 : 체력 250, 마나 300, 공격력 400, 방어력 80");
                     Console.WriteLine("전직 완료. 마을로 입장합니다.");
                     Thread.Sleep(1500);
                     return "궁수";

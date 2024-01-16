@@ -28,7 +28,7 @@ namespace TextRPG
             myState.Name = Name.Key;
             myState.Class = Name.Value;
 
-            myState.Health = 1000;
+            myState.Health = 100;
             myState.MP = 100;
             myState.Level = 1;
             myState.EXP = 0;
@@ -42,20 +42,49 @@ namespace TextRPG
             maxMP = myState.MP;
             PrevExp = myState.EXP;
 
-            switch (PlayerClass)
+            switch (Name.Value)
             {
                 case "전사":
-                    myState.Health += 500;
+                   { 
+                    myState.Health += 400;
+                    myState.MP = 100;
+                    myState.ATK += 200;
+                    myState.DEF += 100;
                     break;
+                    }
+                case "마법사":
+                    {
+                        myState.Health += 100;
+                        myState.MP += 400;
+                        myState.ATK += 150;
+                        myState.DEF += 50;
+                        break;
+                    }
+                case "궁수":
+                    {
+                        myState.Health += 150;
+                        myState.MP += 200;
+                        myState.ATK += 300;
+                        myState.DEF += 80;
+                        break;
+                    }
+                case "도적":
+                    {
+                        myState.Health += 250;
+                        myState.MP += 200;
+                        myState.ATK += 350;
+                        myState.DEF += 60;
+                        break;
+                    }
 
             }
         }
         /*직업 : Warrior, Mage, Archer, Thief
-         * 기본 체력 1000,마나 100, 공격력 100, 방어력 0 
-         * 전사 : 체력-500, 마나 그대로, 공격력+200, 방어력+100
-         * 마법사 : 체력-800, 마나+500, 공격력+150, 방어력+50
-         * 궁수 : 체력-750, 마나+100, 공격력+300, 방어력+80
-         * 도적 : 체력-650, 마나+200, 공격력+350, 방어력+60
+         * 기본 체력 100,마나 100, 공격력 100, 방어력 0 
+         * 전사 : 체력 +400, 마나 그대로, 공격력+200, 방어력+100
+         * 마법사 : 체력 +200, 마나+500, 공격력+150, 방어력+50
+         * 궁수 : 체력 +150, 마나+100, 공격력+300, 방어력+80
+         * 도적 : 체력 +350, 마나+200, 공격력+350, 방어력+60
         
         */
 
