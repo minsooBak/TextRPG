@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,55 @@ using System.Threading.Tasks;
 
 namespace TextRPG
 {
+    struct QuestData
+    {
+        public List<Quest> myQuest; //진행도 저장된 퀘스트
+        public List<string> clearQuest;//완전 클리어된 퀘스트 이름
+    }
     internal class QuestManager : IListener
     {
         private Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests; //화면에 노출되는 퀘스트 목록
-        private List<Item> questItem = new List<Item>();
+        private List<string> Clearquest = new List<string>();
         private static int clearCount = 0; //퀘스트 클리어 횟수
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx
         public QuestManager()
         {
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);
             EventManager.Instance.AddListener(EventType.Quest, this); //Add
-            questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 전체 목록 받아오기
-            quests = new List<Quest> {};
+            questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 전체 목록 받아오기\
+            QuestData? data = (QuestData?)Utilities.LoadFile(LoadType.QuestSaveData);
+            if (data != null)
+            {
+                foreach (var quest in data.Value.clearQuest)
+                {
+                    for (int i = 0; i < questMenu.Length; i++)
+                    {
+                        if (questMenu[i].Name == quest)
+                        {
+                            questMenu[i].isClear = true;
+                            break;
+                        }
+                    }
+
+                }
+                quests = data.Value.myQuest;
+                int count = 0;
+                for (int i = 0; i < questMenu.Length; i++)
+                {
+                    if (questMenu[i].Name == quests[count].Name)
+                    {
+                        count++;
+                        questMenu[i].isActive = true;
+                    }
+                }
+            }
+            else
+            {
+                quests = new List<Quest> { };
+                Clearquest = new List<string>();
+            }
+
             AddQuest();
         }
         public int QuestCount { get { return quests.Count;} } //
@@ -135,6 +173,7 @@ namespace TextRPG
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 골드 추가
                         EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, quests[idx].ItemName));//아이템 획득
                         //아이템 얻는 이벤트 추가해야 함.
+                        Clearquest.Add(quests[idx].Name);//클리어 
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
                         clearCount++; //클리어 횟수 증가
                         break;
@@ -147,9 +186,13 @@ namespace TextRPG
         {
             for (int i = quests.Count; i < 3; i++) // 0 1 2 현재 퀘스트 개수가 3개 미만이고 
             {
+
                 if (idxCount < questMenu.Length)//다음 퀘스트가 있다면 // 0  1 2 3<  4
                 {
-                    quests.Add(questMenu[idxCount++]);//추가한다.
+                    if (questMenu[idxCount].isClear || questMenu[idxCount].isActive)
+                        idxCount++;
+                    else
+                        quests.Add(questMenu[idxCount++]);//추가한다.
                 }
                 else
                 {
@@ -201,7 +244,7 @@ namespace TextRPG
                         }
                     case eQuestType.Stats:
                         {
-                            
+
                             break;
                         }
                     case eQuestType.PlayerLevel:
@@ -220,6 +263,11 @@ namespace TextRPG
                             break;
                         }
                 }
+            }
+            else if (type == EventType.eGameEnd)
+            {
+                QuestData myQuestData = new QuestData { myQuest = quests, clearQuest = Clearquest };
+                Utilities.SaveFile(SaveType.Quest, myQuestData);
             }
         }
     }

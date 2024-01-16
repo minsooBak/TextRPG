@@ -1,0 +1,33 @@
+{
+  "myQuest": [
+    {
+      "Target": "낡은 대검",
+      "Name": "장비를 장착해보자",
+      "Explanation": "\"낡은 대검\" 장비를 장착해 보게!",
+      "Gold": 60,
+      "ItemName": "가시 갑옷",
+      "Exp": 60,
+      "isClear": false,
+      "isActive": true,
+      "Max": 1,
+      "current": 0,
+      "Condition": "아이템 장착하기"
+    },
+    {
+      "Target": "공허충",
+      "Name": "마을을 위협하는 미니언 처치(2)",
+      "Explanation": "이봐 ! 저번에 이어 마을 근처에 공허충이 많아졌다고 생각하지 않나?\n마을주민들의 안정을 위해서라도 저것들 수를 좀 줄여야 한다고!\r\n모험가인 자네가 좀 처치해주게!\r\n",
+      "Gold": 100,
+      "ItemName": "테스트용 개사기검",
+      "Exp": 100,
+      "isClear": false,
+      "isActive": true,
+      "Max": 3,
+      "current": 2,
+      "Condition": "공허충 3마리 처치"
+    }
+  ],
+  "clearQuest": [
+    "마을을 위협하는 미니언 처치"
+  ]
+}
