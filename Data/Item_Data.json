@@ -11,6 +11,28 @@
     }
     ,
     {
+      "Name": "대장장이의 명검",
+      "Type": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "Description": "마을 대장장이의 영혼이 담긴 예리한 검입니다.",
+      "Cost": 1500,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
+      "Name": "란츠크네히트의 할버드",
+      "Type": 0,
+      "ATK": 32,
+      "DEF": 0,
+      "Description": "중세 스위스 용병과의 싸움에서 자주 쓰이던 할버드입니다. 공격력이 매우 뛰어납니다",
+      "Cost": 3000,
+      "IsSale": "TRUE",
+      "IsOnField": "FALSE"
+    }
+    ,
+    {
       "Name": "초보자의 갑옷",
       "Type": 1,
       "ATK": 0,
@@ -27,18 +49,18 @@
       "ATK": 3,
       "DEF": 5,
       "Description": "자신을 공격하는 적에게 고통을 선물해보세요.",
-      "Cost": 999,
+      "Cost": 800,
       "IsSale": "TRUE",
       "IsOnField": "FALSE"
     }
     ,
     {
-      "Name": "테스트용 개사기검",
+      "Name": "로마 레기온의 무장",
       "Type": 0,
-      "ATK": 999,
-      "DEF": 0,
-      "Description": "개발자용",
-      "Cost": 9999,
+      "ATK": 0,
+      "DEF": 22,
+      "Description": "한때 세계를 제패했던 로마 군단병의 무장입니다.",
+      "Cost": 2800,
       "IsSale": "TRUE",
       "IsOnField": "FALSE"
     }
