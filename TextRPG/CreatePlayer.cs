@@ -78,10 +78,26 @@ namespace TextRPG
             int key = Utilities.GetInputKey(1, 4, ConsoleColor.DarkYellow, "캐릭터 생성 - 직업");
             switch (key)
             {
-                case 1: return "전사";
-                case 2: return "마법사";
-                case 3: return "궁수";
-                case 4: return "도적";
+                case 1:
+                    Console.WriteLine("전사 기본스텟 : 체력 500, 마나 100, 공격력 300, 방어력 100");
+                    Console.WriteLine("전직 완료. 마을로 입장합니다.");
+                    Thread.Sleep(1500);
+                    return "전사";
+                case 2:
+                    Console.WriteLine("마법사 기본 스텟 : 체력 200, 마나 500, 공격력 250, 방어력 50");
+                    Console.WriteLine("전직 완료. 마을로 입장합니다.");
+                    Thread.Sleep(1500);
+                    return "마법사";
+                case 3:
+                    Console.WriteLine("궁수 기본 스텟 : 체력 250, 마나 200, 공격력 400, 방어력 80");
+                    Console.WriteLine("전직 완료. 마을로 입장합니다.");
+                    Thread.Sleep(1500);
+                    return "궁수";
+                case 4:
+                    Console.WriteLine("도적 기본 스텟 : 체력 350, 마나 300, 공격력 450, 방어력 60");
+                    Console.WriteLine("전직 완료. 마을로 입장합니다.");
+                    Thread.Sleep(1500);
+                    return "도적";
                 default:
                     {
                         Console.Error.WriteLine("Player Job Input Error");
