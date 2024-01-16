@@ -235,23 +235,6 @@
             }
         }
 
-        public void DropItem(int itemNum)
-        // 인벤토리에서 아이템 삭제 기능, 판매와는 다르게 그냥 버리는 것 (현재 안 쓰임)
-        {
-            Item item = inventory[itemNum - 1]; // 인벤토리에서 아이템 선택
-
-            inventory.Remove(item); // 인벤토리에서 아이템 삭제
-            Console.WriteLine($"{item.Name}을 버렸습니다.");
-
-            if (item.IsEquipped) // 버린 아이템이 장비중인 경우
-            {
-                // EventManager로 아이템 정보만큼 스탯 차감 이벤트 전달
-                item.ATK *= -1;
-                item.DEF *= -1;
-                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats, item));
-            }
-        }
-
         public void EquipItem(int itemNum)
         {
             // 인벤토리에서 아이템 장착/해제 관련 메서드
@@ -283,6 +266,23 @@
                 EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Item, inventory[itemNum - 1].Name));//장착하면 아이템 이름으로 이벤트 발생
             }
         }
+
+        //public void DropItem(int itemNum)
+        //// 인벤토리에서 아이템 삭제 기능, 판매와는 다르게 그냥 버리는 것 (현재 안 쓰임)
+        //{
+        //    Item item = inventory[itemNum - 1]; // 인벤토리에서 아이템 선택
+
+        //    inventory.Remove(item); // 인벤토리에서 아이템 삭제
+        //    Console.WriteLine($"{item.Name}을 버렸습니다.");
+
+        //    if (item.IsEquipped) // 버린 아이템이 장비중인 경우
+        //    {
+        //        // EventManager로 아이템 정보만큼 스탯 차감 이벤트 전달
+        //        item.ATK *= -1;
+        //        item.DEF *= -1;
+        //        EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats, item));
+        //    }
+        //}
 
         public void OnEvent<T>(EventType type, T data)
         {
