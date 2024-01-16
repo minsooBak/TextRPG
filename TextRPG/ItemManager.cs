@@ -1,4 +1,6 @@
-﻿namespace TextRPG
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace TextRPG
 {
     enum ItemType //아이템 종류
     {
@@ -8,8 +10,7 @@
 
     struct SaveData //저장할 데이터 구조
     {
-        public string[] inventory;
-        public string[] equippedItem;
+        public Item[] inventory;
         public string[] saleItem;
     }
 
@@ -70,25 +71,13 @@
             // 저장된 파일이 null이 아니라면 저장된 정보 할당하기
             if (saveData != null)
             {
-                foreach (string saveitem in saveData.Value.inventory)
-                    // 인벤토리 아이템 목록 가져오기
-                {
-                    Item _item = list.Find(x => x.Name == saveitem);
-                    inventory.Add(_item);
-                }
-                foreach (string saveitem in saveData.Value.equippedItem)
-                    // 장착 여부 가져오기
-                {
-                    Item _item = list.Find(x => x.Name == saveitem);
-                    _item.IsEquipped = true;
-                }
+                inventory = saveData.Value.inventory.ToList();
                 foreach (string saveitem in saveData.Value.saleItem)
-                    // 판매 여부 가져오기
+                // 판매 여부 가져오기
                 {
                     Item _item = list.Find(x => x.Name == saveitem);
                     _item.IsSale = false;
                 }
-
             }
 
 
@@ -221,9 +210,10 @@
         public void GetFieldItem(Item? data = null)
         // 던전에서 아이템 얻기 관련 메서드, 단순 인벤토리 아이템 추가용
         {
+            Item newItem = new Item(data.Name, (int)data.Type, data.ATK, data.DEF, data.Description, data.Cost, data.IsSale, data.IsOnField);
             if (data != null) // 매개변수로 아이템이 넘어오면
             {
-                inventory.Add(data); //인벤토리에 아이템 추가
+                inventory.Add(newItem); //인벤토리에 아이템 추가
                 Console.WriteLine($"{data.Name}을 획득했습니다.");
             }
             else
@@ -314,7 +304,7 @@
             // 받는 이벤트의 type에 따른 분기
             if (type == EventType.Item) // 'Item' 이벤트 관련
             {
-                var d = data as KeyValuePair<eItemType, String>?;
+                var d = data as KeyValuePair<eItemType, string>?;
 
                 // 게임 이벤트에 따른 인벤토리 기능 구현
                 if (d != null)
@@ -342,8 +332,7 @@
             {
                 SaveData itemData = new SaveData(); // 저장할 데이터 구조 생성
 
-                itemData.inventory = inventory.Select(x => x.Name).ToArray(); // 인벤토리 아이템 목록 저장
-                itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray(); // 장착 아이템 목록 저장
+                itemData.inventory = inventory.ToArray(); // 인벤토리 아이템 목록 저장
                 itemData.saleItem = inventory.FindAll(x => x.IsSale == false).Select(x => x.Name).ToArray(); // 판매 아이템 목록 저장
 
                 // Save_Data.json 파일에 저장
