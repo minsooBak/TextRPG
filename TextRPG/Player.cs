@@ -52,7 +52,9 @@ namespace TextRPG
                     myState.MP = 100;
                     myState.ATK += 200;
                     myState.DEF += 100;
-                    break;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
+                        break;
                     }
                 case "마법사":
                     {
@@ -60,6 +62,8 @@ namespace TextRPG
                         myState.MP += 400;
                         myState.ATK += 150;
                         myState.DEF += 50;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
                         break;
                     }
                 case "궁수":
@@ -68,6 +72,8 @@ namespace TextRPG
                         myState.MP += 200;
                         myState.ATK += 300;
                         myState.DEF += 80;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
                         break;
                     }
                 case "도적":
@@ -76,6 +82,8 @@ namespace TextRPG
                         myState.MP += 200;
                         myState.ATK += 350;
                         myState.DEF += 60;
+                        maxHealth = myState.Health;
+                        maxMP = myState.MP;
                         break;
                     }
 
