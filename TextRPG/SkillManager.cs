@@ -53,13 +53,12 @@ namespace TextRPG
             skillDictionary.Add(className, list); // {[직업] , 직업에 할당된 스킬 리스트} 이런 식으로 딕셔너리에 추가.
         }
 
-        public int ShowSkillList(string className) //매개변수 : 직업이름 -  직업에 해당하는 스킬을 화면에 출력
+        public void ShowSkillList(string className) //매개변수 : 직업이름 -  직업에 해당하는 스킬을 화면에 출력
         {
             List<Skill> list;
             if (skillDictionary.TryGetValue(className, out list) == false) // 딕셔너리 [ 직업이름 ]에 저장된 스킬이 없다면 에러
             {
                 Console.Error.WriteLine("Skill Show ClassName Null! ClassName : " + className);
-                return 0;
             }
 
             for (int i = 0; i < list.Count; i++)//스킬 리스트가 있다면 스킬 이름, 스킬 설명 출력
@@ -68,7 +67,6 @@ namespace TextRPG
                 Console.WriteLine($"{list[i].Name} - mp {list[i].Cost}"); //스킬 이름 , 비용 출력
                 Console.WriteLine($"   {list[i].Description}."); //스킬 설명 출력
             }
-            return list.Count; //스킬 개수 반환 (현재 사용하지 않는다)
         }
 
         public Skill GetMonsterSkill(string className, int mp) //몬스터 클래스 , 현재 몬스터 mp
@@ -114,11 +112,6 @@ namespace TextRPG
             this.ATKRatio = ATKRatio;
             Cost = cost;
             Description = description;
-        }
-
-        public int GetATK(int ATK)
-        {
-            return (int)(ATK * ATKRatio);
         }
     }
 }

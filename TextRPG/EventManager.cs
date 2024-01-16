@@ -1,28 +1,5 @@
-﻿//public enum EventType//아이템이벤트
-//{
-//    NONE,
-//    eMakeMonsters,
-//    eClearMonsters,
-//    eSetMonsters,
-//    eUpdateItem,
-//    eGetFieldItem,
-//    eUpdateGold,
-//    eUpdateStat,
-//    eGameEnd,
-//    eSetSkill,
-//    eShowSkill,
-//    Item,
-//    Quest,
-//    Player
-//}
-
-public enum EventType //이 타입의 이벤트들을 듣겠다
+﻿public enum EventType //이 타입의 이벤트들을 듣겠다
 {
-    eMakeMonsters,//변경하기
-    eSetMonsters, //변경하기
-    eUpdateStat,//변경하기
-    eUpdateGold,//변경하기
-    eClearMonsters,//변경하기
     Item,
     Quest,
     Player,
@@ -31,9 +8,7 @@ public enum EventType //이 타입의 이벤트들을 듣겠다
 
 enum eItemType//아이템내의 이벤트타입으로 데이터를 보내겠다
 {
-    //eUpdateItem, //잘 모르겠음
     eGetFieldItem,
-    eGameEnd,
     EquipQuest
 }
 
@@ -48,8 +23,6 @@ enum eQuestType//퀘스트이벤트내의 이벤트타입으로 데이터를 보
 
 enum ePlayerType//플레이어내의 이벤트타입으로 데이터를 보내겠다
 {
-    HP,
-    MP,
     Gold,
     Stats,
     Exp
