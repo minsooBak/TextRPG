@@ -23,8 +23,8 @@ namespace TextRPG
         {
             EventManager.Instance.AddListener(EventType.eGameEnd, this);
             EventManager.Instance.AddListener(EventType.Quest, this); //Add
-            questMenu = (Quest[])Utilities.LoadFile(LoadType.QuestData); //퀘스트 전체 목록 받아오기\
-            QuestData? data = (QuestData?)Utilities.LoadFile(LoadType.QuestSaveData);
+            questMenu = Utilities.LoadFile<Quest[]>(LoadType.QuestData); //퀘스트 전체 목록 받아오기\
+            QuestData? data = Utilities.LoadFile<QuestData?>(LoadType.QuestSaveData);
             if (data != null)
             {
                 foreach (var quest in data.Value.clearQuest)

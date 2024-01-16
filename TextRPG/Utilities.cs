@@ -152,7 +152,7 @@ namespace TextRPG
         }
 
         //LoadType에 따라 경로를 설정하고 Json으로 파일 불러와서 데이터 반환
-        public static object? LoadFile(LoadType type)
+        public static T? LoadFile<T>(LoadType type)
         {
             string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             switch (type)
@@ -163,7 +163,7 @@ namespace TextRPG
                             .Parent.Parent.Parent.FullName + @"\Data\Map_Data.json";
 
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -172,7 +172,7 @@ namespace TextRPG
                             JArray json = (JArray)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            //return JsonConvert.DeserializeObject<List<Dungeon>>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
@@ -182,7 +182,7 @@ namespace TextRPG
                         if (File.Exists(path) == false)
                         {
                             Console.WriteLine("저장된 파일이 없습니다.");
-                            return null;
+                            return default(T);
                         }
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
@@ -193,7 +193,7 @@ namespace TextRPG
                             JObject json = (JObject)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            return JsonConvert.DeserializeObject<SaveData>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
 
                         }
                         break;
@@ -203,7 +203,7 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Item_Data.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -212,7 +212,7 @@ namespace TextRPG
                             JArray json = (JArray)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            return JsonConvert.DeserializeObject<List<Item>>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
@@ -220,7 +220,7 @@ namespace TextRPG
                     {
                         path += @"\Data\P_Data.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -230,7 +230,7 @@ namespace TextRPG
                             string? str = JsonConvert.SerializeObject(json);
 
                             file.Close();
-                            return JsonConvert.DeserializeObject<ObjectState>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
@@ -239,7 +239,7 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Data\Monster_Data.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -257,7 +257,7 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Skill_Data.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -267,7 +267,7 @@ namespace TextRPG
                             string? str = JsonConvert.SerializeObject(json);
 
                             file.Close();
-                            return JsonConvert.DeserializeObject<Skill[]>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
@@ -276,7 +276,7 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Quest_Data.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -286,7 +286,7 @@ namespace TextRPG
                             string? str = JsonConvert.SerializeObject(json);
 
                             file.Close();
-                            return JsonConvert.DeserializeObject<Quest[]>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
@@ -295,7 +295,7 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Save_Quest.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -305,7 +305,7 @@ namespace TextRPG
                             string? str = JsonConvert.SerializeObject(json);
 
                             file.Close();
-                            return JsonConvert.DeserializeObject<QuestData>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
@@ -314,7 +314,7 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Dungeon_Data.json";
                         if (File.Exists(path) == false)
-                            return null;
+                            return default(T);
                         StreamReader? file = File.OpenText(path);
                         if (file != null)
                         {
@@ -323,12 +323,12 @@ namespace TextRPG
                             JArray json = (JArray)JToken.ReadFrom(reader);
                             string? str = JsonConvert.SerializeObject(json);
                             file.Close();
-                            return JsonConvert.DeserializeObject<List<Dungeon>>(str);
+                            return JsonConvert.DeserializeObject<T>(str);
                         }
                         break;
                     }
             }
-            return null;
+            return default(T);
         }
 
         //SaveType에 따라 경로를 정하고 데이터를 저장

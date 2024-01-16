@@ -19,7 +19,7 @@ namespace TextRPG
             //EventManager.Instance.AddListener(EventType.eShowSkill,this);
             //EventManager.Instance.AddListener(EventType.eSetSkill, this);
             List<string> classNames = new List<string>(); //클래스 이름 배열
-            Skill[] skillList = (Skill[])Utilities.LoadFile(LoadType.SkillData);
+            Skill[] skillList = Utilities.LoadFile<Skill[]>(LoadType.SkillData);
             if (skillList == null)
             {
                 Console.Error.WriteLine("SkillLoad Faill!");

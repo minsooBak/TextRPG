@@ -32,7 +32,7 @@ namespace TextRPG
         public DungeonManager(Player player)
         {
             EventManager.Instance.AddListener(EventType.eSetMonsters, this);
-            List<Dungeon>? d = (List<Dungeon>?)Utilities.LoadFile(LoadType.Dungeon);
+            List<Dungeon>? d = Utilities.LoadFile<List<Dungeon>>(LoadType.Dungeon);
             dungeons = d;
             // 플레이어 정보 받아오기
             this.player = player;

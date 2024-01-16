@@ -44,7 +44,7 @@ namespace TextRPG
         {
             Mode = 0;
 
-            List<Item>? list = (List<Item>)Utilities.LoadFile(LoadType.Item);
+            List<Item>? list = Utilities.LoadFile<List<Item>>(LoadType.Item);
             items = list.ToArray();
 
             inventory = [];
