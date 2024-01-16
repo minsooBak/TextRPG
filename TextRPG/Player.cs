@@ -75,7 +75,7 @@ namespace TextRPG
                         }
                     case "도적":
                         {
-                            myState.Health += 250;
+                            myState.Health += 350;
                             myState.MP += 200;
                             myState.ATK += 350;
                             myState.DEF += 60;
