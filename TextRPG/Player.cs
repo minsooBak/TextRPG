@@ -18,7 +18,7 @@ namespace TextRPG
         private int PrevMp { get; set; }
         private int PrevExp = 0;
         public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
-        private int maxExp = 30;
+        private int maxEXP= 100; // 레벨 1일때 렙업에 필요한 경험치량
         public Player()
         {
             EventManager.Instance.AddListener(EventType.Player, this);
@@ -160,13 +160,14 @@ namespace TextRPG
                         case ePlayerType.Exp: //경험치 추가
                             {
                                 PrevExp = myState.EXP;      // 이전 경험치 저장
-                                myState.EXP = Math.Clamp(myState.EXP + c.Value, 0, 300);
-                                int LevelUp = 1;
-                                if (myState.EXP > maxExp)
+                                myState.EXP += Math.Clamp(c.Value, 0, 300);
+                                int LevelUp = 0;
+                                if (myState.EXP / maxEXP != 0)
                                 {
-                                    myState.Level += LevelUp;
-                                    myState.EXP = myState.EXP - maxExp;
-                                    maxExp = myState.Level * 30;
+                                    LevelUp = myState.EXP / maxEXP; // maxEXP로 나눴을때 몫(=LevelUp)이 있다 (0이 아니면)
+                                    myState.Level += LevelUp; // 레벨에 레벨업을 더해줌(몫이 있으니까), 그럼 레벨 증가
+                                    myState.EXP = myState.EXP % maxEXP; // 렙업하고 나머지 경험치는 maxExp로 나눠서 나머지를 저장
+                                    maxEXP = maxEXP*2;// maxEXP 증가
                                     Console.WriteLine("레벨 업!!\n");
                                     EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.PlayerLevel, LevelUp.ToString()));
                                 }
@@ -196,7 +197,7 @@ namespace TextRPG
             Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.Write("EXP :");
-            Utilities.TextColor($"{myState.EXP}", ConsoleColor.Yellow);
+            Utilities.TextColor($"{myState.EXP} / {maxEXP}", ConsoleColor.Yellow);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
             Console.WriteLine($"HP : {myState.Health} / {maxHealth}");
             Console.WriteLine($"MP : {myState.MP} / {maxMP}");
