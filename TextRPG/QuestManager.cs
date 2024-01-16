@@ -25,7 +25,7 @@ namespace TextRPG
             EventManager.Instance.AddListener(EventType.Quest, this); //Add //퀘스트 관련 이벤트 등록
             questMenu = Utilities.LoadFile<Quest[]>(LoadType.QuestData); //퀘스트 전체 목록 받아오기\
             QuestData? data = Utilities.LoadFile<QuestData?>(LoadType.QuestSaveData); //QuestData 타입(현재 진행도 리스트, 클리어한 퀘스트 이름 리스트)으로 받아옴
-            if (data.Value.myQuest != null) //세이브 파일이 있다면
+            if (data != null) //세이브 파일이 있다면
             {
                 foreach (var quest in data.Value.clearQuest) // 클리어한 퀘스트 이름 리스트에서 하나씩 꺼내서
                 {
