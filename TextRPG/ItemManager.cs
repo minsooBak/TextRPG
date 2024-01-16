@@ -17,13 +17,13 @@
     {
         // Save_Data.json에서 불러온 읽기 전용 아이템 목록
         readonly Item[] items;
-        readonly Item[] fieldItems;
         readonly Item[] shopItems;
 
         // 게임에서 실제로 사용되는 아이템 목록
         List<Item> inventory; // 인벤토리
         List<Item> shopDisplay; // 상점에 노출되는 아이템 목록(IsSale이 true인 아이템)
-        List<Item> fieldDisplay; 
+
+        //List<Item> fieldDisplay; 
         /* fieldDisplay는 IsOnField가 true인 아이템 리스트로,
          * 단순히 Item_Data.json 파일에서 상점에 노출되는 아이템과 구분하기 위해 만들어진 리스트입니다.
          * IsSale이 true면서 IsOnField를 true로 설정해서 상점에 노출되면서 던전에서도 사용 가능한 아이템을 만들 수 있고,
@@ -35,7 +35,7 @@
         // 리스트 크기를 반환하는 프로퍼티
         public int GetInventorySize { get { return inventory.Count; } }
         public int GetShopDisplaySize { get { return shopDisplay.Count; } }
-        public int GetFieldDisplaySize { get { return fieldDisplay.Count; } }
+        //public int GetFieldDisplaySize { get { return fieldDisplay.Count; } }
 
         // ShowInventory, ShowShop 메서드에서 사용할 모드(Map.cs에서 사용함)
         public int Mode { get; set;}
@@ -53,13 +53,13 @@
             // 배열 초기화
             inventory = [];
             shopDisplay = [];
-            fieldDisplay = [];
+            //fieldDisplay = [];
 
             // shopDisplay, fieldDisplay에 각 조건에 맞는 아이템 추가
             foreach (Item item in items)
             {
-                if (item.IsOnField)
-                    fieldDisplay.Add(item); //필드 아이템 저장
+                //if (item.IsOnField)
+                //    fieldDisplay.Add(item); //필드 아이템 저장
                 if (item.IsSale)
                     shopDisplay.Add(item); //상점 아이템 저장
             }
@@ -296,10 +296,6 @@
                 {
                     switch (d.Value.Key)
                     {
-                        case eItemType.eGameEnd:
-                            {
-                                break;
-                            }
                         case eItemType.eGetFieldItem:
                             {
                                 foreach (var item in items) //전체 아이템 목록에서 하나 씩 아이템을 꺼내서
