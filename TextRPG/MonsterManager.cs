@@ -170,7 +170,7 @@ namespace TextRPG
         public string Item { get; set; }
         public int Gold => myState.Gold;
 
-        public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
+        public bool IsUseSkill => myState.Skill != null;//사용할 수 있는지 체크후 bool
         public bool IsDead => myState.Health <= 0;
         public int GetMP => myState.MP;
 
