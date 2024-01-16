@@ -1,6 +1,4 @@
-﻿
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     //맵의 이동 처리
     internal class Map

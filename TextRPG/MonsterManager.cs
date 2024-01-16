@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     public enum MonsterType
     {

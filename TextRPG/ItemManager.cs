@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     enum ItemType //아이템 종류
     {
