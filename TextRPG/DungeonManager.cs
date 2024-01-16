@@ -277,7 +277,7 @@ namespace TextRPG
 
                 Console.Write($"던전에서 몬스터 ");
                 Utilities.TextColorWithNoNewLine($"{monster}", ConsoleColor.DarkRed);       // 이번 던전에서 잡은 몬스터 수 출력
-                Console.WriteLine("마리를 잡았습니다.");
+                Console.WriteLine("마리를 잡았습니다.\n");
 
                 //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp()));
