@@ -186,13 +186,16 @@ namespace TextRPG
             getDamage = myState.ATK / 100.0 * 10;       // 몬스터의 공격 데미지의 10%
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);     // 오차를 계산해서 몬스터 공격 데미지로 반환
             // 몬스터의 공격 타입이 스킬이라면
-            if (myState.MP < myState.Skill.Cost)
-                attackType = AttackType.Attack;
-            else if (myState.MP >= myState.Skill.Cost)
+            if (attackType == AttackType.Skill)
             {
-                damage *= (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기     // GetAtk()를 호출해서 데미지 반환하기
-                myState.MP -= myState.Skill.Cost;
-                if (myState.MP <= 0) myState.MP = 0;     // 몬스터의 MP가 0 이하가 될 경우 0으로 변경
+                if (myState.MP < myState.Skill.Cost)
+                    attackType = AttackType.Attack;
+                else if (myState.MP >= myState.Skill.Cost)
+                {
+                    damage *= (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기     // GetAtk()를 호출해서 데미지 반환하기
+                    myState.MP -= myState.Skill.Cost;
+                    if (myState.MP <= 0) myState.MP = 0;     // 몬스터의 MP가 0 이하가 될 경우 0으로 변경
+                }
             }
             // 공격 출력문
             if (attackType == AttackType.Attack)
@@ -283,7 +286,7 @@ namespace TextRPG
                 myState.Level = 2;
                 myState.EXP = 15;
                 myState.Health = 15;
-                myState.MP = 100;
+                myState.MP = 20;
                 myState.ATK = 5;
                 myState.Gold = 100;
                 Item = "낡은 대검";
@@ -294,7 +297,7 @@ namespace TextRPG
                 myState.Level = 3;
                 myState.EXP = 20;
                 myState.Health = 10;
-                myState.MP = 100;
+                myState.MP = 20;
                 myState.ATK = 9;
                 myState.Gold = 200;
                 Item = "초보자의 갑옷";
