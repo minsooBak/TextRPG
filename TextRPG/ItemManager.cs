@@ -221,10 +221,11 @@
         public void GetFieldItem(Item? data = null)
         // 던전에서 아이템 얻기 관련 메서드, 단순 인벤토리 아이템 추가용
         {
+            Item newItem = new Item(data.Name,(int)data.Type,data.ATK,data.DEF,data.Description,data.Cost,data.IsSale,data.IsOnField);
             if (data != null) // 매개변수로 아이템이 넘어오면
             {
-                inventory.Add(data); //인벤토리에 아이템 추가
-                Console.WriteLine($"{data.Name}을 획득했습니다.");
+                inventory.Add(newItem); //인벤토리에 아이템 추가
+                Console.WriteLine($"{newItem.Name}을 획득했습니다.");
             }
             else
             {
