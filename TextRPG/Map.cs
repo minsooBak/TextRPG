@@ -177,6 +177,7 @@ namespace TextRPG
             Console.WriteLine("");
 
             Console.WriteLine($"Lv. {player.Level}");
+            Console.WriteLine($"EXP : {player.EXP}");
             Console.WriteLine($"{player.Name} ({player.Class})");
             Console.WriteLine($"공격력 : {player.ATK}");
             Console.WriteLine($"방어력 : {player.DEF}");

@@ -58,6 +58,7 @@ namespace TextRPG
         public int Health => myState.Health;
         public int MP => myState.MP;
         public int Level => myState.Level;
+        public int EXP => myState.EXP;
         public string Name => myState.Name;
         public string Class => myState.Class;
         public int ATK => myState.ATK;
