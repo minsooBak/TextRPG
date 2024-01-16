@@ -134,7 +134,9 @@ namespace TextRPG
             Console.WriteLine("");
 
             Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 전투 시작");
+            Console.Write("2. 전투 시작 (현재 진행 : ");
+            Utilities.TextColorWithNoNewLine($"{player.dungeonStage + 1}", ConsoleColor.DarkRed);       // 현재 플레이어가 입장 가능한 스테이지 출력
+            Console.WriteLine("층)");
             Console.WriteLine("3. 인벤토리 보기");
             Console.WriteLine("4. 상점 보기");
             Console.WriteLine("5. 퀘스트 보기");
@@ -174,11 +176,7 @@ namespace TextRPG
         {
             // 던전 스테이지 선택.
             // 플레이어의 던전 클리어 여부에 따라 진입 가능한 던전 난이도가 높아집니다.
-            // 현재는 SelectDungeonStage의 매개변수에 따라 난이도를 조절해주세요.
-            dungeonManager.SelectDungeonStage(dungeonManager.dungeonStage);
-
-            // 플레이어의 HP가 0이 되면 게임 종료하기
-            // if(player.Hp <= 0) isGameEnd = true;
+            dungeonManager.SelectDungeonStage(player.dungeonStage);
 
             // 전투 종료 후 몬스터 리스트 초기화
             EventManager.Instance.PostEvent(EventType.eClearMonsters, "");
@@ -195,6 +193,7 @@ namespace TextRPG
             Console.WriteLine("");
 
             Console.WriteLine($"Lv. {player.Level}");
+            Console.WriteLine($"EXP : {player.EXP}");
             Console.WriteLine($"{player.Name} ({player.Class})");
             Console.WriteLine($"공격력 : {player.ATK}");
             Console.WriteLine($"방어력 : {player.DEF}");

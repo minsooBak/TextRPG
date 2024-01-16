@@ -11,12 +11,11 @@ namespace TextRPG
     //정원우님 구현
     internal class MonsterManager : IListener
     {
-        //몬스터를 생성해서 넘겨주고 몬스터매니저에서 쓰는것이 없기에 Make에서 생성해주고 넘겨준 뒤 클리어해주었습니다.
-        //List<Monster>dungeonMonsters = [];
         public MonsterManager()
         {
             EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
 
+            // arrayOfMonsterTypes 배열 생성
             for(int i = 0; i < maxMonsterType; i++)
             {
                 arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
@@ -27,35 +26,29 @@ namespace TextRPG
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
         static int maxMonsterType = 3;
-        // 생성 가능한 몬스터 타입 배열
+        // arrayOfMonsterTypes : 생성 가능한 몬스터 타입 배열
         public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
-        //public Item[] monsterItem = [];
 
-        List<Monster> dungeonMonsters = [];
+        // dungeonMonsters : 던전매니저에서 사용할 몬스터 리스트
+        List<IObject> dungeonMonsters = [];
         string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
-        //추가로 구현하면 좋은것은
-        //1. MonsterManager를 DungeonManager에서 생성하여 MakeMonsters호출하기
-        //2. 전체 몬스터 데이터를 배열로 가지고있다가 type에 맞는 몬스터를 꺼내주기
-        //3. CreateMonster에서의 역활은 굳이 int값을 복사해서 MakeMonsters에서도 할수있는것을 넘기는것이기에 MakeMonsters에서 추가해주기
-        //4. MakeMonster에서 rnd값에 따른 swich문으로 생성확률을 조정해서 전체 배열에서 몬스터 꺼내주기
-        public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
+        
+        public List<IObject> MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
 
         {
-            //List<Monster> dungeonMonsters = [];
-
             Random rnd = new Random();
             
             // 스테이지에 따라 생성 가능한 몬스터 마리 수 정하기
             int monsterCount = 0;
             switch (listOfMonsterCount)
             {
-                case 1:
+                case 1:     // 1 스테이지
                     monsterCount = rnd.Next(1, 3);
                     break;
-                case 2:
+                case 2:     // 2 스테이지
                     monsterCount = rnd.Next(2, 4);
                     break;
-                case 3:
+                case 3:     // 3 스테이지 이상
                     monsterCount = rnd.Next(3, 5);
                     break;
             }
@@ -66,13 +59,15 @@ namespace TextRPG
             for (int i = 0; i < monsterCount; i++)
             {
                 int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
-                Monster monster = new Monster(arrayOfMonsterTypes[randomCount]);
+                Monster monster = new Monster(arrayOfMonsterTypes[randomCount]);        // 몬스터 클래스에서 arrayOfMonsterTypes에 맞는 Monster 생성
                 dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
-            EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
+            //EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
+            return dungeonMonsters;
         }
 
+        // 던전 승리 시 경험치 얻기
         public int GetExp()
         {
             int exp = 0;
@@ -80,28 +75,32 @@ namespace TextRPG
             foreach (Monster monster in dungeonMonsters)
             {
                 // 해당 몬스터 리스트의 총 경험치량 저장
-                //exp += monster.Level;
-                exp += monster.Exp; //몬스터의 경험치를 더하는 것이 괜찮을 것 같아서
+                exp += monster.Exp; //몬스터의 경험치를 더하는 것이 괜찮을 것 같아서 -> 저도 이 코드가 더 괜찮은 것 같습니다!
             }
             return exp;
         }
 
+        // 던전 승리 시 아이템 얻기
         public void GetReward()
         {
             Random rnd = new Random();
             int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷 총 3개의 아이템만 떨군다.
             int gold = 0;
-            int i = 0;
 
             foreach (Monster monster in dungeonMonsters)
             {
                 if (rnd.Next(1, 101) <= 8) //8퍼 확률로
                 {
+                    // 아이템 드랍 이벤트 전송
                     EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem,monster.item)); //아이템 드랍 이벤트 수정
 
+                    // itemsCounter : 아이템 별 획득한 개수. 
+                    // itemsCounter[0] : "낡은 대검"
+                    // itemsCounter[1] : "초보자의 갑옷"
+                    // itemsCounter[2] : "가시 갑옷"
                     if (monster.Level == 2)
                     {
-                        itemsCounter[0]++; //떨어뜨릴 아이템 리스트에 추가 
+                        itemsCounter[0]++; // 획득한 아이템 리스트에 추가 
                     }
                     else if (monster.Level == 3)
                     {
@@ -119,20 +118,25 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, gold)); //플레이어 골드 증가 이벤트
             Console.WriteLine();
             Console.WriteLine("[획득 아이템]");
-            Console.WriteLine($"{gold} Gold");
-            
-            for(i = 0; i < itemsCounter.Length; i++)
+            Utilities.TextColorWithNoNewLine($"{gold}", ConsoleColor.DarkRed);      // 플레이어가 얻은 골드 출력
+            Console.WriteLine($" Gold");
+
+            for(int i = 0; i < itemsCounter.Length; i++)
             {
                 if (itemsCounter[i] > 0)
                 {
                     //Console.WriteLine($"{dungeonMonsters[i].item} - {itemsCounter[i]}"); // 몬스터가 가지고 있는 아이템 이름 - 개수 
-                    Console.WriteLine($"{monsterItemName[i]} - {itemsCounter[i]}"); // 테스트로 monsterItemName 이라는 아이템 배열을 만들어서 수정 필요
+                    //Console.WriteLine($"{monsterItemName[i]} - {itemsCounter[i]}"); // 테스트로 monsterItemName 이라는 아이템 배열을 만들어서 수정 필요
+                    Console.Write($"{monsterItemName[i]} ");
+                    Utilities.TextColorWithNoNewLine("- ", ConsoleColor.DarkYellow);
+                    Utilities.TextColorWithNoNewLine($"{itemsCounter[i]}", ConsoleColor.DarkRed);
                 }
             }
         }
 
         public void ClearMonsterList()
         {
+            // 던전 종료 후 생성되어 있던 몬스터 리스트 초기화
             dungeonMonsters.Clear();
         }
 
@@ -168,44 +172,52 @@ namespace TextRPG
 
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
+        // 몬스터가 공격할 경우
         public int Attack(AttackType attackType = AttackType.Attack)
         {
             int damage = 0;
             double getDamage;
 
-            getDamage = myState.ATK / 100.0 * 10;
-            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
+            // 몬스터의 공격 데미지 : 공격력의 10% 오차를 가집니다.
+            getDamage = myState.ATK / 100.0 * 10;       // 몬스터의 공격 데미지의 10%
+            damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);     // 오차를 계산해서 몬스터 공격 데미지로 반환
+            // 몬스터의 공격 타입이 스킬이라면
             if (attackType == AttackType.Skill)
-                damage += (int)myState.Skill.ATKRatio;
+                damage += (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기
+            // 공격 출력문
             if(attackType == AttackType.Attack)
-                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 공격!");
+                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 공격!");     // Attack Type이 Attack일 경우 출력문
             else
-                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 {myState.Skill.Name} 스킬 공격!");
+                Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 {myState.Skill.Name} 스킬 공격!");     // Attack Type이 Skill일 경우 출력문
 
             return damage;
         }
+
+        // 몬스터 상태 출력하기
         public void ShowStats()
         {
             // 몬스터가 죽었는지 확인하기 -> 죽어있다면 Dead, 색깔 변경하기
             if (IsDead)
             {
+                // 해당 몬스터가 죽어있다면, 텍스트 색을 DarkGray로 몬스터 상태 출력
                 Utilities.TextColorWithNoNewLine($"Lv.{myState.Level} {myState.Class} Dead", ConsoleColor.DarkGray);
             }
             else
             {
                 // 안죽었다면 Level, Class, Hp 출력하기
                 Console.Write("Lv.");
-                Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);        // 나중에 player.Lv로 수정하기
-                Console.Write($"{myState.Class}");         // 나중에 player.Name, player.Job으로 수정하기
+                Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+                Console.Write($"{myState.Class}");
 
                 Console.Write(" HP ");
-                Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
+                Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
             }
         }
 
+        // 몬스터가 피해를 입을 경우
         public void TakeDamage(int damage)
         {
-            int criticalDamage = damage;
+            int criticalDamage = damage;        // criticalDamage : 치명타 데미지
             
             int r = new Random().Next(0, 101);
 
@@ -217,10 +229,10 @@ namespace TextRPG
             }
 
             Console.Write($"Lv.{myState.Level} {myState.Name} 을(를) 맞췄습니다. [데미지 : ");
-            // 치명타 공격
+            // 15% 확률로 치명타 공격
             if (r <= 15)
             {
-                criticalDamage += (damage * 60 / 100);
+                criticalDamage += (damage * 60 / 100);      // 공격력의 160% 데미지
 
                 Utilities.TextColorWithNoNewLine($"{criticalDamage}", ConsoleColor.DarkRed);
                 Console.Write("]");
@@ -235,28 +247,21 @@ namespace TextRPG
                 Console.Write("]");
             }
 
+            // 몬스터 공격 결과 출력
             Console.WriteLine($"\n\nLv.{myState.Level} {myState.Name}");
             Console.Write($"{myState.Health} -> ");
 
+            // 몬스터의 체력 차감
             if (r <= 15)
                 myState.Health -= criticalDamage;
             else
                 myState.Health -= damage;
 
+            // 해당 몬스터가 죽었을 경우 Dead로 출력, 아니면 HP를 출력
             Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
         }
 
-        public bool PrintDead()
-        {
-            if (IsDead)
-            {
-                Console.WriteLine("이미 죽은 몬스터입니다.\n 다시 선택해주세요!");
-                Console.ReadKey();
-            }
-
-            return IsDead;
-        }
-
+        // 몬스터 클래스
         public Monster(MonsterType monsterType = MonsterType.Monster1) //몬스터 초기화
         {
             if (monsterType == MonsterType.Monster1)
