@@ -190,6 +190,7 @@ namespace TextRPG
             {
                 damage *= (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기     // GetAtk()를 호출해서 데미지 반환하기
                 myState.MP -= myState.Skill.Cost;
+                if(myState.MP >= 0) myState.MP = 0;     // 몬스터의 MP가 0 이하가 될 경우 0으로 변경
             }
             // 공격 출력문
             if(attackType == AttackType.Attack)
