@@ -299,8 +299,6 @@ namespace TextRPG
                 player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
         
                 GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
-
-                dungeonStage++;
             }
             else
             {
