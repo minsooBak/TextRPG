@@ -63,7 +63,6 @@ namespace TextRPG
                 dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
-            //EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
             return dungeonMonsters;
         }
 
@@ -211,6 +210,9 @@ namespace TextRPG
 
                 Console.Write(" HP ");
                 Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
+
+                Console.Write(" MP ");
+                Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
             }
         }
 
