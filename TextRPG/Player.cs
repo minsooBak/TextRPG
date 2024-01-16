@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Numerics;
+using System.Threading;
 
 namespace TextRPG
 {
@@ -66,6 +67,8 @@ namespace TextRPG
         public bool IsDead => myState.Health <= 0;
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
+
+        public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
 
         public void OnEvent<T>(EventType type, T data)
         {
@@ -210,6 +213,10 @@ namespace TextRPG
                 //    myState.Level += (myState.EXP / 100); //레벨 올리고
                 //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
                 //}
+
+                if (dungeonStage >= 3)
+                    dungeonStage = 3;
+                else dungeonStage++;
 
                 PrevHealth = 0;
                 PrevMp = 0;

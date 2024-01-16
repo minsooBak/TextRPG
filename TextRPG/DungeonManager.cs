@@ -277,9 +277,6 @@ namespace TextRPG
                 GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
 
                 // duneongStage가 3보다 커지면 3으로 변경하기
-                if (dungeonStage >= 3)
-                    dungeonStage = 3;
-                else dungeonStage++;
             }
             else
             {
