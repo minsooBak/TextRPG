@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     struct QuestData
     {
         public List<Quest> myQuest; //진행도 저장된 퀘스트 리스트
         public List<string> clearQuest;//완전 클리어된 퀘스트 이름 리스트
+        //public int clearCount;
     }
     internal class QuestManager : IListener
     {
-        private Quest[] questMenu; //퀘스트 전체 목록
+        private readonly Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests; //화면에 노출되는 퀘스트 목록
-        private List<string> Clearquest = new List<string>(); //클리어한 퀘스트 이름 리스트
+        private List<string> clearQuest; //클리어한 퀘스트 이름 리스트
         private static int clearCount = 0; //퀘스트 클리어 횟수(사용을 안하는 중)
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx 
         public QuestManager()
@@ -27,6 +21,8 @@ namespace TextRPG
             QuestData? data = Utilities.LoadFile<QuestData?>(LoadType.QuestSaveData); //QuestData 타입(현재 진행도 리스트, 클리어한 퀘스트 이름 리스트)으로 받아옴
             if (data != null) //세이브 파일이 있다면
             {
+
+                clearQuest = data.Value.clearQuest;
                 foreach (var quest in data.Value.clearQuest) // 클리어한 퀘스트 이름 리스트에서 하나씩 꺼내서
                 {
                     for (int i = 0; i < questMenu.Length; i++) //전체 배열을 탐색하고
@@ -41,21 +37,25 @@ namespace TextRPG
                 }
                 quests = data.Value.myQuest; //현재 노출될 퀘스트는 세이브 파일의 진행도를 가진 퀘스트 리스트를 복사
                 int count = 0;
-                for (int i = 0; i < questMenu.Length; i++) //전체 퀘스트 목록 만큼 체크 
+                if (quests.Count >= 1)
                 {
-                    if (questMenu[i].Name == quests[count].Name) // 전체 퀘스트 목록의 퀘스트 이름과 노출될 퀘스트의 이름이 같다면
+                    for (int i = 0; i < questMenu.Length; i++) //전체 퀘스트 목록 만큼 체크 
                     {
-                        count++;
-                        questMenu[i].isActive = true; //전체 퀘스트 목록의 해당 퀘스트를 활성화로 변경
+                        if (count >= 3) break;
+                        if (questMenu[i].Name == quests[count].Name) // 전체 퀘스트 목록의 퀘스트 이름과 노출될 퀘스트의 이름이 같다면
+                        {
+                            count++;
+                            questMenu[i].isActive = true; //전체 퀘스트 목록의 해당 퀘스트를 활성화로 변경
+                        }
                     }
                 }
+                idxCount = clearQuest.Count + quests.Count;//현재 위치 참조
             }
             else //세이브 파일이 없다면
             {
                 quests = new List<Quest> { }; //노출될 퀘스트 배열을 새로 생성
-                Clearquest = new List<string>(); //클리어한 퀘스트 이름 배열을 새로 생성
-            }
-
+                clearQuest = new List<string>(); //클리어한 퀘스트 이름 배열을 새로 생성
+            } 
             AddQuest(); //퀘스트 추가
         }
         public int QuestCount { get { return quests.Count;} } //현재 노출된 퀘스트의 개수 반환
@@ -173,7 +173,7 @@ namespace TextRPG
                         EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 보상 골드 추가
                         EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, quests[idx].ItemName));//플레이어 보상 아이템 획득
 
-                        Clearquest.Add(quests[idx].Name);//클리어한 퀘스트 이름이 저장된 배열에 지금 클리어한 퀘스트 이름을 저장
+                        clearQuest.Add(quests[idx].Name);//클리어한 퀘스트 이름이 저장된 배열에 지금 클리어한 퀘스트 이름을 저장
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
                         clearCount++; //클리어 횟수 증가 (사실상 쓰이진 않음)
                         break;
@@ -216,6 +216,7 @@ namespace TextRPG
                                     quest.current++;
                                     if (quest.current >= quest.Max) //최고치에 도달하면 
                                     {
+                                        quest.current = quest.Max;
                                         quest.isClear = true; //퀘스트 클리어
                                     }
                                 }
@@ -231,6 +232,7 @@ namespace TextRPG
                                     quest.current++;
                                     if (quest.current >= quest.Max) //최고치에 도달하면 
                                     {
+                                        quest.current = quest.Max;
                                         quest.isClear = true; //퀘스트 클리어
                                     }
                                 }
@@ -246,6 +248,7 @@ namespace TextRPG
                                     quest.current += Int32.Parse(a.Value.Value); //a는 증가한 레벨의 string형이라서 int형으로 변환 
                                     if (quest.current >= quest.Max) //최고치에 도달하면 
                                     {
+                                        quest.current = quest.Max;
                                         quest.isClear = true; //퀘스트 클리어
                                     }
                                 }
@@ -256,7 +259,7 @@ namespace TextRPG
             }
             else if (type == EventType.eGameEnd) //게임 종료시
             {
-                QuestData myQuestData = new QuestData { myQuest = quests, clearQuest = Clearquest }; // QuestData 형으로 현재 퀘스트 정보들을 감싸서
+                QuestData myQuestData = new QuestData { myQuest = quests, clearQuest = clearQuest }; // QuestData 형으로 현재 퀘스트 정보들을 감싸서
                 Utilities.SaveFile(SaveType.Quest, myQuestData); //저장한다.
             }
         }
