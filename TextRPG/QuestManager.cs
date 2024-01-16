@@ -169,9 +169,13 @@
                 switch (input)
                 {
                     case 1: //보상 받기
-                        EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, quests[idx].Exp)); //플레이어 보상 경험치 추가
-                        EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 보상 골드 추가
-                        EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, quests[idx].ItemName));//플레이어 보상 아이템 획득
+
+                        if (quests[idx].ItemName != "") //퀘스트 보상으로 아이템이 있다면 
+                            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, quests[idx].Exp)); //플레이어 보상 경험치 추가
+                        if (quests[idx].Gold != 0)
+                            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, quests[idx].Gold)); //플레이어 보상 골드 추가
+                        if (quests[idx].Exp != 0)
+                            EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem, quests[idx].ItemName));//플레이어 보상 아이템 획득
 
                         clearQuest.Add(quests[idx].Name);//클리어한 퀘스트 이름이 저장된 배열에 지금 클리어한 퀘스트 이름을 저장
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
