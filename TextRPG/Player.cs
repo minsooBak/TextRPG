@@ -180,8 +180,16 @@ namespace TextRPG
                     var c = b.Value;
                     if (c.Key == ePlayerType.Stats)
                     {
-                        myState.ATK += c.Value.ATK;
-                        myState.DEF += c.Value.DEF;
+                        if(c.Value.IsEquipped)
+                        {
+                            myState.ATK += c.Value.ATK;
+                            myState.DEF += c.Value.DEF;
+                        }
+                        else
+                        {
+                            myState.ATK -= c.Value.ATK;
+                            myState.DEF -= c.Value.DEF;
+                        }
                     }
                 }
             }else if(type == EventType.eGameEnd)
@@ -237,10 +245,16 @@ namespace TextRPG
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
             {
-                damage = (int)(damage * myState.Skill.ATKRatio);
-                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
+                if (myState.MP < myState.Skill.Cost)
+                {
+                    attackType = AttackType.Attack;
+                }
+                else if (myState.MP >= myState.Skill.Cost)
+                {
+                    damage = (int)(damage * myState.Skill.ATKRatio);
+                    myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
+                } 
             }
-
             if (attackType == AttackType.Attack)
                 Console.WriteLine($"{myState.Name} 의 공격!");
             else
