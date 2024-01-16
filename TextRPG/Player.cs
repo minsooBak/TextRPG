@@ -175,7 +175,7 @@ namespace TextRPG
                             }
                         case ePlayerType.Rest: //휴식기능
                             {
-                                if (c.Value >= Gold)
+                                if (c.Value > Gold)
                                 {
                                     Console.WriteLine("골드가 부족합니다.");
                                     Console.WriteLine("아무 키나 입력해주세요.");
