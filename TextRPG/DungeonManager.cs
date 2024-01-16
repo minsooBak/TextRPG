@@ -56,14 +56,6 @@ namespace TextRPG
             StartBattle();
         }
 
-        //// 몬스터 배열을 몬스터 리스트에서 받아 생성하기
-        //public void Encounter(List<Monster> dungeonMonsters)
-        //{
-        //    monsters = dungeonMonsters.ToArray();
-            
-        //    StartBattle();
-        //}
-
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
@@ -326,12 +318,6 @@ namespace TextRPG
 
         public void OnEvent<T>(EventType type, T data)
         {
-            //if (type == EventType.eSetMonsters)
-            //{
-            //    var d = data as KeyValuePair<EventType, List<Monster>>?;
-            //    // MonsterManager에서 생성된 몬스터 리스트 받기
-            //    Encounter(d.Value.Value);
-            //}
             throw new NotImplementedException();
         }
     }
