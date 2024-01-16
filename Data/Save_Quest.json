@@ -1,0 +1,44 @@
+{
+  "myQuest": [
+    {
+      "Target": "미니언",
+      "Name": "마을을 위협하는 미니언 처치",
+      "Explanation": "이봐 ! 마을 근처에 미니언들이 너무 많아졌다고 생각하지 않나?\n마을주민들의 안정을 위해서라도 저것들 수를 좀 줄여야 한다고!\r\n모험가인 자네가 좀 처치해주게!",
+      "Gold": 50,
+      "ItemName": "낡은 대검",
+      "Exp": 70,
+      "isClear": false,
+      "isActive": false,
+      "Max": 5,
+      "current": 0,
+      "Condition": "미니언 5마리 처치"
+    },
+    {
+      "Target": "낡은 대검",
+      "Name": "장비를 장착해보자",
+      "Explanation": "\"낡은 대검\" 장비를 장착해 보게!",
+      "Gold": 60,
+      "ItemName": "가시 갑옷",
+      "Exp": 60,
+      "isClear": false,
+      "isActive": false,
+      "Max": 1,
+      "current": 0,
+      "Condition": "아이템 장착하기"
+    },
+    {
+      "Target": "레벨업",
+      "Name": "더욱 더 강해지기!",
+      "Explanation": "1레벨업 하기",
+      "Gold": 70,
+      "ItemName": "초보자의 갑옷",
+      "Exp": 50,
+      "isClear": false,
+      "isActive": false,
+      "Max": 1,
+      "current": 0,
+      "Condition": "1레벨업 하기"
+    }
+  ],
+  "clearQuest": []
+}
