@@ -158,7 +158,7 @@ namespace TextRPG
             Item item = shopDisplay[itemNum - 1];
             if (item.IsSale == false)
             {
-                Console.WriteLine("이미 구매한 아이템입니다.");
+                Console.WriteLine("이미 구매한 아이템입니다. \n(Enter키를 눌러 진행하세요...)");
                 Console.ReadLine();
                 return;
             }
@@ -166,7 +166,7 @@ namespace TextRPG
             {
                 if (item.Cost > myWallet)
                 {
-                    Console.WriteLine("소지금이 부족합니다.");
+                    Console.WriteLine("소지금이 부족합니다. \n(Enter키를 눌러 진행하세요...)");
                     Console.ReadLine();
                     return;
                 }
@@ -174,7 +174,7 @@ namespace TextRPG
                 {
                     item.IsSale = false;
                     inventory.Add(item);
-                    Console.WriteLine($"{item.Name}을 구매했습니다.");
+                    Console.WriteLine($"{item.Name}을 구매했습니다. \n(Enter키를 눌러 진행하세요...)");
                     Console.ReadLine();
 
                     // EventManager로 골드 변경 이벤트 전달
@@ -200,7 +200,7 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.eUpdateGold, resultGold);
 
             inventory.Remove(item);
-            Console.WriteLine($"{item.Name}을 판매했습니다. (판매 금액: {resultGold} G)");
+            Console.WriteLine($"{item.Name}을 판매했습니다. (판매 금액: {resultGold} G) \n(Enter키를 눌러 진행하세요...)");
             Console.ReadLine();
 
         }
@@ -221,12 +221,14 @@ namespace TextRPG
                 //fieldDisplay.Add(newitem); //
 
                 inventory.Add(newItem); //인벤토리에 아이템 추가
-                Console.WriteLine($"{newItem.Name}을 획득했습니다.");
+                Console.WriteLine($"{newItem.Name}을 획득했습니다. \n(Enter키를 눌러 진행하세요...)");
+                Console.ReadLine();
             
             }
             else
             {
-                Console.WriteLine($"아무 아이템도 얻지 못했습니다.");
+                Console.WriteLine($"아무 아이템도 얻지 못했습니다. \n(Enter키를 눌러 진행하세요...)");
+                Console.ReadLine();
             }
         }
 
@@ -249,13 +251,13 @@ namespace TextRPG
             if (item.IsEquipped)//장착 중이면
             {
                 item.IsEquipped = false;
-                Console.WriteLine($"{item.Name}을 해제했습니다.");
+                Console.WriteLine($"{item.Name}을 해제했습니다. \n(Enter키를 눌러 진행하세요...)");
                 Console.ReadLine();
             }
             else//아니라면
             {
                 item.IsEquipped = true;
-                Console.WriteLine($"{item.Name}을 착용했습니다.");
+                Console.WriteLine($"{item.Name}을 착용했습니다. \n(Enter키를 눌러 진행하세요...)");
                 Console.ReadLine();
                 EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Item, inventory[itemNum - 1].Name));//장착하면 아이템 이름으로 이벤트 발생
             }
