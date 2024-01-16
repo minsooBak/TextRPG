@@ -94,7 +94,7 @@ namespace TextRPG
                             }
                         case ePlayerType.Exp: //경험치 추가
                             {
-                                PrevExp = myState.EXP;
+                                PrevExp = myState.EXP;      // 이전 경험치 저장
                                 myState.EXP += Math.Clamp(c.Value, 0, 300);
                                 int LevelUp = 0;
                                 if (myState.EXP / 100 != 0)
@@ -215,8 +215,9 @@ namespace TextRPG
                 //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
                 //}
 
+                // 던전 클리어 시 입장 가능한 스테이지 증가
                 if (dungeonStage >= 3)
-                    dungeonStage = 3;
+                    dungeonStage = 3;   // 4층 이상 진입하지 못하도록 제어.
                 else dungeonStage++;
 
                 PrevHealth = 0;
