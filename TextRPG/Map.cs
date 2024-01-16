@@ -1,5 +1,6 @@
 ﻿
 
+
 namespace TextRPG
 {
     //맵의 이동 처리
@@ -13,6 +14,7 @@ namespace TextRPG
             Inventory,
             Shop,
             Quest,
+            Rest,
             NONE
         }
 
@@ -48,6 +50,9 @@ namespace TextRPG
                     case GameState.EndGame: // 게임 종료
                         isGameEnd = true; // while문 종료
                         break;
+                    case GameState.Rest:
+                        ShowRest();
+                        break;
                     default:
                         itemManager.Mode = 0; // 메인 화면 호출 시 Mode 기본값으로 변경
                         StartGame(); 
@@ -56,6 +61,34 @@ namespace TextRPG
             }
             // 저장 후 게임 종료
             EndGame();
+        }
+
+        private void ShowRest()
+        {
+            Console.Clear();
+
+            Utilities.TextColor("휴식하기\n", ConsoleColor.DarkYellow);
+            Console.WriteLine("체력 + 100 , 마나 100 회복합니다.");
+            Console.WriteLine("휴식하시려면 500 G 를 지불하세요");
+            Console.WriteLine();
+
+            Console.WriteLine("1. 휴식하기");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+
+            Utilities.AddLine("원하시는 행동을 입력해주세요.");
+            Utilities.Add(">>");
+            int input = (int)Utilities.GetInputKey(0, 1);
+            input--;
+            switch (input)
+            {
+                case 0: // 
+                    EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Rest, 500));
+                    break;
+                case -1:
+                    break;
+            }
+            gameState = GameState.NONE;
         }
 
         private void EndGame()
@@ -134,12 +167,13 @@ namespace TextRPG
             Console.WriteLine("3. 인벤토리 보기");
             Console.WriteLine("4. 상점 보기");
             Console.WriteLine("5. 퀘스트 보기");
+            Console.WriteLine("6. 휴식하기");
             Console.WriteLine("");
             Console.WriteLine("0. 종료");
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(0, 5))
+            switch ((GameState)Utilities.GetInputKey(0, 6))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
@@ -158,6 +192,9 @@ namespace TextRPG
                     break;
                 case GameState.EndGame: // 입력값이 0이라면 
                     gameState = GameState.EndGame; // gameState를 EndGame으로 변경
+                    break;
+                case GameState.Rest:
+                    gameState = GameState.Rest;
                     break;
             }
         }

@@ -1,0 +1,18 @@
+{
+  "os": {
+    "Name": "1",
+    "Class": "전사",
+    "Health": 456,
+    "Gold": 1970,
+    "Level": 2,
+    "EXP": 55,
+    "ATK": 300,
+    "DEF": 100,
+    "MP": 100,
+    "Skill": null
+  },
+  "maxHealth": 500,
+  "maxMP": 100,
+  "maxExp": 200,
+  "dungeonStage": 3
+}

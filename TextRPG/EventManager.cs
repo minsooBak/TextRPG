@@ -25,7 +25,8 @@ enum ePlayerType//플레이어내의 이벤트타입으로 데이터를 보내�
 {
     Gold,
     Stats,
-    Exp
+    Exp,
+    Rest
 }
 
 public interface IListener // T == Utilities.EventPair(Enum, data)

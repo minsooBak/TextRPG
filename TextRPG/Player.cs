@@ -173,6 +173,26 @@ namespace TextRPG
                                 }
                                 break;
                             }
+                        case ePlayerType.Rest: //휴식기능
+                            {
+                                if (c.Value >= Gold)
+                                {
+                                    Console.WriteLine("골드가 부족합니다.");
+                                    Console.WriteLine("아무 키나 입력해주세요.");
+                                    Console.ReadKey();
+                                    break;
+                                }
+                                myState.Health += 100;
+                                myState.MP += 100;
+                                if(myState.Health > maxHealth)
+                                    myState.Health = maxHealth;
+                                if(myState.MP > maxMP)
+                                    myState.MP = maxMP;
+                                myState.Gold -= c.Value;
+                                Console.WriteLine("휴식을 마쳤습니다.");
+                                Console.ReadKey();
+                                break;
+                            }
                     }
                 }
                 else if (b != null)
