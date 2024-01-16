@@ -18,7 +18,6 @@ namespace TextRPG
 
         Player player = new Player();
         DungeonManager dungeonManager;
-        //MonsterManager monsterManager = new MonsterManager();
         ItemManager itemManager = new ItemManager();
         QuestManager questManager = new QuestManager();
 
@@ -26,11 +25,6 @@ namespace TextRPG
         private GameState gameState = GameState.NONE;
         public void DrawMap()
         {
-            //Tuple<ePlayerType, 10>
-            //EventManager.Instance.PostEvent(EventType.Player, new KeyValuePair<ePlayerType, Tuple<int, int>>(ePlayerType.Stats, new Tuple<int, int>(10, 10)));
-
-            //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.HP, -10));
-            //EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats,new int[] { 300,200}));
             dungeonManager = new DungeonManager(player);
             while (!isGameEnd)
             {
@@ -142,10 +136,6 @@ namespace TextRPG
             Console.WriteLine("5. 퀘스트 보기");
             Console.WriteLine("");
             Console.WriteLine("0. 종료");
-
-            //스킬 출력 예제
-            //skillManager.ShowSkillList("전사");
-            //skillManager.ShowSkillList("공허충");
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
