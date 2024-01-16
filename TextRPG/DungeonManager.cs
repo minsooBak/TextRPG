@@ -144,8 +144,16 @@ namespace TextRPG
 
                 //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 사용
                 if ((AttackType)monsterAttackType == AttackType.Skill)
-                    monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
-                //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
+                {
+                    if(monster.IsUseSkill)
+                    {
+                        monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
+                    }
+                    else
+                    {
+                        monsterAttackType = AttackType.Attack;
+                    }
+                }
 
                 //몬스터 공격
                 // 플레이어가 죽으면 종료
