@@ -180,8 +180,16 @@ namespace TextRPG
                     var c = b.Value;
                     if (c.Key == ePlayerType.Stats)
                     {
-                        myState.ATK += c.Value.ATK;
-                        myState.DEF += c.Value.DEF;
+                        if(c.Value.IsEquipped)
+                        {
+                            myState.ATK += c.Value.ATK;
+                            myState.DEF += c.Value.DEF;
+                        }
+                        else
+                        {
+                            myState.ATK -= c.Value.ATK;
+                            myState.DEF -= c.Value.DEF;
+                        }
                     }
                 }
             }else if(type == EventType.eGameEnd)
