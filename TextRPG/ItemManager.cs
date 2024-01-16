@@ -65,10 +65,10 @@
             }
 
             // 인벤토리 저장 파일 불러오기
-            SaveData? saveData = Utilities.LoadFile<SaveData>(LoadType.SaveData);
+            SaveData? saveData = Utilities.LoadFile<SaveData?>(LoadType.SaveData);
 
             // 저장된 파일이 null이 아니라면 저장된 정보 할당하기
-            if (saveData.Value.inventory != null)
+            if (saveData != null)
             {
                 foreach (string saveitem in saveData.Value.inventory)
                     // 인벤토리 아이템 목록 가져오기
