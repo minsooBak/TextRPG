@@ -11,7 +11,8 @@ namespace TextRPG
             StartBattle,
             Inventory,
             Shop,
-            Quest
+            Quest,
+            EndGame
         }
 
         Player player = new Player();
@@ -49,13 +50,29 @@ namespace TextRPG
                     case GameState.Quest:
                         ShowQuest();
                         break;
+                    case GameState.EndGame: // 게임 종료
+                        isGameEnd = true;
+                        break;
                     default:
                         itemManager.Mode = 0; // 메인 화면 호출 시 Mode 기본값으로 변경
                         StartGame(); 
                         break;
                 }
             }
-            //저장처리
+
+            // 저장 후 게임 종료
+            EndGame();
+        }
+
+        private void EndGame()
+        {
+            Console.Clear();
+
+            // Save_Data.json 파일에 저장
+            EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGameEnd, ""));
+
+            Console.WriteLine("게임을 종료합니다.");
+            Console.ReadLine();
         }
 
         private void ShowQuest()//퀘스트 목록을 보여준다.
@@ -129,7 +146,7 @@ namespace TextRPG
 
             Utilities.AddLine("원하시는 행동을 입력해주세요.");
             Utilities.Add(">>");
-            switch ((GameState)Utilities.GetInputKey(1, 5))
+            switch ((GameState)Utilities.GetInputKey(0, 5))
             {
                 case GameState.PlayerInfo: // 상태 보기
                     gameState = GameState.PlayerInfo;
@@ -145,6 +162,9 @@ namespace TextRPG
                     break;
                 case GameState.Quest:
                     gameState = GameState.Quest;
+                    break;
+                case GameState.NONE: // 입력값이 0이라면 게임 종료
+                    gameState = GameState.EndGame;
                     break;
             }
         }

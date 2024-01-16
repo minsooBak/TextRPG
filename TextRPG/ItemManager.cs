@@ -20,7 +20,6 @@ namespace TextRPG
     {
         public string[] inventory;
         public string[] equippedItem;
-        public string[] fieldItem;
         public string[] saleItem;
     }
 
@@ -54,38 +53,35 @@ namespace TextRPG
             foreach (Item item in items)
             {
                 if (item.IsOnField)
-                    fieldDisplay.Add(item);//필드 아이템 저장
+                    fieldDisplay.Add(item); //필드 아이템 저장
                 if (item.IsSale)
-                    shopDisplay.Add(item);//상점 아이템 저장
+                    shopDisplay.Add(item); //상점 아이템 저장
             }
 
-            //// 인벤토리 저장 파일 불러오기
-            //SaveData? saveData = (SaveData?)Utilities.LoadFile(LoadType.SaveData);
-            //if (data != null)
-            //// 아이템 정보를 data에서 읽어와서 inventory및 기타 배열에 할당하기
-            //{
-            //    foreach (string item in data.Value.inventory)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
+            // 인벤토리 저장 파일 불러오기
+            SaveData? saveData = (SaveData?)Utilities.LoadFile(LoadType.SaveData);
+            if (saveData != null)
+            {
+                foreach (string saveitem in saveData.Value.inventory)
+                    // 인벤토리 아이템 목록 가져오기
+                {
+                    Item _item = list.Find(x => x.Name == saveitem);
+                    inventory.Add(_item);
+                }
+                foreach (string saveitem in saveData.Value.equippedItem)
+                    // 장착 여부 가져오기
+                {
+                    Item _item = list.Find(x => x.Name == saveitem);
+                    _item.IsEquipped = true;
+                }
+                foreach (string saveitem in saveData.Value.saleItem)
+                    // 판매 여부 가져오기
+                {
+                    Item _item = list.Find(x => x.Name == saveitem);
+                    _item.IsSale = false;
+                }
 
-            //        inventory.Add(_item);
-            //    }
-            //    foreach (string item in data.Value.equippedItem)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
-            //        _item.IsEquipped = true;
-            //    }
-            //    foreach (string item in data.Value.saleItem)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
-            //        shopDisplay.Add(_item);
-            //    }
-            //    foreach (string item in data.Value.fieldItem)
-            //    {
-            //        Item _item = list.Find(x => x.Name == item);
-            //        fieldDisplay.Add(_item);
-            //    }
-            //}
+            }
 
             List<Item>? equippedItems = inventory.FindAll(x => x.IsEquipped);
             //EventManager.Instance.PostEvent(EventType.eUpdateItem, "");
@@ -274,8 +270,7 @@ namespace TextRPG
                                 SaveData itemData = new SaveData();
                                 itemData.inventory = inventory.Select(x => x.Name).ToArray();
                                 itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                                itemData.saleItem = shopDisplay.Select(x => x.Name).ToArray();
-                                itemData.fieldItem = fieldDisplay.Select(x => x.Name).ToArray();
+                                itemData.saleItem = inventory.FindAll(x => x.IsSale == false).Select(x => x.Name).ToArray();
 
                                 //Utilities.SaveFile(SaveType.ItemData, itemData); //기존 것
                                 Utilities.SaveFile(SaveType.SaveData, itemData);
