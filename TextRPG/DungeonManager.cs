@@ -28,7 +28,6 @@ namespace TextRPG
         public int deadCounter = 0;
         
         public bool showMonsterMode = false;    // 몬스터 선택창에서 번호 출력 여부. true = 출력,  false = 출력하지 않음
-        //public int getExp = 0;
 
 
         public DungeonManager(Player player)
@@ -56,8 +55,6 @@ namespace TextRPG
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
         public void StartBattle()
         {
-            //if (deadCounter >= monsters.Length) break; 이 조건문을 while조건문으로 넣었습니다
-            // deadCounter를 몬스터가 데미지를 받을때 오르게 바꾸고 deadCounter의 초기화를 던전선택할때만 하게했습니다.
             // 플레이어가 살아있거나, 죽은 몬스터 마리 수가 생성된 마리 수 보다 적을 동안 전투 진행.
             while (player.IsDead == false && deadCounter < monsters.Length)
             {
@@ -126,7 +123,6 @@ namespace TextRPG
             {
                 Console.WriteLine("이미 죽은 몬스터입니다.\n다시 선택해주세요!");
                 Thread.Sleep(1000);     // 1초 동안 "이미 죽은 몬스터입니다. 다시 선택해주세요!" 출력하기
-                //Console.ReadKey();
 
                 return;
             }
@@ -135,19 +131,18 @@ namespace TextRPG
             ShowBattle(monsters[input - 1], true, attackType);// 공격 종류에 따라 일반 공격 , 스킬 공격 실행됨
 
             // 몬스터의 공격
-            foreach (Monster monster in monsters)       // foreach(Monster monster in (Monster[])monsters)
+            foreach (Monster monster in monsters)
             {
                 // 이미 죽은 몬스터는 건너뛰기
                 if (monster.IsDead)
                 {
-                    //break; 1번을 죽일경우 공격을 안하게 되기에 continue로 수정
                     continue;
                 }
 
                 // 몬스터의 공격 타입 랜덤으로 정하기
                 AttackType monsterAttackType = (AttackType)new Random().Next(1, 3);// 1 ~2
 
-                //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 쓰도록 바꿧습니다
+                //몬스터가 랜덤으로 스킬을 쓴다면 몬스터의 현재 mp내의 마나소모가 높은 스킬을 사용
                 if ((AttackType)monsterAttackType == AttackType.Skill)
                     monster.SetSkill(skillManager.GetMonsterSkill(monster.Class, monster.GetMP));
                 //monster.SetSkill(skillManager.GetMySkill(monster.Class, 0));
@@ -170,7 +165,6 @@ namespace TextRPG
 
             player.ShowStats(); // 플레이어 상태 표시
 
-            //EventManager.Instance.PostEvent(EventType.eShowSkill, playerJob); // 플레이어 직업의 스킬 출력 
             skillManager.ShowSkillList(player.Class);// 플레이어 직업의 스킬 출력 
 
             Utilities.TextColorWithNoNewLine("0.", ConsoleColor.DarkRed);
@@ -279,13 +273,16 @@ namespace TextRPG
                 Utilities.TextColorWithNoNewLine($"{monster}", ConsoleColor.DarkRed);       // 이번 던전에서 잡은 몬스터 수 출력
                 Console.WriteLine("마리를 잡았습니다.\n");
 
-                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp())); //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가 
+                //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가
+                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp()));  
+                
                 player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
         
                 GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
             }
             else
             {
+                // 플레이어 사망 시
                 Console.WriteLine("You Lose\n");
 
                 player.ShowResult();
@@ -301,7 +298,6 @@ namespace TextRPG
             }
         }
 
-        //public void OnEvent<T>(EventType type, T data) 기존 OnEvent
         public void GetReward()
         {
             // 몬스터 매니저에 전리품 획득 처리 및 출력
