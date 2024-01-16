@@ -75,7 +75,7 @@ namespace TextRPG
             }
 
             // 인벤토리 저장 파일 불러오기
-            SaveData? saveData = (SaveData?)Utilities.LoadFile(LoadType.SaveData);
+            SaveData? saveData = Utilities.LoadFile<SaveData>(LoadType.SaveData);
 
             // 저장된 파일이 null이 아니라면 저장된 정보 할당하기
             if (saveData != null)
