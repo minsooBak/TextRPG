@@ -8,21 +8,27 @@ namespace TextRPG
         Monster2, // 공허충
         Monster3  // 대포 미니언
     }
+
+    public enum MonsterItemType
+    {
+        monsterItem1 = 0,
+        monsterItem2,
+        monsterItem3
+    }
+
     //정원우님 구현
-    internal class MonsterManager : IListener
+    internal class MonsterManager
     {
         public MonsterManager()
         {
-            EventManager.Instance.AddListener(EventType.eMakeMonsters, this);
-
             // arrayOfMonsterTypes 배열 생성
             for(int i = 0; i < maxMonsterType; i++)
             {
                 arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
             }
-            monsterItemName[0] = "낡은 대검";
-            monsterItemName[1] = "초보자의 갑옷";
-            monsterItemName[2] = "가시 갑옷";
+            //monsterItemName[0] = "낡은 대검";
+            //monsterItemName[1] = "초보자의 갑옷";
+            //monsterItemName[2] = "가시 갑옷";
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
         static int maxMonsterType = 3;
@@ -31,7 +37,7 @@ namespace TextRPG
 
         // dungeonMonsters : 던전매니저에서 사용할 몬스터 리스트
         List<IObject> dungeonMonsters = [];
-        string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
+        //string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
         
         public List<IObject> MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
 
@@ -91,7 +97,7 @@ namespace TextRPG
                 if (rnd.Next(1, 101) <= 8) //8퍼 확률로
                 {
                     // 아이템 드랍 이벤트 전송
-                    EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem,monster.item)); //아이템 드랍 이벤트 수정
+                    EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem,monster.Item)); //아이템 드랍 이벤트 수정
 
                     // itemsCounter : 아이템 별 획득한 개수. 
                     // itemsCounter[0] : "낡은 대검"
@@ -120,16 +126,27 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine($"{gold}", ConsoleColor.DarkRed);      // 플레이어가 얻은 골드 출력
             Console.WriteLine($" Gold");
 
-            for(int i = 0; i < itemsCounter.Length; i++)
+            for (int i = 0; i < itemsCounter.Length; i++)
             {
                 if (itemsCounter[i] > 0)
                 {
-                    //Console.WriteLine($"{dungeonMonsters[i].item} - {itemsCounter[i]}"); // 몬스터가 가지고 있는 아이템 이름 - 개수 
-                    //Console.WriteLine($"{monsterItemName[i]} - {itemsCounter[i]}"); // 테스트로 monsterItemName 이라는 아이템 배열을 만들어서 수정 필요
-                    Console.Write($"{monsterItemName[i]} ");
+                    Console.Write($"{GetMonsterItemName(i)} ");
                     Utilities.TextColorWithNoNewLine("- ", ConsoleColor.DarkYellow);
                     Utilities.TextColorWithNoNewLine($"{itemsCounter[i]}", ConsoleColor.DarkRed);
                 }
+            }
+        }
+
+        string GetMonsterItemName(int i)
+        {
+            switch ((MonsterItemType)i)
+            {
+                case MonsterItemType.monsterItem1:
+                    return "낡은 대검";
+                case MonsterItemType.monsterItem2:
+                    return "초보자의 갑옷";
+                default:
+                    return "가시 갑옷";
             }
         }
 
@@ -137,15 +154,6 @@ namespace TextRPG
         {
             // 던전 종료 후 생성되어 있던 몬스터 리스트 초기화
             dungeonMonsters.Clear();
-        }
-
-        public void OnEvent<T>(EventType type, T data)
-        {
-            var d = data as KeyValuePair<EventType, int>?;
-            if (type == EventType.eMakeMonsters)
-            {
-                MakeMonsters(d.Value.Value);
-            }
         }
     }
 
@@ -162,7 +170,7 @@ namespace TextRPG
 
         public string Class => myState.Class;
 
-        public string item { get; set; }
+        public string Item { get; set; }
         public int Gold => myState.Gold;
 
         public bool IsUseSkill => myState.Skill.Cost < myState.MP;//사용할 수 있는지 체크후 bool
@@ -183,7 +191,7 @@ namespace TextRPG
             // 몬스터의 공격 타입이 스킬이라면
             if (attackType == AttackType.Skill)
             {
-                damage += (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기
+                damage += (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기     // GetAtk()를 호출해서 데미지 반환하기
                 myState.MP -= myState.Skill.Cost;
             }
             // 공격 출력문
@@ -278,7 +286,7 @@ namespace TextRPG
                 myState.MP = 100;
                 myState.ATK = 5;
                 myState.Gold = 100;
-                item = "낡은 대검";
+                Item = "낡은 대검";
             }
             else if (monsterType == MonsterType.Monster2)
             {
@@ -289,7 +297,7 @@ namespace TextRPG
                 myState.MP = 100;
                 myState.ATK = 9;
                 myState.Gold = 200;
-                item = "초보자의 갑옷";
+                Item = "초보자의 갑옷";
             }
             else if (monsterType == MonsterType.Monster3)
             {
@@ -300,7 +308,7 @@ namespace TextRPG
                 myState.MP = 100;
                 myState.ATK = 8;
                 myState.Gold = 500;
-                item = "가시 갑옷";
+                Item = "가시 갑옷";
             }
 
             myState.Name = myState.Class;
