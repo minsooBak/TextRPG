@@ -8,24 +8,24 @@ namespace TextRPG
 {
     struct PlayerData
     {
-        ObjectState os;
-        //변수값
-        //스테이지
+        public ObjectState os;
+        public int maxHealth;
+        public int maxMP;
+        public int maxExp;
+        public int dungeonStage;
     }
 
     //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
     internal class Player : IListener, IObject
     {
         private ObjectState myState;
-        private int InitATK { get; set; }
-        private int InitDEF { get; set; }
         private int maxHealth;
         private int maxMP;
         private int PrevHealth { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
         private int PrevExp;
-
-        private string PlayerClass { get; set; } // 플레이어 직업
+        public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
+        private int maxExp = 0;
 
         public Player()
         {
@@ -79,8 +79,6 @@ namespace TextRPG
                         break;
                     }
             }
-            InitATK = myState.ATK;
-            InitDEF = myState.DEF;
             maxHealth = myState.Health;
             maxMP = myState.MP;
             PrevExp = myState.EXP;
@@ -108,8 +106,6 @@ namespace TextRPG
             myState.DEF = state.DEF;
         
             myState.Gold = state.Gold;
-            InitATK = state.ATK;
-            InitDEF = state.DEF;
         }             
 
         public int Health => myState.Health;
@@ -126,7 +122,6 @@ namespace TextRPG
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
-        public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
 
         
         public void OnEvent<T>(EventType type, T data)
@@ -189,6 +184,7 @@ namespace TextRPG
             Console.Write("HP ");
 
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
+
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
@@ -196,13 +192,6 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
-
-            Console.Write("공격력: ");
-            Utilities.TextColorWithNoNewLine($"{myState.ATK}\n", ConsoleColor.DarkRed);
-
-            Console.Write("방어력: ");
-            Utilities.TextColorWithNoNewLine($"{myState.DEF}\n", ConsoleColor.DarkRed);
-
         }
 
         public int Attack(AttackType attackType)
