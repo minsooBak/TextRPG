@@ -22,6 +22,8 @@ namespace TextRPG
         public Player()
         {
             EventManager.Instance.AddListener(EventType.Player, this);
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);
+
             PlayerData? pd = Utilities.LoadFile<PlayerData?>(LoadType.Player);
             if (pd == null)
             {
