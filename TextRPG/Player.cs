@@ -75,7 +75,7 @@ namespace TextRPG
                         }
                     case "도적":
                         {
-                            myState.Health += 250;
+                            myState.Health += 350;
                             myState.MP += 200;
                             myState.ATK += 350;
                             myState.DEF += 60;
@@ -235,7 +235,7 @@ namespace TextRPG
 
         public void ShowStats()
         {
-            Console.Write("\nLv.");
+            Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
 
@@ -248,7 +248,7 @@ namespace TextRPG
             Console.Write("MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColor($"{maxMP}\n", ConsoleColor.Blue);
+            Utilities.TextColorWithNoNewLine($"{maxMP}\n", ConsoleColor.Blue);
         }
 
         public int Attack(AttackType attackType)
@@ -265,16 +265,10 @@ namespace TextRPG
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
             {
-                if (myState.MP < myState.Skill.Cost)
-                {
-                    attackType = AttackType.Attack;
-                }
-                else if (myState.MP >= myState.Skill.Cost)
-                {
-                    damage = (int)(damage * myState.Skill.ATKRatio);
-                    myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
-                } 
+                damage = (int)(damage * myState.Skill.ATKRatio);
+                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
             }
+
             if (attackType == AttackType.Attack)
                 Console.WriteLine($"{myState.Name} 의 공격!");
             else

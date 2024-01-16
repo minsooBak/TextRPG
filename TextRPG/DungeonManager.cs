@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     //송상화님 던전 구현 
     // 전투 결과 구현하기
@@ -251,7 +243,7 @@ namespace TextRPG
                 player.TakeDamage(damage);
             }
 
-            Console.WriteLine("\n0. 다음\n");
+            Console.WriteLine("0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             // 다음 화면으로 넘기기
             if (Utilities.GetInputKey(0, 0) == 0)
@@ -277,7 +269,7 @@ namespace TextRPG
 
                 Console.Write($"던전에서 몬스터 ");
                 Utilities.TextColorWithNoNewLine($"{monster}", ConsoleColor.DarkRed);       // 이번 던전에서 잡은 몬스터 수 출력
-                Console.WriteLine("마리를 잡았습니다.");
+                Console.WriteLine("마리를 잡았습니다.\n");
 
                 //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp()));

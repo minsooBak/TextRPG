@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     public enum MonsterType
     {
@@ -120,17 +118,18 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine("[획득 아이템]");
             Utilities.TextColorWithNoNewLine($"{gold}", ConsoleColor.DarkRed);      // 플레이어가 얻은 골드 출력
-            Console.WriteLine($" Gold");
+            Console.Write($" Gold");
 
             for (int i = 0; i < itemsCounter.Length; i++)
             {
                 if (itemsCounter[i] > 0)
                 {
-                    Console.Write($"{GetMonsterItemName(i)} ");     // 아이템 이름 가져오기
+                    Console.Write($"\n{GetMonsterItemName(i)} ");     // 아이템 이름 가져오기
                     Utilities.TextColorWithNoNewLine("- ", ConsoleColor.DarkYellow);
                     Utilities.TextColorWithNoNewLine($"{itemsCounter[i]}", ConsoleColor.DarkRed);
                 }
             }
+            Console.WriteLine();
         }
 
         // 아이템 이름 가져오기
