@@ -332,7 +332,7 @@ namespace TextRPG
         }
 
         //SaveType에 따라 경로를 정하고 데이터를 저장
-        public static void SaveFile(SaveType dataType, object data)
+        public static void SaveFile<T>(SaveType dataType, T data)
         {
             string path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName;
@@ -341,20 +341,20 @@ namespace TextRPG
                 case SaveType.Player:
                     {
                         path += @"\P_Data.json";
-                        File.WriteAllText(path, JsonConvert.SerializeObject((ObjectState)data, Formatting.Indented));
+                        File.WriteAllText(path, JsonConvert.SerializeObject((T)data, Formatting.Indented));
                         break;
                     }
                 case SaveType.SaveData:
                     {
                         path += @"\Data\Save_Data.json";
-                        string json = JsonConvert.SerializeObject((SaveData)data, Formatting.Indented);
+                        string json = JsonConvert.SerializeObject((T)data, Formatting.Indented);
                         File.WriteAllText(path, json);
                         break;
                     }
                 case SaveType.Quest:
                     {
                         path += @"\Data\Save_Quest.json";
-                        File.WriteAllText(path, JsonConvert.SerializeObject((QuestData)data, Formatting.Indented));
+                        File.WriteAllText(path, JsonConvert.SerializeObject((T)data, Formatting.Indented));
                         break;
                     }
             }
