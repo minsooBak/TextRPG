@@ -197,6 +197,11 @@ namespace TextRPG
             Console.Write(" MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
 
+            Console.Write("공격력 ");
+            Utilities.TextColorWithNoNewLine($"{myState.ATK}\n", ConsoleColor.DarkRed);
+
+            Console.Write("방어력 ");
+            Utilities.TextColorWithNoNewLine($"{myState.DEF}\n", ConsoleColor.Blue);
         }
 
         public void ShowStats()
