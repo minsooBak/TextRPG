@@ -29,10 +29,10 @@ namespace TextRPG
         // arrayOfMonsterTypes : 생성 가능한 몬스터 타입 배열
         public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
 
-        List<Monster> dungeonMonsters = [];
+        List<IObject> dungeonMonsters = [];
         string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
         
-        public void MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
+        public List<IObject> MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
 
         {
             Random rnd = new Random();
@@ -62,7 +62,8 @@ namespace TextRPG
                 dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
             }
 
-            EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
+            //EventManager.Instance.PostEvent(EventType.eSetMonsters, Utilities.EventPair(EventType.eSetMonsters, dungeonMonsters));
+            return dungeonMonsters;
         }
 
         // 던전 승리 시 경험치 얻기
@@ -111,14 +112,18 @@ namespace TextRPG
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, gold)); //플레이어 골드 증가 이벤트
             Console.WriteLine();
             Console.WriteLine("[획득 아이템]");
-            Console.WriteLine($"{gold} Gold");
-            
+            Utilities.TextColorWithNoNewLine($"{gold}", ConsoleColor.DarkRed);
+            Console.WriteLine($" Gold");
+
             for(int i = 0; i < itemsCounter.Length; i++)
             {
                 if (itemsCounter[i] > 0)
                 {
                     //Console.WriteLine($"{dungeonMonsters[i].item} - {itemsCounter[i]}"); // 몬스터가 가지고 있는 아이템 이름 - 개수 
-                    Console.WriteLine($"{monsterItemName[i]} - {itemsCounter[i]}"); // 테스트로 monsterItemName 이라는 아이템 배열을 만들어서 수정 필요
+                    //Console.WriteLine($"{monsterItemName[i]} - {itemsCounter[i]}"); // 테스트로 monsterItemName 이라는 아이템 배열을 만들어서 수정 필요
+                    Console.Write($"{monsterItemName[i]} ");
+                    Utilities.TextColorWithNoNewLine("- ", ConsoleColor.DarkYellow);
+                    Utilities.TextColorWithNoNewLine($"{itemsCounter[i]}", ConsoleColor.DarkRed);
                 }
             }
         }
