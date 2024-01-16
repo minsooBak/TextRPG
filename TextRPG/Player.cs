@@ -47,7 +47,7 @@ namespace TextRPG
                         {
                             myState.Health += 400;
                             myState.MP = 100;
-                            myState.ATK += 200;
+                            myState.ATK += 100;
                             myState.DEF += 100;
                             maxHealth = myState.Health;
                             maxMP = myState.MP;
@@ -57,7 +57,7 @@ namespace TextRPG
                         {
                             myState.Health += 100;
                             myState.MP += 400;
-                            myState.ATK += 150;
+                            myState.ATK += 50;
                             myState.DEF += 50;
                             maxHealth = myState.Health;
                             maxMP = myState.MP;
@@ -67,7 +67,7 @@ namespace TextRPG
                         {
                             myState.Health += 150;
                             myState.MP += 200;
-                            myState.ATK += 300;
+                            myState.ATK += 200;
                             myState.DEF += 80;
                             maxHealth = myState.Health;
                             maxMP = myState.MP;
@@ -77,7 +77,7 @@ namespace TextRPG
                         {
                             myState.Health += 250;
                             myState.MP += 200;
-                            myState.ATK += 350;
+                            myState.ATK += 250;
                             myState.DEF += 60;
                             maxHealth = myState.Health;
                             maxMP = myState.MP;
