@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace TextRPG
+﻿namespace TextRPG
 {
     enum ItemType //아이템 종류
     {
@@ -78,7 +68,7 @@ namespace TextRPG
             SaveData? saveData = Utilities.LoadFile<SaveData>(LoadType.SaveData);
 
             // 저장된 파일이 null이 아니라면 저장된 정보 할당하기
-            if (saveData != null)
+            if (saveData.Value.inventory != null)
             {
                 foreach (string saveitem in saveData.Value.inventory)
                     // 인벤토리 아이템 목록 가져오기
