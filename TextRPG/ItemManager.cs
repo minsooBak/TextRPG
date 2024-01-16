@@ -204,14 +204,10 @@ namespace TextRPG
             Console.ReadLine();
 
         }
-        public Item[] GetItems()
-        {
-            return items;
-        }
 
         public void GetFieldItem(Item? data = null)
         {
-            Item newItem = new Item(data.Name, (int)data.Type, data.ATK, data.DEF, data.Description, data.Cost, data.IsSale, data.IsOnField);
+            //Item newItem = new Item(data.Name, (int)data.Type, data.ATK, data.DEF, data.Description, data.Cost, data.IsSale, data.IsOnField);
             //Item newitem = new Item(); //새로운 아이템 객체
             //newitem.CopyItem(data); //아이템 깊은 복사
 
@@ -220,8 +216,8 @@ namespace TextRPG
             {
                 //fieldDisplay.Add(newitem); //
 
-                inventory.Add(newItem); //인벤토리에 아이템 추가
-                Console.WriteLine($"{newItem.Name}을 획득했습니다.");
+                inventory.Add(data); //인벤토리에 아이템 추가
+                Console.WriteLine($"{data.Name}을 획득했습니다.");
             
             }
             else

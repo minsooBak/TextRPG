@@ -48,14 +48,7 @@ namespace TextRPG
             Console.WriteLine();
             return true;
         }
-        public void ItemSetting(Item[] items)
-        {
-            foreach (var quest in questMenu)
-            {
-                questItem.Add(items.ToList().Find(x => x.Name == quest.ItemName));
-                
-            }
-        }
+
         public void ShowQuest(int idx) //idx에 해당하는 퀘스트 보여주기
         {
             if (quests[idx] == null)
