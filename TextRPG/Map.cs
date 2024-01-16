@@ -69,9 +69,9 @@ namespace TextRPG
             Console.Clear();
 
             // Save_Data.json 파일에 저장
-            EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGameEnd, ""));
+            EventManager.Instance.PostEvent(EventType.eGameEnd, "");
 
-            Console.WriteLine("게임을 종료합니다.");
+            Console.WriteLine("게임을 종료합니다. \n(Enter키를 눌러 진행하세요...)");
             Console.ReadLine();
         }
 

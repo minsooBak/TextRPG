@@ -88,8 +88,9 @@ namespace TextRPG
 
             // ItemManager에 Event Listener 등록
             EventManager.Instance.AddListener(EventType.Item, this);
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);
+
             //EventManager.Instance.AddListener(EventType.eGetFieldItem, this);
-            //EventManager.Instance.AddListener(EventType.eGameEnd, this);
 
         }
 
@@ -267,13 +268,13 @@ namespace TextRPG
                     {
                         case eItemType.eGameEnd:
                             {
-                                SaveData itemData = new SaveData();
-                                itemData.inventory = inventory.Select(x => x.Name).ToArray();
-                                itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
-                                itemData.saleItem = inventory.FindAll(x => x.IsSale == false).Select(x => x.Name).ToArray();
+                                //SaveData itemData = new SaveData();
+                                //itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                                //itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                                //itemData.saleItem = inventory.FindAll(x => x.IsSale == false).Select(x => x.Name).ToArray();
 
                                 //Utilities.SaveFile(SaveType.ItemData, itemData); //기존 것
-                                Utilities.SaveFile(SaveType.SaveData, itemData);
+                                //Utilities.SaveFile(SaveType.SaveData, itemData);
 
                                 break;
                             }
@@ -292,6 +293,16 @@ namespace TextRPG
                             }
                     }
                 }
+            }
+            else if (type == EventType.eGameEnd)
+            {
+                // 게임이 종료 될 때 인벤토리, 장착 아이템, 판매 아이템을 저장
+                SaveData itemData = new SaveData();
+                itemData.inventory = inventory.Select(x => x.Name).ToArray();
+                itemData.equippedItem = inventory.FindAll(x => x.IsEquipped).Select(x => x.Name).ToArray();
+                itemData.saleItem = inventory.FindAll(x => x.IsSale == false).Select(x => x.Name).ToArray();
+
+                Utilities.SaveFile(SaveType.SaveData, itemData);
             }
         //    if(type == EventType.eGameEnd)
         //     {
