@@ -1,141 +1,79 @@
+using System.Threading;
+
 namespace TextRPG
 {
+    struct PlayerData
+    {
+        ObjectState os;
+        //변수값
+        //스테이지
+    }
+
     //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
     internal class Player : IListener, IObject
     {
-        struct PlayerData
-        {
-            public ObjectState os;
-            public int maxHealth;
-            public int maxMP;
-            public int maxExp;
-            public int dungeonStage;
-        }
         private ObjectState myState;
+        private int InitATK { get; set; }
+        private int InitDEF { get; set; }
         private int maxHealth;
         private int maxMP;
         private int PrevHealth { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
-        private int PrevExp = 0;
-        public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
-        private int maxEXP= 100; // 레벨 1일때 렙업에 필요한 경험치량
+        private int PrevExp;
+
         public Player()
         {
             EventManager.Instance.AddListener(EventType.Player, this);
-            EventManager.Instance.AddListener(EventType.eGameEnd, this);
+            //CreatePlayer
+            CreatePlayer createPlayer = new CreatePlayer();
+            var Name = createPlayer.Create();
 
-            PlayerData? pd = Utilities.LoadFile<PlayerData?>(LoadType.Player);
-            if (pd == null)
-            {
-                //CreatePlayer
-                CreatePlayer createPlayer = new CreatePlayer();
-                var Name = createPlayer.Create();
+            myState.Name = Name.Key;
+            myState.Class = Name.Value;
 
-                myState.Name = Name.Key;
-                myState.Class = Name.Value;
+            myState.Health = 100;
+            myState.MP = 100;
+            myState.Level = 1;
+            myState.EXP = 0;
+            myState.ATK = 100;
+            myState.DEF = 0;
+            myState.Gold = 1000;
+            InitATK = myState.ATK;
+            InitDEF = myState.DEF;
 
-                myState.Health = 100;
-                myState.MP = 100;
-                myState.Level = 1;
-                myState.EXP = 0;
-                myState.ATK = 100;
-                myState.DEF = 0;
-                myState.Gold = 1000;
-                switch (Name.Value)
-                {
-                    case "전사":
-                        {
-                            myState.Health += 400;
-                            myState.MP = 100;
-                            myState.ATK += 100;
-                            myState.DEF += 100;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
-                            break;
-                        }
-                    case "마법사":
-                        {
-                            myState.Health += 100;
-                            myState.MP += 400;
-                            myState.ATK += 50;
-                            myState.DEF += 50;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
-                            break;
-                        }
-                    case "궁수":
-                        {
-                            myState.Health += 150;
-                            myState.MP += 200;
-                            myState.ATK += 200;
-                            myState.DEF += 80;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
-                            break;
-                        }
-                    case "도적":
-                        {
-                            myState.Health += 250;
-                            myState.MP += 200;
-                            myState.ATK += 250;
-                            myState.DEF += 60;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                myState = pd.Value.os;
-                maxHealth = pd.Value.maxHealth;
-                maxMP = pd.Value.maxMP;
-                dungeonStage = pd.Value.dungeonStage;
-                maxEXP = pd.Value.maxExp;
-            }
+            maxHealth = myState.Health;
+            maxMP = myState.MP;
+            PrevExp = myState.EXP;
         }
-            
-        /*직업 : Warrior, Mage, Archer, Thief
-         * 기본 체력 100,마나 100, 공격력 100, 방어력 0 
-         * 전사 : 체력 +400, 마나 그대로, 공격력+200, 방어력+100
-         * 마법사 : 체력 +200, 마나+500, 공격력+150, 방어력+50
-         * 궁수 : 체력 +150, 마나+100, 공격력+300, 방어력+80
-         * 도적 : 체력 +350, 마나+200, 공격력+350, 방어력+60
-        
-        */
-
 
         public Player(ObjectState state)
         {
-            myState.Level = state.Level;
-
             myState.Name = state.Name;
             myState.Class = state.Class;
-            
-            myState.Health = Health;
+
+            myState.Health = state.Health;
             myState.MP = state.MP;
+            myState.Level = state.Level;
             myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
             myState.DEF = state.DEF;
-        
             myState.Gold = state.Gold;
-        }             
+            InitATK = state.ATK;
+            InitDEF = state.DEF;
+        }
 
         public int Health => myState.Health;
         public int MP => myState.MP;
         public int Level => myState.Level;
-        public int EXP => myState.EXP;
         public string Name => myState.Name;
         public string Class => myState.Class;
         public int ATK => myState.ATK;
-        public int DEF => myState.DEF; 
+        public int DEF => myState.DEF;
         public int Gold => myState.Gold;
 
         public bool IsDead => myState.Health <= 0;
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
-
-        
         public void OnEvent<T>(EventType type, T data)
         {
             //이벤트 받아서 switch문으로 구현
@@ -154,20 +92,18 @@ namespace TextRPG
                     {
                         case ePlayerType.Gold: //골드 추가
                             {
-                                myState.Gold = Math.Clamp(myState.Gold + c.Value, 0, 999999999);
+                                myState.Gold += Math.Clamp(myState.Gold + c.Value, 0, 999999999);
                                 break;
                             }
                         case ePlayerType.Exp: //경험치 추가
                             {
-                                PrevExp = myState.EXP;      // 이전 경험치 저장
-                                myState.EXP += c.Value;
+                                myState.EXP += Math.Clamp(c.Value, 0, 300);
                                 int LevelUp = 0;
-                                if (myState.EXP / maxEXP != 0)
+                                if (myState.EXP / 100 != 0)
                                 {
-                                    LevelUp = myState.EXP / maxEXP; // maxEXP로 나눴을때 몫(=LevelUp)이 있다 (0이 아니면)
-                                    myState.Level += LevelUp; // 레벨에 레벨업을 더해줌(몫이 있으니까), 그럼 레벨 증가
-                                    myState.EXP = myState.EXP % maxEXP; // 렙업하고 나머지 경험치는 maxExp로 나눠서 나머지를 저장
-                                    maxEXP = maxEXP*2;// maxEXP 증가
+                                    LevelUp = myState.EXP / 100;
+                                    myState.Level += LevelUp;
+                                    myState.EXP = myState.EXP % 100;
                                     Console.WriteLine("레벨 업!!\n");
                                     EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.PlayerLevel, LevelUp.ToString()));
                                 }
@@ -180,55 +116,31 @@ namespace TextRPG
                     var c = b.Value;
                     if (c.Key == ePlayerType.Stats)
                     {
-                        if(c.Value.IsEquipped)
-                        {
-                            myState.ATK += c.Value.ATK;
-                            myState.DEF += c.Value.DEF;
-                        }
-                        else
-                        {
-                            myState.ATK -= c.Value.ATK;
-                            myState.DEF -= c.Value.DEF;
-                        }
+                        myState.ATK += c.Value.ATK;
+                        myState.DEF += c.Value.DEF;
                     }
                 }
-            }else if(type == EventType.eGameEnd)
-            {
-                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP, maxHealth = maxHealth, maxMP = maxMP};
-                Utilities.SaveFile(SaveType.Player, pd);
             }
-        }
-
-        public void PlayerStats()
-        {
-            Console.WriteLine("\n[내 정보]\n");
-            Console.Write("Lv.");
-            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
-            Console.Write("EXP :");
-            Utilities.TextColor($"{myState.EXP} / {maxEXP}", ConsoleColor.Yellow);
-            Console.WriteLine($"{myState.Name} ({myState.Class})");
-            Console.WriteLine($"HP : {myState.Health} / {maxHealth}");
-            Console.WriteLine($"MP : {myState.MP} / {maxMP}");
-            Console.WriteLine($"공격력 : {myState.ATK}");
-            Console.WriteLine($"방어력 : {myState.DEF}");
         }
 
         public void ShowStats()
         {
-            Console.Write("\nLv.");
+            Console.WriteLine("\n[내 정보]");
+            Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
 
             Console.Write("HP ");
-            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
+
+            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
 
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
-            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
+            Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColor($"{maxMP}\n", ConsoleColor.Blue);
+            Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
         }
 
         public int Attack(AttackType attackType)
@@ -245,16 +157,10 @@ namespace TextRPG
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
             {
-                if (myState.MP < myState.Skill.Cost)
-                {
-                    attackType = AttackType.Attack;
-                }
-                else if (myState.MP >= myState.Skill.Cost)
-                {
-                    damage = (int)(damage * myState.Skill.ATKRatio);
-                    myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
-                } 
+                damage = myState.Skill.GetATK(damage);
+                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
             }
+
             if (attackType == AttackType.Attack)
                 Console.WriteLine($"{myState.Name} 의 공격!");
             else
@@ -269,56 +175,34 @@ namespace TextRPG
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
 
             Console.Write($"{myState.Health} ->");
-            //myState.Health -= Math.Clamp(damage, 0 , 100);
-            myState.Health -= damage;
-            if( myState.Health <= 0 ) myState.Health = 0;       // 플레이어의 체력이 0 이하가 되면 0으로 변경
-            Console.Write($" {myState.Health}\n");
+            myState.Health -= Math.Clamp(damage, 0 , 100);
+            Console.Write($"{myState.Health}\n");
         }
 
-        public void ShowResult()
+        public void ShowResult(int exp)
         {
-            //PrevExp = myState.EXP;
-            //myState.EXP += exp;
+            PrevExp = myState.EXP;
+            myState.EXP += exp;
 
-            Console.WriteLine("[캐릭터 정보]");
-            Console.Write($"Lv.");
-            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
-            Console.Write($"{myState.Name}\nHP ");
-            Utilities.TextColorWithNoNewLine($"{PrevHealth} ", ConsoleColor.DarkRed);
-            Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
-            Utilities.TextColor($"{myState.Health}", ConsoleColor.DarkRed);
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nHP {PrevHealth} -> {myState.Health}");
+            Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nMP {PrevMp} -> {myState.MP}\n");
+            Console.WriteLine($"EXP {PrevExp} -> {myState.EXP}\n");
 
-            if (IsDead)
+            //if (myState.EXP / 100 != 0)  //경험치가 100을 넘는다면
+            //{
+            //    myState.Level += (myState.EXP / 100); //레벨 올리고
+            //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
+            //}
+
+            PrevHealth = 0;
+            PrevMp = 0;
+
+            //죽엇을때 부활 체력 마나
+            if(IsDead)
             {
                 myState.Health = 60;
                 myState.MP = 60;
             }
-            else
-            {
-                Console.Write($"MP ");
-                Utilities.TextColorWithNoNewLine($"{PrevMp} ", ConsoleColor.DarkRed);
-                Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
-                Utilities.TextColor($"{myState.MP}", ConsoleColor.DarkRed);
-
-                Console.Write($"EXP ");
-                Utilities.TextColorWithNoNewLine($"{PrevExp} ", ConsoleColor.DarkRed);
-                Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
-                Utilities.TextColor($"{myState.EXP}", ConsoleColor.DarkRed);
-
-                //if (myState.EXP / 100 != 0)  //경험치가 100을 넘는다면
-                //{
-                //    myState.Level += (myState.EXP / 100); //레벨 올리고
-                //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
-                //}
-
-                // 던전 클리어 시 입장 가능한 스테이지 증가
-                if (dungeonStage >= 3)
-                    dungeonStage = 3;   // 4층 이상 진입하지 못하도록 제어.
-                else dungeonStage++;
-
-                PrevHealth = 0;
-                PrevMp = 0;
-            }  
         }
     }
 }
