@@ -189,7 +189,6 @@ namespace TextRPG
             Console.Write("HP ");
 
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
-
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
 
@@ -197,6 +196,13 @@ namespace TextRPG
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxMP}\n\n", ConsoleColor.DarkRed);
+
+            Console.Write("공격력: ");
+            Utilities.TextColorWithNoNewLine($"{myState.ATK}\n", ConsoleColor.DarkRed);
+
+            Console.Write("방어력: ");
+            Utilities.TextColorWithNoNewLine($"{myState.DEF}\n", ConsoleColor.DarkRed);
+
         }
 
         public int Attack(AttackType attackType)
