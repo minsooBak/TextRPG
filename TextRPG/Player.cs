@@ -91,7 +91,7 @@ namespace TextRPG
                 maxHealth = pd.Value.maxHealth;
                 maxMP = pd.Value.maxMP;
                 dungeonStage = pd.Value.dungeonStage;
-                maxExp = pd.Value.maxExp;
+                maxEXP = pd.Value.maxExp;
             }
         }
             
@@ -160,7 +160,7 @@ namespace TextRPG
                         case ePlayerType.Exp: //경험치 추가
                             {
                                 PrevExp = myState.EXP;      // 이전 경험치 저장
-                                myState.EXP += Math.Clamp(c.Value, 0, 300);
+                                myState.EXP += c.Value;
                                 int LevelUp = 0;
                                 if (myState.EXP / maxEXP != 0)
                                 {
@@ -186,7 +186,7 @@ namespace TextRPG
                 }
             }else if(type == EventType.eGameEnd)
             {
-                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxExp, maxHealth = maxHealth, maxMP = maxMP};
+                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP, maxHealth = maxHealth, maxMP = maxMP};
                 Utilities.SaveFile(SaveType.Player, pd);
             }
         }
