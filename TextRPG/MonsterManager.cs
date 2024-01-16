@@ -182,7 +182,10 @@ namespace TextRPG
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);     // 오차를 계산해서 몬스터 공격 데미지로 반환
             // 몬스터의 공격 타입이 스킬이라면
             if (attackType == AttackType.Skill)
+            {
                 damage += (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기
+                myState.MP -= myState.Skill.Cost;
+            }
             // 공격 출력문
             if(attackType == AttackType.Attack)
                 Console.WriteLine($"Lv.{myState.Level} {myState.Class} 의 공격!");     // Attack Type이 Attack일 경우 출력문
