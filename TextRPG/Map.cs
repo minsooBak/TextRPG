@@ -51,7 +51,7 @@ namespace TextRPG
                         ShowQuest();
                         break;
                     case GameState.EndGame: // 게임 종료
-                        isGameEnd = true;
+                        isGameEnd = true; // while문 종료
                         break;
                     default:
                         itemManager.Mode = 0; // 메인 화면 호출 시 Mode 기본값으로 변경
@@ -65,10 +65,11 @@ namespace TextRPG
         }
 
         private void EndGame()
+        // 게임 종료 관련 메서드
         {
             Console.Clear();
 
-            // Save_Data.json 파일에 저장
+            // Save_Data.json 파일에 저장하도록 ItemManager의 OnEvent() 호출
             EventManager.Instance.PostEvent(EventType.eGameEnd, "");
 
             Console.WriteLine("게임을 종료합니다. \n(Enter키를 눌러 진행하세요...)");
@@ -163,8 +164,8 @@ namespace TextRPG
                 case GameState.Quest:
                     gameState = GameState.Quest;
                     break;
-                case GameState.NONE: // 입력값이 0이라면 게임 종료
-                    gameState = GameState.EndGame;
+                case GameState.NONE: // 입력값이 0이라면 
+                    gameState = GameState.EndGame; // gameState를 EndGame으로 변경
                     break;
             }
         }
@@ -218,6 +219,10 @@ namespace TextRPG
         }
 
         private void ShowInventory()
+        /* 인벤토리 UI, itemManager.Mode에 따라 다른 내용 출력
+            mode=0 일 때: 기본 인벤토리 아이템 목록만 출력 (번호 없음)
+            mode=1 일 때: 장착 여부와 함께 인벤토리 아이템 목록 출력 (장착 중인 아이템은 [E]로 표시)
+        */
         {
             Console.Clear();
 
@@ -262,13 +267,18 @@ namespace TextRPG
                         gameState = GameState.NONE; // StartGame()으로 돌아가기
                         break;
                     default:
-                        itemManager.EquipItem(itemNum);
+                        itemManager.EquipItem(itemNum); // 아이템 장착/해제
                         break;
                 }
             }
         }
 
         private void ShowShop()
+        /* 상점 UI, itemManager.Mode에 따라 다른 내용 출력
+            mode=0 일 때: 기본 상점 아이템 목록만 출력 (번호 없음)
+            mode=1 일 때: 번호와 함께 상점 아이템 목록 출력
+            mode=2 일 때: 번호와 함께 '인벤토리' 판매 가능 아이템 목록 출력
+        */
         {
             Console.Clear();
 
@@ -302,7 +312,7 @@ namespace TextRPG
                         gameState = GameState.Shop; // Mode를 1로 바꾸고 다시 ShowShop() 호출
                         break;
                     case 2:
-                        itemManager.Mode = 2;
+                        itemManager.Mode = 2; // Mode를 2로 바꾸고 다시 ShowShop() 호출
                         gameState = GameState.Shop;
                         break;
                 }
@@ -325,7 +335,7 @@ namespace TextRPG
                         gameState = GameState.Shop; // ShowShop()-Mode0 으로 돌아가기
                         break;
                     default:
-                        itemManager.BuyItem(itemNum, player.Gold);
+                        itemManager.BuyItem(itemNum, player.Gold); // 아이템 구매
                         break;
                 }
             }
@@ -347,7 +357,7 @@ namespace TextRPG
                         gameState = GameState.Shop; // ShowShop()-Mode0 으로 돌아가기
                         break;
                     default:
-                        itemManager.SellItem(itemNum, player.Gold);
+                        itemManager.SellItem(itemNum, player.Gold); // 아이템 판매
                         break;
                 }
             }
