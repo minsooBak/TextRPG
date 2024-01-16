@@ -7,7 +7,8 @@ namespace TextRPG
     enum SaveType // 데이터 저장 타입
     {
         Player,
-        SaveData
+        SaveData,
+        Quest
     }
 
     enum LoadType // 데이터 불러오기 타입
@@ -19,7 +20,8 @@ namespace TextRPG
         Monster,
         SkillData,
         Dungeon,
-        QuestData
+        QuestData,
+        QuestSaveData
     }
     struct ObjectState //공통변수들
     {
@@ -288,6 +290,25 @@ namespace TextRPG
                         }
                         break;
                     }
+                case LoadType.QuestSaveData:
+                    {
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Data\Save_Quest.json";
+                        if (File.Exists(path) == false)
+                            return null;
+                        StreamReader? file = File.OpenText(path);
+                        if (file != null)
+                        {
+                            JsonTextReader reader = new JsonTextReader(file);
+
+                            JObject json = (JObject)JToken.ReadFrom(reader);
+                            string? str = JsonConvert.SerializeObject(json);
+
+                            file.Close();
+                            return JsonConvert.DeserializeObject<QuestData>(str);
+                        }
+                        break;
+                    }
                 case LoadType.Dungeon:
                     {
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
@@ -313,7 +334,8 @@ namespace TextRPG
         //SaveType에 따라 경로를 정하고 데이터를 저장
         public static void SaveFile(SaveType dataType, object data)
         {
-            string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "";
+            string path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName;
             switch (dataType)
             {
                 case SaveType.Player:
@@ -327,6 +349,12 @@ namespace TextRPG
                         path += @"\Data\Save_Data.json";
                         string json = JsonConvert.SerializeObject((SaveData)data, Formatting.Indented);
                         File.WriteAllText(path, json);
+                        break;
+                    }
+                case SaveType.Quest:
+                    {
+                        path += @"\Data\Save_Quest.json";
+                        File.WriteAllText(path, JsonConvert.SerializeObject((QuestData)data, Formatting.Indented));
                         break;
                     }
             }
