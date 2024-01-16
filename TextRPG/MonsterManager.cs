@@ -286,7 +286,7 @@ namespace TextRPG
                 myState.Level = 2;
                 myState.EXP = 15;
                 myState.Health = 15;
-                myState.MP = 20;
+                myState.MP = 100;
                 myState.ATK = 5;
                 myState.Gold = 100;
                 Item = "낡은 대검";
@@ -297,7 +297,7 @@ namespace TextRPG
                 myState.Level = 3;
                 myState.EXP = 20;
                 myState.Health = 10;
-                myState.MP = 20;
+                myState.MP = 100;
                 myState.ATK = 9;
                 myState.Gold = 200;
                 Item = "초보자의 갑옷";
