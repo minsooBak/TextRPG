@@ -16,7 +16,7 @@ namespace TextRPG
         Skill
     }
 
-    internal class DungeonManager : IListener
+    internal class DungeonManager
     {
         private Player player;
         private SkillManager skillManager = new SkillManager();
@@ -26,8 +26,6 @@ namespace TextRPG
         public IObject[] monsters;
         // deadCounter : 이번 던전에서 죽은 몬스터 마리 수 저장
         public int deadCounter = 0;
-
-        //public int dungeonStage = 0; // dungeonStage 0 ~ 2 -> 현재 던전 스테이지 1 ~ 3
         
         public bool showMonsterMode = false;    // 몬스터 선택창에서 번호 출력 여부. true = 출력,  false = 출력하지 않음
         //public int getExp = 0;
@@ -35,7 +33,6 @@ namespace TextRPG
 
         public DungeonManager(Player player)
         {
-            EventManager.Instance.AddListener(EventType.eSetMonsters, this);
             List<Dungeon>? d = Utilities.LoadFile<List<Dungeon>>(LoadType.Dungeon);
 
             dungeons = d;
@@ -282,11 +279,6 @@ namespace TextRPG
                 Utilities.TextColorWithNoNewLine($"{monster}", ConsoleColor.DarkRed);       // 이번 던전에서 잡은 몬스터 수 출력
                 Console.WriteLine("마리를 잡았습니다.\n");
 
-                //for (int i = 0; i < monster; i++)
-                //{
-                //    EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monsters[i].Class)); //퀘스트 이벤트 몬스터 수만큼 호출함
-                //    // EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, monsters[i].Exp));//몬스터 잡고 경험치 획득 (동일해서 지움)
-                //}
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp())); //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가 
                 player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
         
@@ -314,11 +306,6 @@ namespace TextRPG
         {
             // 몬스터 매니저에 전리품 획득 처리 및 출력
             monsterManager.GetReward();
-        }
-
-        public void OnEvent<T>(EventType type, T data)
-        {
-            throw new NotImplementedException();
         }
     }
 
