@@ -45,7 +45,7 @@
         {
             Mode = 0;
 
-           List<Item>? list = Utilities.LoadFile<List<Item>>(LoadType.Item);
+            List<Item>? list = Utilities.LoadFile<List<Item>>(LoadType.Item);
 
 
             items = list.ToArray();
