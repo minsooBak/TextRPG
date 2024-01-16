@@ -189,9 +189,11 @@ namespace TextRPG
             Console.WriteLine("\n[내 정보]\n");
             Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+            Console.Write("EXP :");
+            Utilities.TextColor($"{myState.EXP}", ConsoleColor.Yellow);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
-            Console.WriteLine($"체력 : {myState.Health} / {maxHealth}");
-            Console.WriteLine($"마나 : {myState.MP} / {maxMP}");
+            Console.WriteLine($"HP : {myState.Health} / {maxHealth}");
+            Console.WriteLine($"MP : {myState.MP} / {maxMP}");
             Console.WriteLine($"공격력 : {myState.ATK}");
             Console.WriteLine($"방어력 : {myState.DEF}");
         }
@@ -201,10 +203,6 @@ namespace TextRPG
             Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
-
-            Console.Write("경험치 :");
-            Utilities.TextColorWithNoNewLine($"{myState.EXP}\n\n", ConsoleColor.Yellow);
-
 
             Console.Write("HP ");
             Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
@@ -232,7 +230,7 @@ namespace TextRPG
             damage = new Random().Next(myState.ATK - (int)Math.Ceiling(getDamage), myState.ATK + (int)Math.Ceiling(getDamage) + 1);
             if (attackType == AttackType.Skill)
             {
-                damage = myState.Skill.GetATK(damage);
+                damage = (int)(damage * myState.Skill.ATKRatio);
                 myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
             }
 
