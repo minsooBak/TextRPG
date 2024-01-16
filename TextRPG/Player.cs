@@ -90,6 +90,7 @@ namespace TextRPG
                             }
                         case ePlayerType.Exp: //경험치 추가
                             {
+                                PrevExp = myState.EXP;
                                 myState.EXP += Math.Clamp(c.Value, 0, 300);
                                 int LevelUp = 0;
                                 if (myState.EXP / 100 != 0)
@@ -125,7 +126,7 @@ namespace TextRPG
 
             Console.Write("HP ");
 
-            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);      // 나중에 player.Hp로 수정하기
+            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
 
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
             Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
@@ -168,34 +169,51 @@ namespace TextRPG
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
 
             Console.Write($"{myState.Health} ->");
-            myState.Health -= Math.Clamp(damage, 0 , 100);
-            Console.Write($"{myState.Health}\n");
+            //myState.Health -= Math.Clamp(damage, 0 , 100);
+            myState.Health -= damage;
+            if( myState.Health <= 0 ) myState.Health = 0;       // 플레이어의 체력이 0 이하가 되면 0으로 변경
+            Console.Write($" {myState.Health}\n");
         }
 
-        public void ShowResult(int exp)
+        public void ShowResult()
         {
-            PrevExp = myState.EXP;
-            myState.EXP += exp;
+            //PrevExp = myState.EXP;
+            //myState.EXP += exp;
 
-            Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nHP {PrevHealth} -> {myState.Health}");
-            Console.WriteLine($"Lv.{myState.Level} {myState.Name}\nMP {PrevMp} -> {myState.MP}\n");
-            Console.WriteLine($"EXP {PrevExp} -> {myState.EXP}\n");
+            Console.WriteLine("[캐릭터 정보]");
+            Console.Write($"Lv.");
+            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+            Console.Write($"{myState.Name}\nHP ");
+            Utilities.TextColorWithNoNewLine($"{PrevHealth} ", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
+            Utilities.TextColor($"{myState.Health}", ConsoleColor.DarkRed);
 
-            //if (myState.EXP / 100 != 0)  //경험치가 100을 넘는다면
-            //{
-            //    myState.Level += (myState.EXP / 100); //레벨 올리고
-            //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
-            //}
-
-            PrevHealth = 0;
-            PrevMp = 0;
-
-            //죽엇을때 부활 체력 마나
-            if(IsDead)
+            if (IsDead)
             {
                 myState.Health = 60;
                 myState.MP = 60;
             }
+            else
+            {
+                Console.Write($"MP ");
+                Utilities.TextColorWithNoNewLine($"{PrevMp} ", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
+                Utilities.TextColor($"{myState.MP}", ConsoleColor.DarkRed);
+
+                Console.Write($"EXP ");
+                Utilities.TextColorWithNoNewLine($"{PrevExp} ", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
+                Utilities.TextColor($"{myState.EXP}", ConsoleColor.DarkRed);
+
+                //if (myState.EXP / 100 != 0)  //경험치가 100을 넘는다면
+                //{
+                //    myState.Level += (myState.EXP / 100); //레벨 올리고
+                //    myState.EXP = myState.EXP % 100; //남은 경험치를 현재 경험치로 설정
+                //}
+
+                PrevHealth = 0;
+                PrevMp = 0;
+            }  
         }
     }
 }
