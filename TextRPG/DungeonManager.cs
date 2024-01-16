@@ -280,7 +280,8 @@ namespace TextRPG
                 Console.WriteLine("마리를 잡았습니다.\n");
 
                 //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가
-                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp()));  
+                EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp()));
+                Console.WriteLine();
                 
                 player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
         
