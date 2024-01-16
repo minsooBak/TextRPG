@@ -251,7 +251,7 @@ namespace TextRPG
                 player.TakeDamage(damage);
             }
 
-            Console.WriteLine("\n0. 다음\n");
+            Console.WriteLine("0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             // 다음 화면으로 넘기기
             if (Utilities.GetInputKey(0, 0) == 0)
