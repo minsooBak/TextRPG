@@ -9,37 +9,37 @@ namespace TextRPG
 {
     struct QuestData
     {
-        public List<Quest> myQuest; //진행도 저장된 퀘스트
-        public List<string> clearQuest;//완전 클리어된 퀘스트 이름
+        public List<Quest> myQuest; //진행도 저장된 퀘스트 리스트
+        public List<string> clearQuest;//완전 클리어된 퀘스트 이름 리스트
     }
     internal class QuestManager : IListener
     {
         private Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests; //화면에 노출되는 퀘스트 목록
-        private List<string> Clearquest = new List<string>();
-        private static int clearCount = 0; //퀘스트 클리어 횟수
-        private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx
+        private List<string> Clearquest = new List<string>(); //클리어한 퀘스트 이름 리스트
+        private static int clearCount = 0; //퀘스트 클리어 횟수(사용을 안하는 중)
+        private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx 
         public QuestManager()
         {
-            EventManager.Instance.AddListener(EventType.eGameEnd, this);
-            EventManager.Instance.AddListener(EventType.Quest, this); //Add
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);//게임 종료시 저장이벤트 등록
+            EventManager.Instance.AddListener(EventType.Quest, this); //Add //퀘스트 관련 이벤트 등록
             questMenu = Utilities.LoadFile<Quest[]>(LoadType.QuestData); //퀘스트 전체 목록 받아오기\
-            QuestData? data = Utilities.LoadFile<QuestData?>(LoadType.QuestSaveData);
+            QuestData? data = Utilities.LoadFile<QuestData?>(LoadType.QuestSaveData); //QuestData 타입(현재 진행도 리스트, 클리어한 퀘스트 이름 리스트)으로 받아옴
             if (data != null)
             {
-                foreach (var quest in data.Value.clearQuest)
+                foreach (var quest in data.Value.clearQuest) // 클리어한 퀘스트 이름 리스트에서 하나씩 꺼내서
                 {
-                    for (int i = 0; i < questMenu.Length; i++)
+                    for (int i = 0; i < questMenu.Length; i++) //전체 배열을 탐색하고
                     {
-                        if (questMenu[i].Name == quest)
+                        if (questMenu[i].Name == quest) //이미 클리어한 것과 퀘스트 전체 배열의 퀘스트 이름이 같다면
                         {
-                            questMenu[i].isClear = true;
+                            questMenu[i].isClear = true; //전체 배열의 해당 퀘스트를 클리어로 변경
                             break;
                         }
                     }
 
                 }
-                quests = data.Value.myQuest;
+                quests = data.Value.myQuest; //현재 노출될 퀘스트는 세이브 파일의 저장된 진행도를 가진 퀘스트 리스트를 복사
                 int count = 0;
                 for (int i = 0; i < questMenu.Length; i++)
                 {
