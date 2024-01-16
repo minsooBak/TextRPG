@@ -178,7 +178,8 @@ namespace TextRPG
                     }
                 case LoadType.SaveData:
                     {
-                        path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Data\Save_Data.json";
+                        path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
+                            .Parent.Parent.Parent.FullName + @"\Data\Save_Data.json";
                         if (File.Exists(path) == false)
                         {
                             Console.WriteLine("저장된 파일이 없습니다.");
