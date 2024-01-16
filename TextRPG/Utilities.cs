@@ -4,13 +4,13 @@ using System.Text;
 
 namespace TextRPG
 {
-    enum SaveType
+    enum SaveType // 데이터 저장 타입
     {
         Player,
         SaveData
     }
 
-    enum LoadType
+    enum LoadType // 데이터 불러오기 타입
     {
         Player,
         Map,
@@ -46,25 +46,31 @@ namespace TextRPG
         void ShowStats();
     }
 
+    //Load Save쪽은 제네릭으로 변경할수도있음 [최적화]
     internal static class Utilities
     {
-        static StringBuilder sb = new StringBuilder(400);
+        static StringBuilder sb = new StringBuilder(400); //GetInputKey에서 호출될 String
 
         //| T1 == Type / T2 == data | 원래 데이터만 보내던것을 type이라는 enum열거형으로 묶어서 보낸다
-        public static KeyValuePair<T1, T2> EventPair<T1, T2>(T1 type, T2 data)
+        //where는 제약조건으로 T1은 Enum으로밖에 못보낸다고 제약조건을 설정했습니다.
+        public static KeyValuePair<T1, T2> EventPair<T1, T2>(T1 type, T2 data) where T1 : Enum
         {
             return new KeyValuePair<T1, T2>(type, data);
         }
 
+        //Console.WriteLine
         public static void AddLine(string str)
         {
             sb.AppendLine(str);
         }
+
+        //Console.Write
         public static void Add(string str)
         {
             sb.Append(str);
         }
 
+        //str에 color로 들어온 값으로 색깔을 변경하고 Console.WriteLine 출력한 뒤 컬러 초기화
         static public void TextColor(string str, ConsoleColor color)
         {
             Console.ForegroundColor = color;
@@ -72,6 +78,7 @@ namespace TextRPG
             Console.ResetColor();
         }
 
+        //str에 color로 들어온 값으로 색깔을 변경하고 Console.Write 출력한 뒤 컬러 초기화
         static public void TextColorWithNoNewLine(string str, ConsoleColor color)
         {
             Console.ForegroundColor = color;
@@ -79,6 +86,7 @@ namespace TextRPG
             Console.ResetColor();
         }
 
+        //min, max값을 받아 무한반복문을돌며 전에 입력한 StringBuilder을 출력하고 min, max 값 내의 키를 입력했을때만 그 키를 반환하며 무한반복문 종료
         static public int GetInputKey(int min, int max)
         {
             while (true)
@@ -109,6 +117,7 @@ namespace TextRPG
             }
         }
 
+        //min, max값을 받아 무한반복문을돌며 전에 입력한 StringBuilder을 출력하고 min, max 값 내의 키를 입력했을때만 그 키를 반환하며 무한반복문 종료
         static public int GetInputKey(int min, int max, ConsoleColor color, string intro)
         {
             while (true)
@@ -140,6 +149,7 @@ namespace TextRPG
             }
         }
 
+        //LoadType에 따라 경로를 설정하고 Json으로 파일 불러와서 데이터 반환
         public static object? LoadFile(LoadType type)
         {
             string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -300,6 +310,7 @@ namespace TextRPG
             return null;
         }
 
+        //SaveType에 따라 경로를 정하고 데이터를 저장
         public static void SaveFile(SaveType dataType, object data)
         {
             string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "";
