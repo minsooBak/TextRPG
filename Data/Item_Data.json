@@ -26,7 +26,7 @@
       "Type": 0,
       "ATK": 32,
       "DEF": 0,
-      "Description": "중세 스위스 용병과의 싸움에서 자주 쓰이던 할버드입니다. 공격력이 매우 뛰어납니다",
+      "Description": "중세 스위스 용병과의 싸움에서 자주 쓰이던 할버드입니다.",
       "Cost": 3000,
       "IsSale": "TRUE",
       "IsOnField": "FALSE"
