@@ -203,8 +203,6 @@
                 item.IsEquipped = false; // 장착 해제
 
                 // EventManager로 아이템 정보만큼 스탯 차감 이벤트 전달
-                item.ATK *= -1;
-                item.DEF *= -1;
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats, item));
             }
 
