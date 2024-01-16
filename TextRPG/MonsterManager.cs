@@ -120,17 +120,18 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine("[획득 아이템]");
             Utilities.TextColorWithNoNewLine($"{gold}", ConsoleColor.DarkRed);      // 플레이어가 얻은 골드 출력
-            Console.WriteLine($" Gold");
+            Console.Write($" Gold");
 
             for (int i = 0; i < itemsCounter.Length; i++)
             {
                 if (itemsCounter[i] > 0)
                 {
-                    Console.Write($"{GetMonsterItemName(i)} ");     // 아이템 이름 가져오기
+                    Console.Write($"\n{GetMonsterItemName(i)} ");     // 아이템 이름 가져오기
                     Utilities.TextColorWithNoNewLine("- ", ConsoleColor.DarkYellow);
                     Utilities.TextColorWithNoNewLine($"{itemsCounter[i]}", ConsoleColor.DarkRed);
                 }
             }
+            Console.WriteLine();
         }
 
         // 아이템 이름 가져오기
@@ -160,8 +161,10 @@ namespace TextRPG
         public int Exp => myState.EXP;
 
         public int MP => myState.MP;
+        public int MaxMP {  get; set; }
 
         public int Health => myState.Health;
+        public int MaxHealth { get; set; }
 
         public int Level => myState.Level;
 
@@ -225,8 +228,13 @@ namespace TextRPG
                 Console.Write(" HP ");
                 Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
 
-                Console.Write(" MP ");
-                Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+                Utilities.TextColorWithNoNewLine($"{MaxHealth} ", ConsoleColor.DarkRed);
+
+                Console.Write("MP ");
+                Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
+                Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
+                Utilities.TextColorWithNoNewLine($"{MaxMP}", ConsoleColor.Blue);
             }
         }
 
@@ -286,7 +294,9 @@ namespace TextRPG
                 myState.Level = 2;
                 myState.EXP = 15;
                 myState.Health = 15;
+                MaxHealth = myState.Health;
                 myState.MP = 100;
+                MaxMP = myState.MP;
                 myState.ATK = 5;
                 myState.Gold = 100;
                 Item = "낡은 대검";
@@ -297,7 +307,9 @@ namespace TextRPG
                 myState.Level = 3;
                 myState.EXP = 20;
                 myState.Health = 10;
+                MaxHealth = myState.Health;
                 myState.MP = 100;
+                MaxMP = myState.MP;
                 myState.ATK = 9;
                 myState.Gold = 200;
                 Item = "초보자의 갑옷";
@@ -308,7 +320,9 @@ namespace TextRPG
                 myState.Level = 5;
                 myState.EXP = 25;
                 myState.Health = 25;
+                MaxHealth = myState.Health;
                 myState.MP = 100;
+                MaxMP = myState.MP;
                 myState.ATK = 8;
                 myState.Gold = 500;
                 Item = "가시 갑옷";

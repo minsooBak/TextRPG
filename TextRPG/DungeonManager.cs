@@ -100,7 +100,7 @@ namespace TextRPG
         {
             Console.Clear();
 
-            Console.WriteLine("Battle!! - 대상 선택\n");
+            Utilities.TextColor("Battle!! - 대상 선택\n", ConsoleColor.DarkYellow);
 
             ShowMonsterList(showMonsterMode = true); // ShowMonsterMode = true : 몬스터 앞에 번호 붙여서 출력하기
 
@@ -251,7 +251,7 @@ namespace TextRPG
                 player.TakeDamage(damage);
             }
 
-            Console.WriteLine("\n0. 다음\n");
+            Console.WriteLine("0. 다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             // 다음 화면으로 넘기기
             if (Utilities.GetInputKey(0, 0) == 0)
@@ -281,10 +281,9 @@ namespace TextRPG
 
                 //잡은 몬스터들의 경험치 양 만큼 플레이어 exp 증가
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp,monsterManager.GetExp()));
-                Console.WriteLine();
                 
                 player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
-        
+
                 GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
             }
             else
