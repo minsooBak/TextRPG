@@ -168,8 +168,6 @@ namespace TextRPG
             // 플레이어의 던전 클리어 여부에 따라 진입 가능한 던전 난이도가 높아집니다.
             dungeonManager.SelectDungeonStage(player.dungeonStage);
 
-            // 전투 종료 후 몬스터 리스트 초기화
-            EventManager.Instance.PostEvent(EventType.eClearMonsters, "");
             // StartGame()으로 돌아가기
             gameState = GameState.NONE;
         }
