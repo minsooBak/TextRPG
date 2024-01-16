@@ -253,7 +253,7 @@
                 item.DEF *= -1;
                 EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Stats, item));
             }
-            else // 아니라면 (아이템 장착)
+            else if(CheckTypeIsAble(item.Type))// 그게 아니고 장착 아이템 중 타입 중복이 없다면 (아이템 장착)
             {
                 item.IsEquipped = true; // 장착
                 Console.WriteLine($"{item.Name}을 착용했습니다. \n(Enter키를 눌러 진행하세요...)");
@@ -265,6 +265,33 @@
                 // QuestManager에 아이템 장착 이벤트 전달
                 EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Item, inventory[itemNum - 1].Name));//장착하면 아이템 이름으로 이벤트 발생
             }
+            else // 장착 아이템 중 타입 중복이 있다면
+            {
+                Console.WriteLine("이미 장착 중인 같은 종류의 아이템이 있습니다. \n(Enter키를 눌러 진행하세요...)");
+                Console.ReadLine();
+            }
+        }
+
+        private bool CheckTypeIsAble(ItemType type)
+        // 아이템 타입이 장착 가능한지 검사하는 메서드
+        {
+            bool isAble = true; // return 기본값 true
+
+            Item[]? equippedItems = inventory.FindAll(x => x.IsEquipped == true).ToArray(); // 장착 중인 아이템 인벤토리에서 모두 가져오기
+
+            if (equippedItems != null) // 장착 중인 아이템이 있다면 조건문 실행
+            {
+                foreach(Item item in equippedItems)
+                {
+                    if (item.Type == type) // 장착 중인 아이템이 같은 타입이면
+                    {
+                        isAble = false; // 장착 불가능
+                        break;
+                    }
+                }
+            }
+
+            return isAble;
         }
 
         //public void DropItem(int itemNum)

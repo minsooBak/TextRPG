@@ -113,5 +113,9 @@ namespace TextRPG
             Cost = cost;
             Description = description;
         }
+        public int GetATK(int ATK)
+        {
+            return (int)(ATK * ATKRatio);
+        }
     }
 }

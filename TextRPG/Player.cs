@@ -1,98 +1,100 @@
-
-using System.Numerics;
-using System.ComponentModel.Design;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.ComponentModel;
-using System;
-
 namespace TextRPG
 {
-    struct PlayerData
-    {
-        public ObjectState os;
-        public int maxHealth;
-        public int maxMP;
-        public int maxExp;
-        public int dungeonStage;
-    }
-
     //유시아님 플레이어 구현 매소드 : 스탯출력, 공격
     internal class Player : IListener, IObject
     {
+        struct PlayerData
+        {
+            public ObjectState os;
+            public int maxHealth;
+            public int maxMP;
+            public int maxExp;
+            public int dungeonStage;
+        }
         private ObjectState myState;
         private int maxHealth;
         private int maxMP;
         private int PrevHealth { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
-        private int PrevExp;
+        private int PrevExp = 0;
         public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
-        private int maxExp = 0;
-
+        private int maxEXP= 100; // 레벨 1일때 렙업에 필요한 경험치량
         public Player()
         {
             EventManager.Instance.AddListener(EventType.Player, this);
-            //CreatePlayer
-            CreatePlayer createPlayer = new CreatePlayer();
-            var Name = createPlayer.Create();
+            EventManager.Instance.AddListener(EventType.eGameEnd, this);
 
-            myState.Name = Name.Key;
-            myState.Class = Name.Value;
-
-            myState.Health = 100;
-            myState.MP = 100;
-            myState.Level = 1;
-            myState.EXP = 0;
-            myState.ATK = 100;
-            myState.DEF = 0;
-            myState.Gold = 1000;
-            switch (Name.Value)
+            PlayerData? pd = Utilities.LoadFile<PlayerData?>(LoadType.Player);
+            if (pd == null)
             {
-                case "전사":
-                   { 
-                    myState.Health += 400;
-                    myState.MP = 100;
-                    myState.ATK += 200;
-                    myState.DEF += 100;
-                        maxHealth = myState.Health;
-                        maxMP = myState.MP;
-                        break;
-                    }
-                case "마법사":
-                    {
-                        myState.Health += 100;
-                        myState.MP += 400;
-                        myState.ATK += 150;
-                        myState.DEF += 50;
-                        maxHealth = myState.Health;
-                        maxMP = myState.MP;
-                        break;
-                    }
-                case "궁수":
-                    {
-                        myState.Health += 150;
-                        myState.MP += 200;
-                        myState.ATK += 300;
-                        myState.DEF += 80;
-                        maxHealth = myState.Health;
-                        maxMP = myState.MP;
-                        break;
-                    }
-                case "도적":
-                    {
-                        myState.Health += 250;
-                        myState.MP += 200;
-                        myState.ATK += 350;
-                        myState.DEF += 60;
-                        maxHealth = myState.Health;
-                        maxMP = myState.MP;
-                        break;
-                    }
+                //CreatePlayer
+                CreatePlayer createPlayer = new CreatePlayer();
+                var Name = createPlayer.Create();
+
+                myState.Name = Name.Key;
+                myState.Class = Name.Value;
+
+                myState.Health = 100;
+                myState.MP = 100;
+                myState.Level = 1;
+                myState.EXP = 0;
+                myState.ATK = 100;
+                myState.DEF = 0;
+                myState.Gold = 1000;
+                switch (Name.Value)
+                {
+                    case "전사":
+                        {
+                            myState.Health += 400;
+                            myState.MP = 100;
+                            myState.ATK += 200;
+                            myState.DEF += 100;
+                            maxHealth = myState.Health;
+                            maxMP = myState.MP;
+                            break;
+                        }
+                    case "마법사":
+                        {
+                            myState.Health += 100;
+                            myState.MP += 400;
+                            myState.ATK += 150;
+                            myState.DEF += 50;
+                            maxHealth = myState.Health;
+                            maxMP = myState.MP;
+                            break;
+                        }
+                    case "궁수":
+                        {
+                            myState.Health += 150;
+                            myState.MP += 200;
+                            myState.ATK += 300;
+                            myState.DEF += 80;
+                            maxHealth = myState.Health;
+                            maxMP = myState.MP;
+                            break;
+                        }
+                    case "도적":
+                        {
+                            myState.Health += 250;
+                            myState.MP += 200;
+                            myState.ATK += 350;
+                            myState.DEF += 60;
+                            maxHealth = myState.Health;
+                            maxMP = myState.MP;
+                            break;
+                        }
+                }
             }
-            maxHealth = myState.Health;
-            maxMP = myState.MP;
-            PrevExp = myState.EXP;
+            else
+            {
+                myState = pd.Value.os;
+                maxHealth = pd.Value.maxHealth;
+                maxMP = pd.Value.maxMP;
+                dungeonStage = pd.Value.dungeonStage;
+                maxEXP = pd.Value.maxExp;
+            }
         }
+            
         /*직업 : Warrior, Mage, Archer, Thief
          * 기본 체력 100,마나 100, 공격력 100, 방어력 0 
          * 전사 : 체력 +400, 마나 그대로, 공격력+200, 방어력+100
@@ -158,13 +160,14 @@ namespace TextRPG
                         case ePlayerType.Exp: //경험치 추가
                             {
                                 PrevExp = myState.EXP;      // 이전 경험치 저장
-                                myState.EXP += Math.Clamp(c.Value, 0, 300);
+                                myState.EXP += c.Value;
                                 int LevelUp = 0;
-                                if (myState.EXP / 100 != 0)
+                                if (myState.EXP / maxEXP != 0)
                                 {
-                                    LevelUp = myState.EXP / 100;
-                                    myState.Level += LevelUp;
-                                    myState.EXP = myState.EXP % 100;
+                                    LevelUp = myState.EXP / maxEXP; // maxEXP로 나눴을때 몫(=LevelUp)이 있다 (0이 아니면)
+                                    myState.Level += LevelUp; // 레벨에 레벨업을 더해줌(몫이 있으니까), 그럼 레벨 증가
+                                    myState.EXP = myState.EXP % maxEXP; // 렙업하고 나머지 경험치는 maxExp로 나눠서 나머지를 저장
+                                    maxEXP = maxEXP*2;// maxEXP 증가
                                     Console.WriteLine("레벨 업!!\n");
                                     EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.PlayerLevel, LevelUp.ToString()));
                                 }
@@ -181,6 +184,10 @@ namespace TextRPG
                         myState.DEF += c.Value.DEF;
                     }
                 }
+            }else if(type == EventType.eGameEnd)
+            {
+                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP, maxHealth = maxHealth, maxMP = maxMP};
+                Utilities.SaveFile(SaveType.Player, pd);
             }
         }
 
@@ -190,7 +197,7 @@ namespace TextRPG
             Console.Write("Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.Write("EXP :");
-            Utilities.TextColor($"{myState.EXP}", ConsoleColor.Yellow);
+            Utilities.TextColor($"{myState.EXP} / {maxEXP}", ConsoleColor.Yellow);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
             Console.WriteLine($"HP : {myState.Health} / {maxHealth}");
             Console.WriteLine($"MP : {myState.MP} / {maxMP}");
