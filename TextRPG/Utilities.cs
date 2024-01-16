@@ -162,17 +162,17 @@ namespace TextRPG
                         path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName + @"\Data\Map_Data.json";
 
-                        if (File.Exists(path) == false)
+                        if (File.Exists(path) == false) // 파일이 존재하는지 체크
                             return default(T);
-                        StreamReader? file = File.OpenText(path);
+                        StreamReader? file = File.OpenText(path); // 파일열기
                         if (file != null)
                         {
-                            JsonTextReader reader = new JsonTextReader(file);
+                            JsonTextReader reader = new JsonTextReader(file); //읽어올 Reader선언
 
-                            JArray json = (JArray)JToken.ReadFrom(reader);
-                            string? str = JsonConvert.SerializeObject(json);
-                            file.Close();
-                            return JsonConvert.DeserializeObject<T>(str);
+                            JArray json = (JArray)JToken.ReadFrom(reader); // JToken을 reader로 생성 한뒤 JObject나 JArray로 형변환하여 json에 데이터를 넘겨줍니다.
+                            string? str = JsonConvert.SerializeObject(json); // json을 직렬화(내부데이터를 byte형식의 데이터로 변경)해서 str에 넣어줍니다
+                            file.Close();//파일 닫아줍니다
+                            return JsonConvert.DeserializeObject<T>(str); // str을 역직렬화해서 <T>로 형변환하여 반환합니다
                         }
                         break;
                     }
@@ -332,7 +332,7 @@ namespace TextRPG
         }
 
         //SaveType에 따라 경로를 정하고 데이터를 저장
-        public static void SaveFile(SaveType dataType, object data)
+        public static void SaveFile<T>(SaveType dataType, T data)
         {
             string path = Directory.GetParent(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                             .Parent.Parent.Parent.FullName;
@@ -341,20 +341,21 @@ namespace TextRPG
                 case SaveType.Player:
                     {
                         path += @"\P_Data.json";
-                        File.WriteAllText(path, JsonConvert.SerializeObject((ObjectState)data, Formatting.Indented));
+                        //path경로에 데이터를를 직렬화하여 라인 들여쓰기(Formatting.Indented)를 마친 text를 파일이 있다면 덮어쓰고 없다면 생성하여 작성
+                        File.WriteAllText(path, JsonConvert.SerializeObject(data, Formatting.Indented));
                         break;
                     }
                 case SaveType.SaveData:
                     {
                         path += @"\Data\Save_Data.json";
-                        string json = JsonConvert.SerializeObject((SaveData)data, Formatting.Indented);
+                        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
                         File.WriteAllText(path, json);
                         break;
                     }
                 case SaveType.Quest:
                     {
                         path += @"\Data\Save_Quest.json";
-                        File.WriteAllText(path, JsonConvert.SerializeObject((QuestData)data, Formatting.Indented));
+                        File.WriteAllText(path, JsonConvert.SerializeObject(data, Formatting.Indented));
                         break;
                     }
             }
