@@ -26,9 +26,6 @@ namespace TextRPG
             {
                 arrayOfMonsterTypes[i] = (MonsterType)(i + 1);
             }
-            //monsterItemName[0] = "낡은 대검";
-            //monsterItemName[1] = "초보자의 갑옷";
-            //monsterItemName[2] = "가시 갑옷";
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
         static int maxMonsterType = 3;
@@ -37,9 +34,8 @@ namespace TextRPG
 
         // dungeonMonsters : 던전매니저에서 사용할 몬스터 리스트
         List<IObject> dungeonMonsters = [];
-        //string[] monsterItemName = new string[maxMonsterType]; // 돌아가는지 체크용으로
         
-        public List<IObject> MakeMonsters(int listOfMonsterCount) //몬스터 생성 //스테이지 1 2 3 4
+        public List<IObject> MakeMonsters(int listOfMonsterCount) //몬스터 생성
 
         {
             Random rnd = new Random();
@@ -61,12 +57,12 @@ namespace TextRPG
 
             // 던전매니저에서 호출한 몬스터의 타입 값이 전체 몬스터 종류 수(maxMonsterType)보다 클 경우, 값을 maxMonsterType로 고정하기.
             if (listOfMonsterCount > maxMonsterType)
-                listOfMonsterCount = maxMonsterType; //1 2 3 
+                listOfMonsterCount = maxMonsterType;
             for (int i = 0; i < monsterCount; i++)
             {
-                int randomCount = rnd.Next(0, listOfMonsterCount);// 0 1 2 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
+                int randomCount = rnd.Next(0, listOfMonsterCount);// 등록되어 있는 몬스터 중 어떤 몬스터를 고를지
                 Monster monster = new Monster(arrayOfMonsterTypes[randomCount]);        // 몬스터 클래스에서 arrayOfMonsterTypes에 맞는 Monster 생성
-                dungeonMonsters.Add(monster);// 1 2 3 던전 몬스터 리스트에 몬스터 추가
+                dungeonMonsters.Add(monster);// 던전 몬스터 리스트에 몬스터 추가
             }
 
             return dungeonMonsters;
@@ -80,7 +76,7 @@ namespace TextRPG
             foreach (Monster monster in dungeonMonsters)
             {
                 // 해당 몬스터 리스트의 총 경험치량 저장
-                exp += monster.Exp; //몬스터의 경험치를 더하는 것이 괜찮을 것 같아서 -> 저도 이 코드가 더 괜찮은 것 같습니다!
+                exp += monster.Exp; //몬스터의 경험치를 더해서 return
             }
             return exp;
         }
@@ -89,7 +85,7 @@ namespace TextRPG
         public void GetReward()
         {
             Random rnd = new Random();
-            int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷 총 3개의 아이템만 떨군다.
+            int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷 총 3개의 아이템만 떨어트린다.
             int gold = 0;
 
             foreach (Monster monster in dungeonMonsters)
@@ -97,7 +93,7 @@ namespace TextRPG
                 if (rnd.Next(1, 101) <= 8) //8퍼 확률로
                 {
                     // 아이템 드랍 이벤트 전송
-                    EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem,monster.Item)); //아이템 드랍 이벤트 수정
+                    EventManager.Instance.PostEvent(EventType.Item, Utilities.EventPair(eItemType.eGetFieldItem,monster.Item)); 
 
                     // itemsCounter : 아이템 별 획득한 개수. 
                     // itemsCounter[0] : "낡은 대검"
@@ -130,13 +126,14 @@ namespace TextRPG
             {
                 if (itemsCounter[i] > 0)
                 {
-                    Console.Write($"{GetMonsterItemName(i)} ");
+                    Console.Write($"{GetMonsterItemName(i)} ");     // 아이템 이름 가져오기
                     Utilities.TextColorWithNoNewLine("- ", ConsoleColor.DarkYellow);
                     Utilities.TextColorWithNoNewLine($"{itemsCounter[i]}", ConsoleColor.DarkRed);
                 }
             }
         }
 
+        // 아이템 이름 가져오기
         string GetMonsterItemName(int i)
         {
             switch ((MonsterItemType)i)
@@ -191,7 +188,7 @@ namespace TextRPG
             // 몬스터의 공격 타입이 스킬이라면
             if (attackType == AttackType.Skill)
             {
-                damage += (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기     // GetAtk()를 호출해서 데미지 반환하기
+                damage *= (int)myState.Skill.ATKRatio;  // 공격 데미지에 스킬의 공격 계수만큼 더해주기     // GetAtk()를 호출해서 데미지 반환하기
                 myState.MP -= myState.Skill.Cost;
             }
             // 공격 출력문
