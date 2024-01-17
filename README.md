@@ -20,8 +20,8 @@
 
 
 ### 개발 환경
-- 'Visual Studio 2022'
-- 'C# Net.8.0'
+- `Visual Studio 2022`
+- `C# Net.8.0`
 
 ## 주요 기능
 * 필수 요구 사항
