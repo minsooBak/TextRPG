@@ -8,10 +8,10 @@
 
     internal class DungeonManager
     {
-        private Player player;
+        private readonly Player player;
         private SkillManager skillManager = new SkillManager();
         private MonsterManager monsterManager = new MonsterManager();
-        private List<Dungeon> dungeons = [];
+        private readonly List<Dungeon> dungeons = [];
         // monsters : 던전매니저에서 사용할 몬스터 배열
         private IObject[] monsters;
         // deadCounter : 이번 던전에서 죽은 몬스터 마리 수 저장
