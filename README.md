@@ -72,4 +72,5 @@
   * Map : ShowInventory, ShowShop 및 게임 종료 기능 구현.
     
 * 팀원(유시아)
-  * Player 클래스 구현. (추가 예정)
+  * Player : 전반적인 이벤트처리 코드 수정 및 정리, 플레이어의 직업 별 기초 스탯, 경험치 증가 구현.
+  * CreatePlayer : 직업 선택 시 부가 설명 기능 구현.
