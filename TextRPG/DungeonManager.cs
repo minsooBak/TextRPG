@@ -1,8 +1,6 @@
 ﻿namespace TextRPG
 {
-    //송상화님 던전 구현 
-    // 전투 결과 구현하기
-    public enum AttackType
+    enum AttackType
     {
         Attack = 1,
         Skill
@@ -13,11 +11,11 @@
         private Player player;
         private SkillManager skillManager = new SkillManager();
         private MonsterManager monsterManager = new MonsterManager();
-        public List<Dungeon> dungeons = [];
+        private List<Dungeon> dungeons = [];
         // monsters : 던전매니저에서 사용할 몬스터 배열
-        public IObject[] monsters;
+        private IObject[] monsters;
         // deadCounter : 이번 던전에서 죽은 몬스터 마리 수 저장
-        public int deadCounter = 0;
+        private int deadCounter = 0;
         
         public bool showMonsterMode = false;    // 몬스터 선택창에서 번호 출력 여부. true = 출력,  false = 출력하지 않음
 
@@ -45,7 +43,7 @@
         }
 
         // 전투 돌입하기(ShowBattle에 있는 출력문 & 제어문)
-        public void StartBattle()
+        private void StartBattle()
         {
             // 플레이어가 살아있거나, 죽은 몬스터 마리 수가 생성된 마리 수 보다 적을 동안 전투 진행.
             while (player.IsDead == false && deadCounter < monsters.Length)
@@ -88,7 +86,7 @@
             ShowResult(deadCounter, monsters.Length);
         }
 
-        public void SelectMonster(AttackType attackType = AttackType.Attack) //대상 선택
+        private void SelectMonster(AttackType attackType = AttackType.Attack) //대상 선택
         {
             Console.Clear();
 
@@ -153,7 +151,7 @@
         }
 
         // 스킬 선택
-        public void SelectSkill()
+        private void SelectSkill()
         {
             Console.Clear();
 
@@ -211,7 +209,7 @@
         // 공격 진행하기(ShowBattle)
         // isPlayerTurn : 참일 경우 플레이어 차례, 거짓일 경우 몬스터의 차례
         // attackType : 공격 방식.
-        public void ShowBattle(IObject monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
+        private void ShowBattle(IObject monster, bool isPlayerTurn,AttackType attackType = AttackType.Attack)
         {
             Console.Clear();
 
@@ -254,7 +252,7 @@
         }
 
         // 결과 화면 보여주기
-        public void ShowResult(int deadCounter, int monster )
+        private void ShowResult(int deadCounter, int monster )
         {
             Console.Clear();
 
@@ -276,7 +274,7 @@
                 
                 player.ShowResult(); //던전 몬스터 배열의 경험치들을 다 더하고 리턴
 
-                GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
+                monsterManager.GetReward(); //아이템 드랍, 퀘스트 이벤트 , 골드 추가,
             }
             else
             {
@@ -294,12 +292,6 @@
                 Console.Clear();
                 return;
             }
-        }
-
-        public void GetReward()
-        {
-            // 몬스터 매니저에 전리품 획득 처리 및 출력
-            monsterManager.GetReward();
         }
     }
 
