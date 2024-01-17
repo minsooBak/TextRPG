@@ -6,17 +6,14 @@
         Monster2, // 공허충
         Monster3  // 대포 미니언
     }
-
-    public enum MonsterItemType
-    {
-        monsterItem1 = 0,
-        monsterItem2,
-        monsterItem3
-    }
-
-    //정원우님 구현
     internal class MonsterManager
     {
+        enum MonsterItemType
+        {
+            monsterItem1 = 0,
+            monsterItem2,
+            monsterItem3
+        }
         public MonsterManager()
         {
             // arrayOfMonsterTypes 배열 생성
@@ -26,15 +23,15 @@
             }
         }
         // maxMonsterType : 생성 가능한 몬스터 종류 수
-        static int maxMonsterType = 3;
+        const int maxMonsterType = 3;
+
         // arrayOfMonsterTypes : 생성 가능한 몬스터 타입 배열
-        public MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
+        private MonsterType[] arrayOfMonsterTypes = new MonsterType[maxMonsterType];
 
         // dungeonMonsters : 던전매니저에서 사용할 몬스터 리스트
         List<IObject> dungeonMonsters = [];
         
         public List<IObject> MakeMonsters(int listOfMonsterCount) //몬스터 생성
-
         {
             Random rnd = new Random();
             
@@ -133,7 +130,7 @@
         }
 
         // 아이템 이름 가져오기
-        string GetMonsterItemName(int i)
+        private string GetMonsterItemName(int i)
         {
             switch ((MonsterItemType)i)
             {
@@ -156,25 +153,18 @@
     public class Monster : IObject
     {
         private ObjectState myState;
-        public int Exp => myState.EXP;
 
+        public int Exp => myState.EXP;
         public int MP => myState.MP;
         public int MaxMP {  get; set; }
-
         public int Health => myState.Health;
         public int MaxHealth { get; set; }
-
         public int Level => myState.Level;
-
         public string Class => myState.Class;
-
         public string Item { get; set; }
         public int Gold => myState.Gold;
-
         public bool IsUseSkill => myState.Skill != null;//사용할 수 있는지 체크후 bool
         public bool IsDead => myState.Health <= 0;
-        public int GetMP => myState.MP;
-
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         // 몬스터가 공격할 경우
