@@ -231,7 +231,7 @@ namespace TextRPG
 
         public void ShowStats()
         {
-            Console.Write("Lv.");
+            Console.Write("\nLv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
 
@@ -244,7 +244,7 @@ namespace TextRPG
             Console.Write("MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{myState.MaxMP}\n", ConsoleColor.Blue);
+            Utilities.TextColor($"{myState.MaxMP}\n", ConsoleColor.Blue);
         }
 
         public int Attack(AttackType attackType)

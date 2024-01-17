@@ -243,7 +243,8 @@
                 player.TakeDamage(damage);
             }
 
-            Console.WriteLine("0. 다음\n");
+            Utilities.TextColorWithNoNewLine("\n0. ", ConsoleColor.DarkRed);
+            Console.WriteLine("다음\n");
             Utilities.TextColorWithNoNewLine(">>", ConsoleColor.Yellow);
             // 다음 화면으로 넘기기
             if (Utilities.GetInputKey(0, 0) == 0)
