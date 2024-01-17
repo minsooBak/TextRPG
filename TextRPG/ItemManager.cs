@@ -6,21 +6,21 @@
         Armor
     }
 
-    struct SaveData //저장할 데이터 구조
-    {
-        public Item[] inventory;
-        public string[] saleItem;
-    }
-
     internal class ItemManager : IListener
     {
+        struct SaveData //저장할 데이터 구조
+        {
+            public Item[] inventory;
+            public string[] saleItem;
+        }
+
         // Save_Data.json에서 불러온 읽기 전용 아이템 목록
-        readonly Item[] items;
-        readonly Item[] shopItems;
+        private readonly Item[] items;
+        private readonly Item[] shopItems;
 
         // 게임에서 실제로 사용되는 아이템 목록
-        List<Item> inventory; // 인벤토리
-        List<Item> shopDisplay; // 상점에 노출되는 아이템 목록(IsSale이 true인 아이템)
+        private List<Item> inventory; // 인벤토리
+        private List<Item> shopDisplay; // 상점에 노출되는 아이템 목록(IsSale이 true인 아이템)
 
         //List<Item> fieldDisplay; 
         /* fieldDisplay는 IsOnField가 true인 아이템 리스트로,
