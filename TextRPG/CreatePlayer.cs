@@ -49,7 +49,7 @@ namespace TextRPG
                 Console.WriteLine("캐릭터 생성 - 이름");
                 Console.ResetColor();
                 Console.WriteLine("이름을 정해주세요!\n");
-                Console.WriteLine("당신의 이름은? [이름 생성 규칙 : 띄워쓰기 금지 / 10글자 이내]");
+                Console.WriteLine("당신의 이름은? [이름 생성 규칙 : 띄어쓰기 금지 / 10글자 이내]");
                 Console.Write(">>");
                 string? str = Console.ReadLine();
                 bool isCheck = Regex.IsMatch(str, @"[^a-zA-Z0-9가-힣]");
