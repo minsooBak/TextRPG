@@ -41,7 +41,7 @@ namespace TextRPG
         }
 
         //이름 만들기
-        string CreateName()
+        private string CreateName()
         {
             while (true)
             {
@@ -67,7 +67,7 @@ namespace TextRPG
         }
 
         //클래스 정하기
-        string CreateJob()
+        private string CreateJob()
         {
             Utilities.AddLine("직업을 정해주세요!\n");
             Utilities.AddLine("1. 전사");
