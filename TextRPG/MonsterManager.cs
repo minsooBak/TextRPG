@@ -156,15 +156,15 @@
 
         public int Exp => myState.EXP;
         public int MP => myState.MP;
-        public int MaxMP {  get; set; }
-        public int Health => myState.Health;
-        public int MaxHealth { get; set; }
+        public int MaxMP => myState.MaxMP;
+        private int HP => myState.HP;
+        private int MaxHP => myState.MaxHP;
         public int Level => myState.Level;
         public string Class => myState.Class;
         public string Item { get; set; }
         public int Gold => myState.Gold;
         public bool IsUseSkill => myState.Skill != null;//사용할 수 있는지 체크후 bool
-        public bool IsDead => myState.Health <= 0;
+        public bool IsDead => myState.HP <= 0;
         public void SetSkill(Skill skill) => myState.Skill = skill;
 
         // 몬스터가 공격할 경우
@@ -214,10 +214,10 @@
                 Console.Write($"{myState.Class}");
 
                 Console.Write(" HP ");
-                Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed);
 
                 Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-                Utilities.TextColorWithNoNewLine($"{MaxHealth} ", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine($"{MaxHP} ", ConsoleColor.DarkRed);
 
                 Console.Write("MP ");
                 Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
@@ -261,16 +261,16 @@
 
             // 몬스터 공격 결과 출력
             Console.WriteLine($"\n\nLv.{myState.Level} {myState.Name}");
-            Console.Write($"{myState.Health} -> ");
+            Console.Write($"{HP} -> ");
 
             // 몬스터의 체력 차감
             if (r <= 15)
-                myState.Health -= criticalDamage;
+                myState.HP -= criticalDamage;
             else
-                myState.Health -= damage;
+                myState.HP -= damage;
 
             // 해당 몬스터가 죽었을 경우 Dead로 출력, 아니면 HP를 출력
-            Console.WriteLine($"{(IsDead ? "Dead" : myState.Health)}");
+            Console.WriteLine($"{(IsDead ? "Dead" : myState.HP)}");
         }
 
         // 몬스터 클래스
@@ -281,10 +281,10 @@
                 myState.Class = "미니언";
                 myState.Level = 2;
                 myState.EXP = 15;
-                myState.Health = 15;
-                MaxHealth = myState.Health;
+                myState.HP = 15;
+                myState.MaxHP = myState.HP;
                 myState.MP = 100;
-                MaxMP = myState.MP;
+                myState.MaxMP = myState.MP;
                 myState.ATK = 5;
                 myState.Gold = 100;
                 Item = "낡은 대검";
@@ -294,10 +294,10 @@
                 myState.Class = "공허충";
                 myState.Level = 3;
                 myState.EXP = 20;
-                myState.Health = 10;
-                MaxHealth = myState.Health;
+                myState.HP = 10;
+                myState.HP = myState.HP;
                 myState.MP = 100;
-                MaxMP = myState.MP;
+                myState.MaxMP = myState.MP;
                 myState.ATK = 9;
                 myState.Gold = 200;
                 Item = "초보자의 갑옷";
@@ -307,10 +307,10 @@
                 myState.Class = "대포미니언";
                 myState.Level = 5;
                 myState.EXP = 25;
-                myState.Health = 25;
-                MaxHealth = myState.Health;
+                myState.HP = 25;
+                myState.MaxHP = myState.HP;
                 myState.MP = 100;
-                MaxMP = myState.MP;
+                myState.MaxMP = myState.MP;
                 myState.ATK = 8;
                 myState.Gold = 500;
                 Item = "가시 갑옷";

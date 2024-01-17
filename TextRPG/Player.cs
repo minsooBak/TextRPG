@@ -6,15 +6,14 @@ namespace TextRPG
         struct PlayerData
         {
             public ObjectState os;
-            public int maxHealth;
+            public int maxHP;
             public int maxMP;
             public int maxExp;
             public int dungeonStage;
         }
         private ObjectState myState;
-        private int maxHealth;
-        private int maxMP;
-        private int PrevHealth { get; set; } // 이전 hp값
+
+        private int PrevHP { get; set; } // 이전 hp값
         private int PrevMp { get; set; }
         private int PrevExp = 0;
         public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
@@ -34,7 +33,7 @@ namespace TextRPG
                 myState.Name = Name.Key;
                 myState.Class = Name.Value;
 
-                myState.Health = 100;
+                myState.HP = 100;
                 myState.MP = 100;
                 myState.Level = 1;
                 myState.EXP = 0;
@@ -45,42 +44,42 @@ namespace TextRPG
                 {
                     case "전사":
                         {
-                            myState.Health += 400;
+                            myState.HP += 400;
                             myState.MP = 100;
                             myState.ATK += 200;
                             myState.DEF += 100;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
+                            myState.MaxHP = myState.HP;
+                            myState.MaxMP = myState.MP;
                             break;
                         }
                     case "마법사":
                         {
-                            myState.Health += 100;
+                            myState.HP += 100;
                             myState.MP += 400;
                             myState.ATK += 150;
                             myState.DEF += 50;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
+                            myState.MaxHP = myState.HP;
+                            myState.MaxMP = myState.MP;
                             break;
                         }
                     case "궁수":
                         {
-                            myState.Health += 150;
+                            myState.HP += 150;
                             myState.MP += 200;
                             myState.ATK += 300;
                             myState.DEF += 80;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
+                            myState.MaxHP = myState.HP;
+                            myState.MaxMP = myState.MP;
                             break;
                         }
                     case "도적":
                         {
-                            myState.Health += 350;
+                            myState.HP += 350;
                             myState.MP += 200;
                             myState.ATK += 350;
                             myState.DEF += 60;
-                            maxHealth = myState.Health;
-                            maxMP = myState.MP;
+                            myState.MaxHP = myState.HP;
+                            myState.MaxMP = myState.MP;
                             break;
                         }
                 }
@@ -88,8 +87,8 @@ namespace TextRPG
             else
             {
                 myState = pd.Value.os;
-                maxHealth = pd.Value.maxHealth;
-                maxMP = pd.Value.maxMP;
+                myState.MaxHP = pd.Value.maxHP;
+                myState.MaxMP = pd.Value.maxMP;
                 dungeonStage = pd.Value.dungeonStage;
                 maxEXP = pd.Value.maxExp;
             }
@@ -112,7 +111,7 @@ namespace TextRPG
             myState.Name = state.Name;
             myState.Class = state.Class;
             
-            myState.Health = Health;
+            myState.HP = HP;
             myState.MP = state.MP;
             myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
             myState.DEF = state.DEF;
@@ -120,7 +119,7 @@ namespace TextRPG
             myState.Gold = state.Gold;
         }             
 
-        public int Health => myState.Health;
+        public int HP => myState.HP;
         public int MP => myState.MP;
         public int Level => myState.Level;
         public int EXP => myState.EXP;
@@ -129,12 +128,9 @@ namespace TextRPG
         public int ATK => myState.ATK;
         public int DEF => myState.DEF; 
         public int Gold => myState.Gold;
-
-        public bool IsDead => myState.Health <= 0;
+        public bool IsDead => myState.HP <= 0;
         public bool IsUseSkill => myState.Skill.Cost <= myState.MP;
         public void SetSkill(Skill skill) => myState.Skill = skill;
-
-
         
         public void OnEvent<T>(EventType type, T data)
         {
@@ -182,12 +178,12 @@ namespace TextRPG
                                     Console.ReadKey();
                                     break;
                                 }
-                                myState.Health += 100;
+                                myState.HP += 100;
                                 myState.MP += 100;
-                                if(myState.Health > maxHealth)
-                                    myState.Health = maxHealth;
-                                if(myState.MP > maxMP)
-                                    myState.MP = maxMP;
+                                if(myState.HP > myState.MaxHP)
+                                    myState.HP = myState.MaxHP;
+                                if(myState.MP > myState.MaxMP)
+                                    myState.MP = myState.MaxMP;
                                 myState.Gold -= c.Value;
                                 Console.WriteLine("휴식을 마쳤습니다.");
                                 Console.ReadKey();
@@ -214,7 +210,7 @@ namespace TextRPG
                 }
             }else if(type == EventType.eGameEnd)
             {
-                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP, maxHealth = maxHealth, maxMP = maxMP};
+                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP, maxHP = myState.MaxHP, maxMP = myState.MaxMP };
                 Utilities.SaveFile(SaveType.Player, pd);
             }
         }
@@ -227,8 +223,8 @@ namespace TextRPG
             Console.Write("EXP :");
             Utilities.TextColor($"{myState.EXP} / {maxEXP}", ConsoleColor.Yellow);
             Console.WriteLine($"{myState.Name} ({myState.Class})");
-            Console.WriteLine($"HP : {myState.Health} / {maxHealth}");
-            Console.WriteLine($"MP : {myState.MP} / {maxMP}");
+            Console.WriteLine($"HP : {myState.HP} / {myState.MaxHP}");
+            Console.WriteLine($"MP : {myState.MP} / {myState.MaxMP}");
             Console.WriteLine($"공격력 : {myState.ATK}");
             Console.WriteLine($"방어력 : {myState.DEF}");
         }
@@ -240,22 +236,22 @@ namespace TextRPG
             Console.WriteLine($"{myState.Name} ({myState.Class})");
 
             Console.Write("HP ");
-            Utilities.TextColorWithNoNewLine($"{myState.Health}", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{myState.HP}", ConsoleColor.DarkRed);
 
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{maxHealth}\n", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{myState.MaxHP}\n", ConsoleColor.DarkRed);
 
             Console.Write("MP ");
             Utilities.TextColorWithNoNewLine($"{myState.MP}", ConsoleColor.Blue);
             Utilities.TextColorWithNoNewLine("/", ConsoleColor.DarkYellow);
-            Utilities.TextColorWithNoNewLine($"{maxMP}\n", ConsoleColor.Blue);
+            Utilities.TextColorWithNoNewLine($"{myState.MaxMP}\n", ConsoleColor.Blue);
         }
 
         public int Attack(AttackType attackType)
         {
-            if (PrevHealth == 0)
+            if (PrevHP == 0)
             {
-                PrevHealth = myState.Health;
+                PrevHP = myState.HP;
                 PrevMp = myState.MP;
             }
 
@@ -266,7 +262,7 @@ namespace TextRPG
             if (attackType == AttackType.Skill)
             {
                 damage = (int)(damage * myState.Skill.ATKRatio);
-                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, maxMP);
+                myState.MP = Math.Clamp(myState.MP - myState.Skill.Cost, 0, myState.MaxMP);
             }
 
             if (attackType == AttackType.Attack)
@@ -282,11 +278,11 @@ namespace TextRPG
 
             Console.WriteLine($"Lv.{myState.Level} {myState.Name}");
 
-            Console.Write($"{myState.Health} ->");
-            //myState.Health -= Math.Clamp(damage, 0 , 100);
-            myState.Health -= damage;
-            if( myState.Health <= 0 ) myState.Health = 0;       // 플레이어의 체력이 0 이하가 되면 0으로 변경
-            Console.Write($" {myState.Health}\n");
+            Console.Write($"{myState.HP} ->");
+            //myState.HP -= Math.Clamp(damage, 0 , 100);
+            myState.HP -= damage;
+            if( myState.HP <= 0 ) myState.HP = 0;       // 플레이어의 체력이 0 이하가 되면 0으로 변경
+            Console.Write($" {myState.HP}\n");
         }
 
         public void ShowResult()
@@ -298,13 +294,13 @@ namespace TextRPG
             Console.Write($"Lv.");
             Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
             Console.Write($"{myState.Name}\nHP ");
-            Utilities.TextColorWithNoNewLine($"{PrevHealth} ", ConsoleColor.DarkRed);
+            Utilities.TextColorWithNoNewLine($"{PrevHP} ", ConsoleColor.DarkRed);
             Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
-            Utilities.TextColor($"{myState.Health}", ConsoleColor.DarkRed);
+            Utilities.TextColor($"{myState.HP}", ConsoleColor.DarkRed);
 
             if (IsDead)
             {
-                myState.Health = 60;
+                myState.HP = 60;
                 myState.MP = 60;
             }
             else
@@ -330,7 +326,7 @@ namespace TextRPG
                     dungeonStage = 3;   // 4층 이상 진입하지 못하도록 제어.
                 else dungeonStage++;
 
-                PrevHealth = 0;
+                PrevHP = 0;
                 PrevMp = 0;
             }  
         }
