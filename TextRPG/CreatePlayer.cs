@@ -8,7 +8,7 @@ namespace TextRPG
 
         public KeyValuePair<string, string> Create()
         {
-            Utilities.AddLine("스파르타 던전에 오신 여러분 환영합니다!");
+            Utilities.AddLine("데마시아스토리에 오신 여러분 환영합니다!");
             Utilities.AddLine("이곳은 캐릭터 생성을 하는 곳 입니다.\n");
             Utilities.AddLine("1. 캐릭터 생성");
             Utilities.AddLine("\n0. 종료\n");
