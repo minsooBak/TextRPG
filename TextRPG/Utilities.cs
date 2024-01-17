@@ -100,7 +100,6 @@ namespace TextRPG
                 int key;
                 if (int.TryParse(str, out key) && key >= min && key <= max)
                 {
-                    key = int.Parse(str);
                     if (key >= min && key <= max)
                     {
                         sb.Clear();
@@ -133,7 +132,6 @@ namespace TextRPG
                 int key;
                 if (int.TryParse(str, out key) && key >= min && key <= max)
                 {
-                    key = int.Parse(str);
                     if (key >= min && key <= max)
                     {
                         sb.Clear();
