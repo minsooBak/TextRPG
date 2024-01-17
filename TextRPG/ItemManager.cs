@@ -16,7 +16,6 @@
 
         // Save_Data.json에서 불러온 읽기 전용 아이템 목록
         private readonly Item[] items;
-        private readonly Item[] shopItems;
 
         // 게임에서 실제로 사용되는 아이템 목록
         private List<Item> inventory; // 인벤토리
