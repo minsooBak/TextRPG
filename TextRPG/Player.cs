@@ -173,6 +173,7 @@ namespace TextRPG
                             {
                                 if (c.Value > Gold)
                                 {
+                                    Console.WriteLine();
                                     Console.WriteLine("골드가 부족합니다.");
                                     Console.WriteLine("아무 키나 입력해주세요.");
                                     Console.ReadKey();
@@ -185,7 +186,9 @@ namespace TextRPG
                                 if(myState.MP > myState.MaxMP)
                                     myState.MP = myState.MaxMP;
                                 myState.Gold -= c.Value;
+                                Console.WriteLine();
                                 Console.WriteLine("휴식을 마쳤습니다.");
+                                Console.WriteLine("아무 키나 입력해주세요.");
                                 Console.ReadKey();
                                 break;
                             }

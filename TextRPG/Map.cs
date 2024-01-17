@@ -65,9 +65,9 @@ namespace TextRPG
             Console.Clear();
 
             Utilities.TextColor("휴식하기\n", ConsoleColor.DarkYellow);
-            Console.WriteLine("체력 + 100 , 마나 100 회복합니다.");
-            Console.WriteLine("휴식하시려면 500 G 를 지불하세요");
-            Console.WriteLine();
+            Console.WriteLine("체력 +100 , 마나 +100 회복합니다.");
+            Console.WriteLine("휴식하려면 500 G 를 지불하세요");
+            Console.WriteLine(); 
 
             Console.WriteLine("1. 휴식하기");
             Console.WriteLine("0. 나가기");
