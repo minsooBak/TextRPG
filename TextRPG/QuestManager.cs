@@ -4,15 +4,16 @@
     {
         public List<Quest> myQuest; //진행도 저장된 퀘스트 리스트
         public List<string> clearQuest;//완전 클리어된 퀘스트 이름 리스트
-        //public int clearCount;
     }
     internal class QuestManager : IListener
     {
         private readonly Quest[] questMenu; //퀘스트 전체 목록
         private List<Quest> quests; //화면에 노출되는 퀘스트 목록
         private List<string> clearQuest; //클리어한 퀘스트 이름 리스트
-        private static int clearCount = 0; //퀘스트 클리어 횟수(사용을 안하는 중)
         private static int idxCount = 0; // 현재 퀘스트를 나타내는 idx 
+
+        public int QuestCount { get { return quests.Count; } } //현재 노출된 퀘스트의 개수 반환
+
         public QuestManager()
         {
             EventManager.Instance.AddListener(EventType.eGameEnd, this);//게임 종료시 저장이벤트 등록
@@ -58,7 +59,7 @@
             } 
             AddQuest(); //퀘스트 추가
         }
-        public int QuestCount { get { return quests.Count;} } //현재 노출된 퀘스트의 개수 반환
+
         public bool ShowQuests() //최대 3개 까지 퀘스트 목록 보여주기
         {
             if (quests.Count < 3) //노출된 퀘스트가 3개 미만이면 (3개 까지 채우려고 진행)
@@ -179,14 +180,14 @@
 
                         clearQuest.Add(quests[idx].Name);//클리어한 퀘스트 이름이 저장된 배열에 지금 클리어한 퀘스트 이름을 저장
                         quests.RemoveAt(idx); //노출되는 목록에서 삭제
-                        clearCount++; //클리어 횟수 증가 (사실상 쓰이진 않음)
                         break;
                     case 2: // 돌아가기
                         break;
                 }
             }
         }
-        public void AddQuest() //퀘스트 추가 최대 3개까지 보인다. //아직 완벽하지 않아서 손 봐야함.
+
+        private void AddQuest() //퀘스트 추가 최대 3개까지 보인다. //아직 완벽하지 않아서 손 봐야함.
         {
             for (int i = quests.Count; i < 3; i++) //현재 노출된 퀘스트의 개수가 3개 이하가 되도록 반복
             {
