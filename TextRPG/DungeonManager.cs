@@ -8,7 +8,7 @@
 
     internal class DungeonManager
     {
-        private Player player;
+        private readonly Player player;
         private SkillManager skillManager = new SkillManager();
         private MonsterManager monsterManager = new MonsterManager();
         private readonly List<Dungeon> dungeons = [];
