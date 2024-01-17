@@ -97,23 +97,7 @@ namespace TextRPG
          * 궁수 : 체력 +150, 마나+100, 공격력+300, 방어력+80
          * 도적 : 체력 +350, 마나+200, 공격력+350, 방어력+60
         
-        */
-
-
-        public Player(ObjectState state)
-        {
-            myState.Level = state.Level;
-
-            myState.Name = state.Name;
-            myState.Class = state.Class;
-            
-            myState.HP = HP;
-            myState.MP = state.MP;
-            myState.ATK = state.ATK; // 기존 공격력 + 추가 공격력
-            myState.DEF = state.DEF;
-        
-            myState.Gold = state.Gold;
-        }             
+        */        
 
         public int HP => myState.HP;
         public int MP => myState.MP;
@@ -289,14 +273,6 @@ namespace TextRPG
             //PrevExp = myState.EXP;
             //myState.EXP += exp;
 
-            Console.WriteLine("[캐릭터 정보]");
-            Console.Write($"Lv.");
-            Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
-            Console.Write($"{myState.Name}\nHP ");
-            Utilities.TextColorWithNoNewLine($"{PrevHP} ", ConsoleColor.DarkRed);
-            Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
-            Utilities.TextColor($"{myState.HP}", ConsoleColor.DarkRed);
-
             if (IsDead)
             {
                 myState.HP = 60;
@@ -304,6 +280,13 @@ namespace TextRPG
             }
             else
             {
+                Console.WriteLine("[캐릭터 정보]");
+                Console.Write($"Lv.");
+                Utilities.TextColorWithNoNewLine($"{myState.Level} ", ConsoleColor.DarkRed);
+                Console.Write($"{myState.Name}\nHP ");
+                Utilities.TextColorWithNoNewLine($"{PrevHP} ", ConsoleColor.DarkRed);
+                Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
+                Utilities.TextColor($"{myState.HP}", ConsoleColor.DarkRed);
                 Console.Write($"MP ");
                 Utilities.TextColorWithNoNewLine($"{PrevMp} ", ConsoleColor.DarkRed);
                 Utilities.TextColorWithNoNewLine("-> ", ConsoleColor.DarkYellow);
