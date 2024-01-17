@@ -149,7 +149,7 @@ namespace TextRPG
             gameState = GameState.NONE;//게임 상태를 마을로 다시 가기
         }
 
-        public void StartGame()
+        private void StartGame()
         {
             Console.Clear();
 
