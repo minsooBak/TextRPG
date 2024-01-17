@@ -1,6 +1,6 @@
 ﻿namespace TextRPG
 {
-    enum AttackType
+    public enum AttackType
     {
         Attack = 1,
         Skill
