@@ -6,14 +6,12 @@ namespace TextRPG
         struct PlayerData
         {
             public ObjectState os;
-            public int maxHP;
-            public int maxMP;
             public int maxExp;
             public int dungeonStage;
         }
         private ObjectState myState;
 
-        private int PrevHP { get; set; } // 이전 hp값
+        private int PrevHP { get; set; } // 이전 hp값P
         private int PrevMp { get; set; }
         private int PrevExp = 0;
         public int dungeonStage = 0;    // 플레이어가 입장 가능한 던전 스테이지
@@ -87,8 +85,6 @@ namespace TextRPG
             else
             {
                 myState = pd.Value.os;
-                myState.MaxHP = pd.Value.maxHP;
-                myState.MaxMP = pd.Value.maxMP;
                 dungeonStage = pd.Value.dungeonStage;
                 maxEXP = pd.Value.maxExp;
             }
@@ -213,7 +209,7 @@ namespace TextRPG
                 }
             }else if(type == EventType.eGameEnd)
             {
-                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP, maxHP = myState.MaxHP, maxMP = myState.MaxMP };
+                PlayerData pd = new PlayerData{ os = myState , dungeonStage = dungeonStage, maxExp = maxEXP };
                 Utilities.SaveFile(SaveType.Player, pd);
             }
         }
