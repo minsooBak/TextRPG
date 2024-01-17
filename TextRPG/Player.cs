@@ -236,6 +236,7 @@ namespace TextRPG
             {
                 PrevHP = myState.HP;
                 PrevMp = myState.MP;
+                PrevExp = myState.EXP;
             }
 
             int damage = 0;
@@ -310,6 +311,7 @@ namespace TextRPG
 
                 PrevHP = 0;
                 PrevMp = 0;
+                PrevExp = 0;
             }  
         }
     }
