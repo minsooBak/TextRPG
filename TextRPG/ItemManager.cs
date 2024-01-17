@@ -16,6 +16,7 @@
 
         // Save_Data.json에서 불러온 읽기 전용 아이템 목록
         private readonly Item[] items;
+        private readonly Item[] shopItems;
 
         // 게임에서 실제로 사용되는 아이템 목록
         private List<Item> inventory; // 인벤토리
@@ -176,7 +177,7 @@
             }
         }
 
-        public void SellItem(int itemNum, int myWallet)
+        public void SellItem(int itemNum)
         // 아이템 판매 관련 메서드
         {
             Item item = inventory[itemNum - 1]; // 인벤토리에서 아이템 선택

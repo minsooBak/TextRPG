@@ -368,7 +368,7 @@ namespace TextRPG
                         gameState = GameState.Shop; // ShowShop()-Mode0 으로 돌아가기
                         break;
                     default:
-                        itemManager.SellItem(itemNum, player.Gold); // 아이템 판매
+                        itemManager.SellItem(itemNum); // 아이템 판매
                         break;
                 }
             }
