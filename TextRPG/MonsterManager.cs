@@ -63,26 +63,13 @@
             return dungeonMonsters;
         }
 
-        // 던전 승리 시 경험치 얻기
-        public int GetExp()
-        {
-            int exp = 0;
-
-            foreach (Monster monster in dungeonMonsters)
-            {
-                // 해당 몬스터 리스트의 총 경험치량 저장
-                exp += monster.Exp; //몬스터의 경험치를 더해서 return
-            }
-            return exp;
-        }
-
         // 던전 승리 시 아이템 얻기
         public void GetReward()
         {
             Random rnd = new Random();
             int[] itemsCounter = new int[3];    // 낡은 대검, 초보자의 갑옷, 가시 갑옷 총 3개의 아이템만 떨어트린다.
             int gold = 0;
-
+            int exp = 0;
             foreach (Monster monster in dungeonMonsters)
             {
                 if (rnd.Next(1, 101) <= 8) //8퍼 확률로
@@ -109,9 +96,12 @@
                 }
                 EventManager.Instance.PostEvent(EventType.Quest, Utilities.EventPair(eQuestType.Monster, monster.Class)); //몬스터 수만큼 처치 이벤트 발생
                 gold += monster.Gold; //몬스터 골드 총합
+                exp += monster.Exp; // 몬스터 경험치 총합
             }
 
             EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Gold, gold)); //플레이어 골드 증가 이벤트
+            EventManager.Instance.PostEvent(EventType.Player, Utilities.EventPair(ePlayerType.Exp, exp));
+
             Console.WriteLine();
             Console.WriteLine("[획득 아이템]");
             Utilities.TextColorWithNoNewLine($"{gold}", ConsoleColor.DarkRed);      // 플레이어가 얻은 골드 출력
